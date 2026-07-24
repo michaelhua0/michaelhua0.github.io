@@ -60,8 +60,9 @@
   --measure: 66ch;
   --page-max: 1180px;
   --nav-h: 68px;
-  --radius: 6px;
-  --radius-lg: 14px;
+  /* Sharp, architectural geometry — no soft rounding. */
+  --radius: 0px;
+  --radius-lg: 0px;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -188,7 +189,7 @@ img { max-width: 100%; display: block; }
 }
 .spectral-tick i {
   width: 4px;
-  border-radius: 999px;
+  border-radius: 0;
   display: block;
   opacity: 0.92;
 }
@@ -215,30 +216,42 @@ img { max-width: 100%; display: block; }
 }
 .skip-link:focus { top: 12px; }
 
-/* ---- buttons / links ---- */
+/* ---- buttons / links ----
+   Sharp, bordered, monospaced — reads as an instrument control, not a pill. */
 .btn {
-  display: inline-flex; align-items: center; gap: 0.55em;
+  position: relative;
+  display: inline-flex; align-items: center; gap: 0.6em;
   font-family: var(--font-mono);
-  font-size: 0.8rem; font-weight: 500; letter-spacing: 0.04em;
-  padding: 0.72em 1.25em;
-  border-radius: 999px;
+  font-size: 0.76rem; font-weight: 500; letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.85em 1.4em;
+  border-radius: 0;
   border: 1px solid var(--border-strong);
-  background: color-mix(in srgb, var(--surface-3) 60%, transparent);
+  background: transparent;
   color: var(--text);
   cursor: pointer;
-  transition: border-color 0.25s var(--ease), background 0.25s var(--ease),
-              transform 0.25s var(--ease), color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  overflow: hidden;
+  transition: border-color 0.3s var(--ease), color 0.3s var(--ease), background 0.3s var(--ease);
   text-decoration: none;
+}
+/* accent wipe from the left on hover */
+.btn::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: var(--accent-bright);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out);
+  z-index: -1;
 }
 .btn:hover {
-  border-color: color-mix(in srgb, var(--accent-bright) 60%, var(--border-strong));
-  color: var(--text);
-  transform: translateY(-2px);
+  border-color: var(--accent-bright);
+  color: #04140f;
   text-decoration: none;
-  box-shadow: 0 12px 30px -22px rgba(0, 0, 0, 0.9);
 }
+.btn:hover::before { transform: scaleX(1); }
 .btn .arrow { transition: transform 0.25s var(--ease); display: inline-block; }
-.btn:hover .arrow { transform: translateX(3px); }
+.btn:hover .arrow { transform: translateX(4px); }
 
 .btn--primary {
   background: var(--accent-bright);
@@ -246,12 +259,8 @@ img { max-width: 100%; display: block; }
   color: #04140f;
   font-weight: 600;
 }
-.btn--primary:hover {
-  background: #5cead8;
-  border-color: #5cead8;
-  color: #04140f;
-  box-shadow: var(--glow);
-}
+.btn--primary::before { background: var(--text); }
+.btn--primary:hover { color: var(--bg); border-color: var(--text); }
 
 /* Section rhythm */
 .section { padding-block: clamp(64px, 9vw, 120px); }

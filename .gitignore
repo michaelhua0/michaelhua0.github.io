@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local design tooling (not part of the deployed site)
+.claude/skills/
+PRODUCT.md
