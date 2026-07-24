@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import NeuralMark from "./NeuralMark";
+import TensorMark from "./TensorMark";
 import "./nav.css";
 
 const links = [
@@ -42,7 +42,7 @@ export default function Nav() {
     <header className={`nav ${transparent ? "nav--transparent" : "nav--solid"}`}>
       <div className="nav__inner container">
         <Link to="/" className="nav__brand" aria-label="Michael Hua, home">
-          <NeuralMark className="nav__mark" />
+          <TensorMark className="nav__mark" />
         </Link>
 
         <nav className="nav__links" aria-label="Primary">
