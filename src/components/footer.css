@@ -1,34 +1,52 @@
 .footer {
-  background: var(--ink);
+  background: var(--surface-1);
   color: var(--on-ink);
-  border-top: 1px solid var(--graphite);
+  border-top: 1px solid var(--border);
+  position: relative;
+}
+.footer::before {
+  /* thin spectral seam at the very top of the footer */
+  content: "";
+  position: absolute;
+  top: -1px; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    var(--band-teal), var(--band-green) 30%, transparent 55%);
+  opacity: 0.5;
 }
 .footer__inner {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  padding-block: 40px;
+  gap: 24px;
+  padding-block: 48px;
 }
-.footer__brand { display: inline-flex; align-items: center; gap: 12px; }
-.footer__brand .spectral-tick { height: 18px; }
+.footer__brand { display: inline-flex; align-items: center; gap: 13px; }
+.footer__brand .spectral-tick { height: 17px; }
 .footer__name {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-weight: 560;
+  font-size: 1.15rem;
   color: var(--on-ink);
 }
-.footer__nav { display: flex; flex-wrap: wrap; gap: 18px; }
+.footer__nav { display: flex; flex-wrap: wrap; gap: 22px; }
 .footer__nav a {
   font-family: var(--font-mono);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
   color: var(--on-ink-soft);
   text-decoration: none;
+  transition: color 0.2s var(--ease);
 }
 .footer__nav a:hover { color: var(--research-bright); text-decoration: none; }
 .footer__meta {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--on-ink-soft);
+  font-size: 0.74rem;
+  letter-spacing: 0.03em;
+  color: var(--text-faint);
   margin: 0;
+}
+@media (max-width: 620px) {
+  .footer__inner { flex-direction: column; align-items: flex-start; gap: 20px; }
 }

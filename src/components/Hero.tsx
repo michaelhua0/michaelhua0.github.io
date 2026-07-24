@@ -88,8 +88,8 @@ void main(){
   vec3 col = mix(deep, ink, clamp(f * 1.3, 0.0, 1.0));
 
   float ribbon = smoothstep(0.35, 0.9, f + length(q) * 0.4);
-  col = mix(col, teal, ribbon * 0.75);
-  col = mix(col, green, clamp(r.x * r.x * 1.4, 0.0, 1.0) * 0.55);
+  col = mix(col, teal, ribbon * 0.68);
+  col = mix(col, green, clamp(r.x * r.x * 1.4, 0.0, 1.0) * 0.5);
 
   // warm amber accent, biased to one region for balance
   float warm = smoothstep(0.55, 1.0, r.y + 0.15) * smoothstep(0.0, 0.6, uv.x);
@@ -97,10 +97,10 @@ void main(){
 
   // luminous filaments where the warp folds sharply
   float fil = pow(clamp(1.0 - abs(f - 0.55) * 3.2, 0.0, 1.0), 2.0);
-  col += bright * fil * 0.35;
+  col += bright * fil * 0.28;
 
   // pointer bloom
-  col += bright * u_active * exp(-md * 3.4) * 0.4;
+  col += bright * u_active * exp(-md * 3.4) * 0.38;
 
   // starfield — faint drifting motes
   vec2 gp = uv * u_res.xy / 2.2;
@@ -120,6 +120,18 @@ void main(){
   gl_FragColor = vec4(col, 1.0);
 }
 `;
+
+const DESTS = [
+  { to: "/portfolio", n: "01", label: "Portfolio", desc: "Research, software, and film" },
+  {
+    to: "/publications",
+    n: "02",
+    label: "Publications",
+    desc: "Peer-reviewed and competition papers",
+  },
+  { to: "/about", n: "03", label: "About", desc: "Research interests and background" },
+];
+const CYCLE_MS = 3400;
 
 function compile(gl: WebGLRenderingContext, type: number, src: string) {
   const sh = gl.createShader(type);
@@ -300,6 +312,18 @@ export default function Hero() {
     };
   }, []);
 
+  // Auto-cycling destination band — draws the eye toward the site's sections.
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (paused) return;
+    const id = window.setInterval(() => {
+      setActive((a) => (a + 1) % DESTS.length);
+    }, CYCLE_MS);
+    return () => window.clearInterval(id);
+  }, [paused, active]);
+
   const [w1, w2] = site.name.split(" ");
   const roleParts = site.role.split("·").map((s) => s.trim());
 
@@ -350,16 +374,41 @@ export default function Hero() {
           My work connects <em>computer vision</em> and <em>hyperspectral imaging</em> with
           software development, documentary research, and public service.
         </p>
-
-        <div className="hero__actions">
-          <Link to="/portfolio" className="hero__btn hero__btn--primary">
-            View the work <span className="arrow" aria-hidden="true">→</span>
-          </Link>
-          <Link to="/about" className="hero__btn">
-            About Michael
-          </Link>
-        </div>
       </div>
+
+      {/* Auto-cycling destination band — animated wayfinding into the site. */}
+      <nav
+        className="hero__wayfind"
+        aria-label="Explore the site"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onFocusCapture={() => setPaused(true)}
+        onBlurCapture={() => setPaused(false)}
+      >
+        {DESTS.map((d, i) => (
+          <Link
+            key={d.to}
+            to={d.to}
+            className={`hero__way ${i === active ? "is-active" : ""}`}
+            onMouseEnter={() => setActive(i)}
+            onFocus={() => setActive(i)}
+          >
+            <span className="hero__way-n" aria-hidden="true">
+              {d.n}
+            </span>
+            <span className="hero__way-text">
+              <span className="hero__way-label">{d.label}</span>
+              <span className="hero__way-desc">{d.desc}</span>
+            </span>
+            <span className="hero__way-arrow" aria-hidden="true">
+              →
+            </span>
+            {i === active && (
+              <span key={active} className="hero__way-prog" aria-hidden="true" />
+            )}
+          </Link>
+        ))}
+      </nav>
 
       <a href="#explore" className="hero__scroll" aria-label="Scroll to explore">
         <span>Scroll</span>

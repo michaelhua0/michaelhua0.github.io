@@ -2,8 +2,8 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  transition: background 0.3s var(--ease), border-color 0.3s var(--ease),
-              backdrop-filter 0.3s var(--ease);
+  transition: background 0.35s var(--ease), border-color 0.35s var(--ease),
+              backdrop-filter 0.35s var(--ease);
 }
 
 .nav__inner {
@@ -15,9 +15,9 @@
 }
 
 .nav--solid {
-  background: rgba(236, 238, 241, 0.88);
-  backdrop-filter: saturate(140%) blur(10px);
-  border-bottom: 1px solid var(--hairline);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: saturate(150%) blur(14px);
+  border-bottom: 1px solid var(--border);
 }
 .nav--transparent {
   background: transparent;
@@ -28,48 +28,49 @@
 .nav__brand {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: inherit;
   text-decoration: none;
 }
 .nav__brand:hover { text-decoration: none; }
 .nav__name {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.15rem;
+  font-weight: 560;
+  font-size: 1.2rem;
   letter-spacing: -0.01em;
   color: var(--text);
 }
-.nav__mono .spectral-tick { height: 22px; }
+.nav__mono .spectral-tick { height: 20px; }
+.nav__brand:hover .spectral-tick i { opacity: 1; }
 
 /* Links (desktop) */
-.nav__links { display: flex; gap: 4px; align-items: center; }
+.nav__links { display: flex; gap: 2px; align-items: center; }
 .nav__link {
   font-family: var(--font-mono);
-  font-size: 0.82rem;
-  letter-spacing: 0.02em;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
   color: var(--text-soft);
-  padding: 8px 12px;
+  padding: 8px 14px;
   border-radius: var(--radius);
   position: relative;
   text-decoration: none;
   transition: color 0.2s var(--ease), background 0.2s var(--ease);
 }
-.nav__link:hover { color: var(--text); text-decoration: none; }
-.nav__link.is-active { color: var(--accent); }
+.nav__link:hover { color: var(--text); text-decoration: none; background: color-mix(in srgb, var(--surface-3) 50%, transparent); }
+.nav__link.is-active { color: var(--accent-bright); }
 .nav__link.is-active::after {
   content: "";
   position: absolute;
-  left: 12px; right: 12px; bottom: 2px;
+  left: 14px; right: 14px; bottom: 1px;
   height: 2px;
-  background: var(--accent);
+  background: var(--accent-bright);
   border-radius: 2px;
 }
 
 /* Transparent (over dark hero) variant */
 .nav--transparent .nav__name { color: var(--on-ink); }
 .nav--transparent .nav__link { color: var(--on-ink-soft); }
-.nav--transparent .nav__link:hover { color: var(--on-ink); }
+.nav--transparent .nav__link:hover { color: var(--on-ink); background: rgba(255, 255, 255, 0.06); }
 .nav--transparent .nav__link.is-active { color: var(--research-bright); }
 .nav--transparent .nav__link.is-active::after { background: var(--research-bright); }
 .nav--transparent .nav__burger i { background: var(--on-ink); }
@@ -100,25 +101,25 @@
 /* Mobile menu panel */
 .nav__mobile {
   display: none;
-  background: var(--paper-2);
-  border-bottom: 1px solid var(--hairline);
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--border);
   padding: 8px 0 16px;
 }
-.nav__mobile nav { display: flex; flex-direction: column; padding-inline: clamp(20px, 5vw, 48px); }
+.nav__mobile nav { display: flex; flex-direction: column; padding-inline: clamp(22px, 5vw, 56px); }
 .nav__mobile-link {
   font-family: var(--font-mono);
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--text);
-  padding: 14px 4px;
-  border-bottom: 1px solid var(--hairline);
+  padding: 15px 4px;
+  border-bottom: 1px solid var(--border);
   text-decoration: none;
 }
-.nav__mobile-link.is-active { color: var(--accent); }
+.nav__mobile-link:hover { color: var(--accent-bright); text-decoration: none; }
+.nav__mobile-link.is-active { color: var(--accent-bright); }
 
 @media (max-width: 760px) {
   .nav__links { display: none; }
   .nav__toggle { display: inline-flex; }
   .nav__mobile.is-open { display: block; }
-  /* Keep menu readable even over the hero */
-  .nav--transparent.nav { background: rgba(11, 14, 20, 0.0); }
+  .nav--transparent.nav { background: transparent; }
 }

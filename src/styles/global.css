@@ -1,60 +1,73 @@
 /* ============================================================
-   Spectral Field — design system
-   Subject: decoding light into bands (HSI / MSST / plant growth),
-   neural + vessel graphs, and documentary history.
-   Color logic: a discrete spectral scale encodes category.
-   Research/AI -> teal-green side.  History/documentary -> amber side.
-   Used as data marks, never as a full-bleed blue-purple gradient.
+   Michael Hua — design system
+   A dark, editorial research portfolio. Deep slate surfaces,
+   a scholarly serif type system (Fraunces + Newsreader) offset
+   by a technical mono, and a signature teal accent carried over
+   from the hero, with gold as its counterpart for history work.
+   Depth comes from hairlines and light, not heavy shadow.
    ============================================================ */
 
 :root {
-  /* --- surfaces --- */
-  --ink: #0b0e14;          /* the constellation night */
-  --ink-2: #10141d;        /* raised dark panel */
-  --graphite: #1a2029;     /* dark hairlines / borders */
-  --paper: #eceef1;        /* cool light slate — reading surface (not cream) */
-  --paper-2: #f6f7f9;      /* raised light panel */
-  --hairline: #d5dae0;     /* light hairlines */
+  color-scheme: dark;
+
+  /* --- surfaces (deep → raised) --- */
+  --bg:          #090c12;   /* page */
+  --surface-1:   #0d1119;   /* sections / footer */
+  --surface-2:   #111826;   /* cards, panels */
+  --surface-3:   #17202f;   /* hover / elevated */
+  --border:      #1e2735;   /* hairline */
+  --border-strong:#2b3747;  /* stronger divider */
+
+  /* --- legacy aliases: keep older component CSS working on the new palette --- */
+  --ink:      #06080d;
+  --ink-2:    var(--surface-2);
+  --graphite: var(--border);
+  --paper:    var(--bg);
+  --paper-2:  var(--surface-2);
+  --hairline: var(--border);
 
   /* --- text --- */
-  --text: #12161d;         /* body text on paper */
-  --text-soft: #4b5563;    /* secondary text on paper */
-  --text-faint: #7c8794;   /* captions / meta on paper */
-  --on-ink: #e7ecf2;       /* text on dark */
-  --on-ink-soft: #9aa6b4;  /* secondary on dark */
+  --text:       #eaeef4;   /* primary */
+  --text-soft:  #aab6c6;   /* secondary */
+  --text-faint: #6d7b8d;   /* meta / captions */
+  --on-ink:      var(--text);
+  --on-ink-soft: #9aa7b7;
 
-  /* --- the spectrum (discrete bands, like a spectrometer readout) --- */
-  --band-violet: #7c5cff;
-  --band-blue:   #2e6ff2;
-  --band-teal:   #12b5a5;
-  --band-green:  #3fbf5f;
-  --band-amber:  #e0a100;
-  --band-red:    #e5484d;
+  /* --- accents (carried from the hero) --- */
+  --research:        #21b7a6;   /* deep teal — solid fills */
+  --research-bright: #3fe0cc;   /* luminous teal — on dark */
+  --history:         #cf9a35;   /* deep gold */
+  --history-bright:  #ecc164;   /* luminous gold */
 
-  /* --- category accents --- */
-  --research: #0fa391;         /* AI / CS / research */
-  --research-bright: #22d3c0;  /* research accent on dark */
-  --history: #c9820a;          /* history / documentary */
-  --history-bright: #eab63c;   /* history accent on dark */
-
-  /* --- interactive (defaults to research) --- */
-  --accent: var(--research);
+  --accent:        var(--research);
   --accent-bright: var(--research-bright);
-  --focus: #22d3c0;
+  --focus:         #3fe0cc;
+
+  /* --- the spectrum (refined; the "decoding light" motif) --- */
+  --band-violet: #8b7bff;
+  --band-blue:   #4f8dff;
+  --band-teal:   #2fd4bf;
+  --band-green:  #46c86b;
+  --band-amber:  #e6b23f;
+  --band-red:    #ec6a63;
 
   /* --- type --- */
-  --font-display: "Spectral", Georgia, "Times New Roman", serif;
-  --font-body: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body:    "Newsreader", Georgia, "Times New Roman", serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
   /* --- layout --- */
-  --measure: 68ch;
-  --page-max: 1200px;
-  --nav-h: 64px;
-  --radius: 4px;
-  --radius-lg: 10px;
+  --measure: 66ch;
+  --page-max: 1180px;
+  --nav-h: 68px;
+  --radius: 6px;
+  --radius-lg: 14px;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --shadow: 0 30px 70px -40px rgba(0, 0, 0, 0.85);
+  --glow: 0 20px 60px -28px color-mix(in srgb, var(--accent-bright) 55%, transparent);
 }
 
 * { box-sizing: border-box; }
@@ -72,21 +85,36 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background: var(--paper);
+  background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
-  font-size: 17px;
-  line-height: 1.65;
+  font-optical-sizing: auto;
+  font-size: 1.125rem;
+  line-height: 1.72;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
 
+/* Atmospheric field — faint fixed glows keep large dark areas alive. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 42% at 82% -8%, rgba(63, 224, 204, 0.07), transparent 60%),
+    radial-gradient(50% 40% at 5% 8%, rgba(236, 193, 100, 0.045), transparent 60%),
+    radial-gradient(80% 60% at 50% 120%, rgba(63, 224, 204, 0.05), transparent 60%);
+}
+
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.01em;
+  font-optical-sizing: auto;
+  font-weight: 560;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
   color: var(--text);
   margin: 0 0 0.5em;
   text-wrap: balance;
@@ -94,16 +122,34 @@ h1, h2, h3, h4 {
 
 p { margin: 0 0 1em; }
 
-a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; text-underline-offset: 3px; }
+a { color: var(--accent-bright); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+strong, b { font-weight: 600; }
+em { font-style: italic; }
 
 img { max-width: 100%; display: block; }
+
+::selection { background: color-mix(in srgb, var(--accent-bright) 32%, transparent); color: #fff; }
 
 :focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 3px;
-  border-radius: 2px;
+  border-radius: 3px;
 }
+
+/* Custom scrollbar — subtle, matches the dark shell. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+*::-webkit-scrollbar { width: 11px; height: 11px; }
+*::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+  border: 3px solid var(--bg);
+}
+*::-webkit-scrollbar-thumb:hover { background: #3a475a; }
 
 /* ---- utility / structural ---- */
 
@@ -111,14 +157,14 @@ img { max-width: 100%; display: block; }
   width: 100%;
   max-width: var(--page-max);
   margin-inline: auto;
-  padding-inline: clamp(20px, 5vw, 48px);
+  padding-inline: clamp(22px, 5vw, 56px);
 }
 
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 500;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--text-faint);
   margin: 0 0 0.75rem;
@@ -127,20 +173,25 @@ img { max-width: 100%; display: block; }
 
 .meta {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-faint);
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
 }
 
-/* The signature structural motif: a row of discrete spectral bands.
-   Reused as eyebrow-divider across the site to tie dark + light. */
+/* Signature motif: discrete spectral bands — "decoding light."
+   Refined to a slim, deliberate readout used across the shell. */
 .spectral-tick {
   display: inline-flex;
   gap: 3px;
-  height: 10px;
+  height: 12px;
   align-items: stretch;
 }
-.spectral-tick i { width: 5px; border-radius: 1px; display: block; }
+.spectral-tick i {
+  width: 4px;
+  border-radius: 999px;
+  display: block;
+  opacity: 0.92;
+}
 .spectral-tick i:nth-child(1) { background: var(--band-violet); }
 .spectral-tick i:nth-child(2) { background: var(--band-blue); }
 .spectral-tick i:nth-child(3) { background: var(--band-teal); }
@@ -156,52 +207,68 @@ img { max-width: 100%; display: block; }
 
 .skip-link {
   position: absolute; left: 12px; top: -60px;
-  background: var(--ink); color: var(--on-ink);
+  background: var(--surface-3); color: var(--text);
   padding: 10px 16px; border-radius: var(--radius);
   z-index: 1000; transition: top 0.2s var(--ease);
   font-family: var(--font-mono); font-size: 0.85rem;
+  border: 1px solid var(--border-strong);
 }
 .skip-link:focus { top: 12px; }
 
 /* ---- buttons / links ---- */
 .btn {
-  display: inline-flex; align-items: center; gap: 0.5em;
+  display: inline-flex; align-items: center; gap: 0.55em;
   font-family: var(--font-mono);
-  font-size: 0.82rem; letter-spacing: 0.04em;
-  padding: 0.7em 1.15em;
-  border-radius: var(--radius);
-  border: 1px solid var(--hairline);
-  background: var(--paper-2);
+  font-size: 0.8rem; font-weight: 500; letter-spacing: 0.04em;
+  padding: 0.72em 1.25em;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: color-mix(in srgb, var(--surface-3) 60%, transparent);
   color: var(--text);
   cursor: pointer;
-  transition: border-color 0.2s var(--ease), background 0.2s var(--ease),
-              transform 0.2s var(--ease), color 0.2s var(--ease);
+  transition: border-color 0.25s var(--ease), background 0.25s var(--ease),
+              transform 0.25s var(--ease), color 0.25s var(--ease), box-shadow 0.25s var(--ease);
   text-decoration: none;
 }
 .btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--accent-bright) 60%, var(--border-strong));
+  color: var(--text);
+  transform: translateY(-2px);
   text-decoration: none;
+  box-shadow: 0 12px 30px -22px rgba(0, 0, 0, 0.9);
 }
-.btn .arrow { transition: transform 0.2s var(--ease); }
+.btn .arrow { transition: transform 0.25s var(--ease); display: inline-block; }
 .btn:hover .arrow { transform: translateX(3px); }
 
 .btn--primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
+  background: var(--accent-bright);
+  border-color: var(--accent-bright);
+  color: #04140f;
+  font-weight: 600;
 }
-.btn--primary:hover { background: var(--text); border-color: var(--text); color: #fff; }
+.btn--primary:hover {
+  background: #5cead8;
+  border-color: #5cead8;
+  color: #04140f;
+  box-shadow: var(--glow);
+}
 
 /* Section rhythm */
-.section { padding-block: clamp(56px, 9vw, 112px); }
-.section--tight { padding-block: clamp(40px, 6vw, 72px); }
+.section { padding-block: clamp(64px, 9vw, 120px); }
+.section--tight { padding-block: clamp(44px, 6vw, 80px); }
 
 /* Long-title hierarchy helper */
 .long-title {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 560;
   letter-spacing: -0.02em;
-  line-height: 1.05;
+  line-height: 1.04;
+}
+
+/* A hairline rule with a spectral seed at its left — editorial divider. */
+.rule {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(90deg, var(--border-strong), transparent 70%);
+  margin: 0;
 }
