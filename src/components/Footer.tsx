@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import CTISMark from "./CTISMark";
+import NeuralMark from "./NeuralMark";
 import "./footer.css";
 
 export default function Footer() {
@@ -8,7 +8,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="container footer__inner">
         <div className="footer__brand">
-          <CTISMark className="footer__mark" />
+          <NeuralMark className="footer__mark" />
         </div>
         <nav className="footer__nav" aria-label="Footer">
           <Link to="/">Home</Link>
