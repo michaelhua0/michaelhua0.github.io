@@ -4,12 +4,16 @@ import { site } from "../data/site";
 import "./hero.css";
 
 /* ============================================================
-   Hero — a cinematic, mouse-reactive spectral field.
-   A full-screen WebGL fragment shader renders domain-warped
-   flowing light in the site palette (teal-green research +
-   amber history), evoking "decoding light into bands."
-   Falls back to a static gradient when WebGL is unavailable
-   or the visitor prefers reduced motion.
+   Hero — an interactive spectral decomposition field.
+   A full-screen WebGL shader renders a dark, structured noise
+   field that the cursor acts on like a detector: it lenses the
+   field, splits it into discrete measurement bands (à la a
+   spectrometer decoding incoming light), and disperses those
+   bands into RGB fringing near the pointer — a literal reading
+   of "decoding light" rather than a generic flowing blob.
+   A pushbroom scanline sweeps the frame, and a click fires a
+   radial band-shockwave. Falls back to a static gradient when
+   WebGL is unavailable or the visitor prefers reduced motion.
    ============================================================ */
 
 const VERT = `
@@ -23,6 +27,10 @@ uniform vec2  u_res;
 uniform float u_time;
 uniform vec2  u_mouse;      // 0..1, y flipped to match uv
 uniform float u_active;     // 0..1 pointer influence
+uniform vec2  u_click;      // last click, in p-space
+uniform float u_clickAge;   // seconds since last click (large if none yet)
+
+const float BANDS = 6.0;
 
 float hash(vec2 p){
   p = fract(p * vec2(123.34, 456.21));
@@ -46,7 +54,7 @@ const mat2 M = mat2(1.62, 1.18, -1.18, 1.62);
 float fbm(vec2 p){
   float v = 0.0;
   float a = 0.5;
-  for (int i = 0; i < 6; i++){
+  for (int i = 0; i < 5; i++){
     v += a * noise(p);
     p = M * p;
     a *= 0.5;
@@ -54,53 +62,110 @@ float fbm(vec2 p){
   return v;
 }
 
+// domain-warped scalar field (IQ-style) sampled at a given point
+float fieldAt(vec2 sp, float t){
+  vec2 q = vec2(fbm(sp + t), fbm(sp + vec2(4.2, 1.8) - t * 0.6));
+  vec2 r = vec2(
+    fbm(sp + 2.0 * q + vec2(1.2, 7.5) + t * 0.9),
+    fbm(sp + 2.0 * q + vec2(8.1, 3.0) - t * 0.7)
+  );
+  return fbm(sp + 3.0 * r);
+}
+
+// six-stop spectral ramp: violet -> blue -> teal -> green -> amber -> ember
+vec3 spectralRamp(float x){
+  vec3 violet = vec3(0.078, 0.043, 0.208);
+  vec3 blue   = vec3(0.071, 0.302, 0.647);
+  vec3 teal   = vec3(0.071, 0.710, 0.643);
+  vec3 green  = vec3(0.247, 0.749, 0.373);
+  vec3 amber  = vec3(0.878, 0.631, 0.000);
+  vec3 ember  = vec3(0.950, 0.300, 0.120);
+
+  float seg = clamp(x, 0.0, 1.0) * 5.0;
+  vec3 c = violet;
+  c = mix(c, blue,  clamp(seg - 0.0, 0.0, 1.0));
+  c = mix(c, teal,  clamp(seg - 1.0, 0.0, 1.0));
+  c = mix(c, green, clamp(seg - 2.0, 0.0, 1.0));
+  c = mix(c, amber, clamp(seg - 3.0, 0.0, 1.0));
+  c = mix(c, ember, clamp(seg - 4.0, 0.0, 1.0));
+  return c;
+}
+
+float quantize(float f){
+  return floor(clamp(f, 0.0, 0.999) * BANDS) / BANDS * (BANDS / (BANDS - 1.0));
+}
+
 void main(){
   vec2 uv = gl_FragCoord.xy / u_res.xy;
   float aspect = u_res.x / u_res.y;
   vec2 p = (uv - 0.5) * vec2(aspect, 1.0);
-
   float t = u_time * 0.045;
 
-  // pointer warps the field toward the cursor
+  // ---- cursor as lens: bends sampled space toward the pointer ----
   vec2 m = (u_mouse - 0.5) * vec2(aspect, 1.0);
-  float md = length(p - m);
-  float pull = u_active * exp(-md * 2.4) * 0.35;
+  vec2 toM = p - m;
+  float mDist = length(toM) + 1e-4;
+  vec2 mDir = toM / mDist;
+  float lens = u_active * 0.5 * exp(-mDist * 2.6);
+  vec2 pd = p + (m - p) * lens;
 
-  vec2 sp = p * 1.6 + vec2(0.0, t * 0.6);
+  // ---- click shockwave: radial band expanding outward from last click ----
+  vec2 toClick = p - u_click;
+  float clickDist = length(toClick) + 1e-4;
+  vec2 clickDir = toClick / clickDist;
+  float ringR = u_clickAge * 1.7;
+  float ringDist = abs(clickDist - ringR);
+  float ringDecay = exp(-u_clickAge * 1.6);
+  float ringGlow = exp(-ringDist * 16.0) * ringDecay;
+  float ringPush = exp(-ringDist * 7.0) * ringDecay;
+  pd += clickDir * ringPush * 0.16;
 
-  // domain warping (IQ-style) for liquid, flowing structure
-  vec2 q = vec2(fbm(sp + t), fbm(sp + vec2(5.2, 1.3)));
-  vec2 r = vec2(
-    fbm(sp + 2.2 * q + vec2(1.7, 9.2) + t * 1.1),
-    fbm(sp + 2.2 * q + vec2(8.3, 2.8) - t * 0.9)
-  );
-  r += (m - p) * pull;
-  float f = fbm(sp + 3.4 * r);
+  vec2 sp = pd * 1.7 + vec2(0.0, t * 0.5);
 
-  // ---- spectral palette ----
-  vec3 deep  = vec3(0.020, 0.028, 0.052);  // near-black navy
-  vec3 ink   = vec3(0.043, 0.055, 0.078);  // --ink
-  vec3 teal  = vec3(0.071, 0.710, 0.643);  // --band-teal
-  vec3 green = vec3(0.247, 0.749, 0.373);  // --band-green
-  vec3 amber = vec3(0.878, 0.631, 0.000);  // --band-amber
-  vec3 bright= vec3(0.133, 0.827, 0.753);  // --research-bright
+  // ---- chromatic dispersion: sample R/G/B slightly apart, radial to the cursor ----
+  // (light literally splitting into its component bands near the "detector")
+  float dispAmt = u_active * 0.05 * exp(-mDist * 2.0);
+  float fR = fieldAt(sp + mDir * dispAmt, t);
+  float fG = fieldAt(sp, t);
+  float fB = fieldAt(sp - mDir * dispAmt, t);
 
-  vec3 col = mix(deep, ink, clamp(f * 1.3, 0.0, 1.0));
+  vec3 colR = spectralRamp(quantize(fR));
+  vec3 colG = spectralRamp(quantize(fG));
+  vec3 colB = spectralRamp(quantize(fB));
+  vec3 spectral = vec3(colR.r, colG.g, colB.b);
 
-  float ribbon = smoothstep(0.35, 0.9, f + length(q) * 0.4);
-  col = mix(col, teal, ribbon * 0.68);
-  col = mix(col, green, clamp(r.x * r.x * 1.4, 0.0, 1.0) * 0.5);
+  // ---- dark instrument base, spectrum revealed where the field resolves ----
+  vec3 deep = vec3(0.020, 0.028, 0.052);
+  vec3 ink  = vec3(0.043, 0.055, 0.078);
+  vec3 base = mix(deep, ink, smoothstep(0.0, 0.6, fG));
 
-  // warm amber accent, biased to one region for balance
-  float warm = smoothstep(0.55, 1.0, r.y + 0.15) * smoothstep(0.0, 0.6, uv.x);
-  col = mix(col, amber, warm * 0.28);
+  float reveal = smoothstep(0.16, 0.85, fG);
+  reveal = max(reveal, u_active * exp(-mDist * 2.0) * 0.9);
+  vec3 col = mix(base, spectral, reveal * 0.85);
 
-  // luminous filaments where the warp folds sharply
-  float fil = pow(clamp(1.0 - abs(f - 0.55) * 3.2, 0.0, 1.0), 2.0);
-  col += bright * fil * 0.28;
+  // ---- absorption lines: crisp dark seams at each discrete band boundary ----
+  float edge = fract(fG * BANDS);
+  float edgeDist = min(edge, 1.0 - edge);
+  float absorb = 1.0 - smoothstep(0.0, 0.05, edgeDist);
+  col *= (1.0 - absorb * 0.55);
 
-  // pointer bloom
-  col += bright * u_active * exp(-md * 3.4) * 0.38;
+  vec3 bright = vec3(0.133, 0.827, 0.753); // --research-bright
+
+  // luminous filaments where the field folds sharply
+  float fil = pow(clamp(1.0 - abs(fG - 0.55) * 3.2, 0.0, 1.0), 2.0);
+  col += bright * fil * 0.22;
+
+  // pointer bloom + click flash
+  col += bright * u_active * exp(-mDist * 3.4) * 0.32;
+  col += vec3(1.0, 0.96, 0.9) * ringGlow * 1.3;
+
+  // ---- pushbroom scanline: a hyperspectral sensor sweeping the frame ----
+  float scanY = fract(u_time * 0.05);
+  float scanDist = abs(uv.y - scanY);
+  float scanLine = exp(-scanDist * 220.0);
+  float scanGlow = exp(-scanDist * 18.0) * 0.15;
+  float ticks = step(0.982, fract(uv.x * 90.0));
+  col += vec3(0.75, 0.92, 1.0) * (scanLine * 0.9 + scanGlow * ticks);
 
   // starfield — faint drifting motes
   vec2 gp = uv * u_res.xy / 2.2;
@@ -148,6 +213,7 @@ function compile(gl: WebGLRenderingContext, type: number, src: string) {
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const heroRef = useRef<HTMLElement>(null);
+  const probeRef = useRef<HTMLSpanElement>(null);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
@@ -194,12 +260,18 @@ export default function Hero() {
     const uTime = gl.getUniformLocation(prog, "u_time");
     const uMouse = gl.getUniformLocation(prog, "u_mouse");
     const uActive = gl.getUniformLocation(prog, "u_active");
+    const uClick = gl.getUniformLocation(prog, "u_click");
+    const uClickAge = gl.getUniformLocation(prog, "u_clickAge");
 
     let W = 0;
     let H = 0;
+    let cssW = 0;
+    let cssH = 0;
     const resize = () => {
       const rect = hero.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+      cssW = rect.width;
+      cssH = rect.height;
       W = Math.max(1, Math.round(rect.width * dpr));
       H = Math.max(1, Math.round(rect.height * dpr));
       canvas.width = W;
@@ -213,6 +285,8 @@ export default function Hero() {
 
     // pointer — targets are lerped for buttery motion
     const mouse = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5, a: 0, ta: 0 };
+    const start = performance.now();
+    const click = { x: 0, y: 0, at: -9999 };
     const onMove = (e: PointerEvent) => {
       const rect = hero.getBoundingClientRect();
       mouse.tx = (e.clientX - rect.left) / rect.width;
@@ -222,13 +296,19 @@ export default function Hero() {
     const onLeave = () => {
       mouse.ta = 0;
     };
+    const onDown = (e: PointerEvent) => {
+      onMove(e);
+      const aspect = W / H;
+      click.x = (mouse.tx - 0.5) * aspect;
+      click.y = (mouse.ty - 0.5) * 1.0;
+      click.at = (performance.now() - start) / 1000;
+    };
     if (!reduced) {
       hero.addEventListener("pointermove", onMove);
       hero.addEventListener("pointerleave", onLeave);
-      hero.addEventListener("pointerdown", onMove);
+      hero.addEventListener("pointerdown", onDown);
     }
 
-    const start = performance.now();
     let raf = 0;
     let running = false;
 
@@ -240,7 +320,25 @@ export default function Hero() {
       gl.uniform1f(uTime, t);
       gl.uniform2f(uMouse, mouse.x, mouse.y);
       gl.uniform1f(uActive, mouse.a);
+      gl.uniform2f(uClick, click.x, click.y);
+      gl.uniform1f(uClickAge, t - click.at);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+      const probe = probeRef.current;
+      if (probe) {
+        if (mouse.a > 0.02) {
+          const px = mouse.x * cssW;
+          const py = (1 - mouse.y) * cssH;
+          probe.style.transform = `translate3d(${px}px, ${py}px, 0)`;
+          probe.style.opacity = String(mouse.a * 0.9);
+          const nm = Math.round(400 + (1 - mouse.y) * 300);
+          const band = Math.min(5, Math.max(0, Math.floor(((nm - 400) / 300) * 6)));
+          probe.textContent = `λ ${nm} nm · BAND ${String(band).padStart(2, "0")}`;
+        } else {
+          probe.style.opacity = "0";
+        }
+      }
+
       raf = requestAnimationFrame(render);
     };
 
@@ -259,6 +357,8 @@ export default function Hero() {
       gl.uniform1f(uTime, 12.0);
       gl.uniform2f(uMouse, 0.5, 0.5);
       gl.uniform1f(uActive, 0);
+      gl.uniform2f(uClick, 0, 0);
+      gl.uniform1f(uClickAge, 9999.0);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
 
@@ -304,7 +404,7 @@ export default function Hero() {
       canvas.removeEventListener("webglcontextlost", onLost);
       hero.removeEventListener("pointermove", onMove);
       hero.removeEventListener("pointerleave", onLeave);
-      hero.removeEventListener("pointerdown", onMove);
+      hero.removeEventListener("pointerdown", onDown);
       gl.deleteProgram(prog);
       gl.deleteShader(vs);
       gl.deleteShader(fs);
@@ -335,6 +435,9 @@ export default function Hero() {
     >
       <canvas ref={canvasRef} className="hero__canvas" aria-hidden="true" />
       <div className="hero__scrim" aria-hidden="true" />
+
+      {/* cursor probe — reads the field's simulated wavelength under the pointer */}
+      {!failed && <span ref={probeRef} className="hero__probe" aria-hidden="true" />}
 
       {/* corner data readouts — tech texture */}
       <div className="hero__hud hero__hud--tl" aria-hidden="true">
