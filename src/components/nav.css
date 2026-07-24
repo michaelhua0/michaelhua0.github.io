@@ -50,9 +50,13 @@
   width: 39px;
   height: 39px;
 }
-.nav__brand:hover .ctis-mark__order {
-  transform: scale(1.32);
+.nav__brand:hover .neural-mark__node {
+  transform: scale(1.18);
   filter: saturate(1.2) brightness(1.12);
+}
+.nav__brand:hover .neural-mark__signal {
+  stroke-width: 2.2;
+  filter: drop-shadow(0 0 5px rgba(63, 224, 204, 0.75));
 }
 
 /* Links (desktop) */
