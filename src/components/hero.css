@@ -1,0 +1,249 @@
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: calc(100svh - var(--nav-h));
+  margin-top: calc(-1 * var(--nav-h)); /* transparent nav sits over it */
+  padding-top: var(--nav-h);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(120% 100% at 20% 15%, #101a2a 0%, #05070d 55%, #04050a 100%);
+}
+
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+}
+
+/* Legibility scrim — darkens toward the lower-left where copy sits. */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(90% 80% at 12% 82%, rgba(3, 5, 10, 0.82) 0%, rgba(3, 5, 10, 0) 60%),
+    linear-gradient(180deg, rgba(4, 6, 12, 0.55) 0%, rgba(4, 6, 12, 0) 28%),
+    linear-gradient(0deg, rgba(4, 6, 12, 0.7) 0%, rgba(4, 6, 12, 0) 40%);
+}
+
+/* Fallback: if WebGL fails, animate the CSS gradient subtly. */
+.hero--fallback {
+  background:
+    radial-gradient(120% 100% at 20% 20%, #123, #06121a 45%, #05070d 100%);
+}
+.hero--fallback .hero__canvas { display: none; }
+.hero--fallback::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  background:
+    radial-gradient(38% 46% at 30% 40%, rgba(34, 211, 192, 0.28), transparent 70%),
+    radial-gradient(34% 40% at 72% 64%, rgba(63, 191, 95, 0.22), transparent 70%),
+    radial-gradient(30% 36% at 60% 22%, rgba(224, 161, 0, 0.16), transparent 70%);
+  filter: blur(24px);
+  animation: heroDrift 22s ease-in-out infinite alternate;
+}
+@keyframes heroDrift {
+  0%   { transform: translate3d(-3%, -2%, 0) scale(1.05); }
+  100% { transform: translate3d(4%, 3%, 0) scale(1.15); }
+}
+
+/* ---- HUD corner readouts ---- */
+.hero__hud {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(154, 166, 180, 0.55);
+  pointer-events: none;
+  opacity: 0;
+  animation: heroFade 1.1s var(--ease) 0.6s forwards;
+}
+.hero__hud span { white-space: nowrap; }
+.hero__hud--tl { top: calc(var(--nav-h) + 22px); left: clamp(20px, 5vw, 48px); }
+.hero__hud--tr {
+  top: calc(var(--nav-h) + 22px);
+  right: clamp(20px, 5vw, 48px);
+  text-align: right;
+}
+
+/* ---- Content ---- */
+.hero__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: clamp(20px, 5vw, 48px);
+  padding-block: clamp(40px, 10vh, 96px);
+}
+
+.hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 clamp(18px, 3vh, 30px);
+  opacity: 0;
+  animation: heroFade 0.9s var(--ease) 0.15s forwards;
+}
+.hero__eyebrow .spectral-tick { height: 14px; }
+.hero__eyebrow-text {
+  font-family: var(--font-mono);
+  font-size: clamp(0.66rem, 1.5vw, 0.8rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--on-ink-soft);
+}
+.hero__eyebrow-text b {
+  color: var(--research-bright);
+  margin: 0 0.5em;
+  font-weight: 400;
+}
+
+.hero__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--on-ink);
+  font-size: clamp(3.2rem, 12vw, 8.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  margin: 0;
+  text-shadow: 0 6px 60px rgba(0, 0, 0, 0.5);
+}
+.hero__word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.4em);
+  animation: heroRise 1s var(--ease) forwards;
+}
+.hero__word--accent {
+  background: linear-gradient(100deg, var(--research-bright) 0%, var(--band-green) 55%, var(--history-bright) 115%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.hero__lede {
+  margin: clamp(20px, 3.5vh, 34px) 0 0;
+  max-width: 42ch;
+  font-size: clamp(1.02rem, 2.1vw, 1.28rem);
+  line-height: 1.55;
+  color: #c7d0da;
+  opacity: 0;
+  animation: heroFade 1s var(--ease) 0.42s forwards;
+}
+.hero__lede em {
+  font-style: normal;
+  color: var(--on-ink);
+  border-bottom: 1px solid rgba(34, 211, 192, 0.5);
+  padding-bottom: 1px;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: clamp(26px, 4vh, 40px);
+  opacity: 0;
+  animation: heroFade 1s var(--ease) 0.58s forwards;
+}
+.hero__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  letter-spacing: 0.03em;
+  padding: 0.85em 1.5em;
+  border-radius: 999px;
+  border: 1px solid rgba(231, 236, 242, 0.22);
+  background: rgba(16, 20, 29, 0.35);
+  backdrop-filter: blur(6px);
+  color: var(--on-ink);
+  text-decoration: none;
+  transition: border-color 0.25s var(--ease), background 0.25s var(--ease),
+    color 0.25s var(--ease), transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+.hero__btn:hover,
+.hero__btn:focus-visible {
+  text-decoration: none;
+  transform: translateY(-2px);
+  border-color: rgba(231, 236, 242, 0.5);
+}
+.hero__btn .arrow { transition: transform 0.25s var(--ease); }
+.hero__btn:hover .arrow { transform: translateX(4px); }
+.hero__btn--primary {
+  background: var(--research-bright);
+  border-color: var(--research-bright);
+  color: #041210;
+  font-weight: 500;
+}
+.hero__btn--primary:hover,
+.hero__btn--primary:focus-visible {
+  background: #34e6d2;
+  border-color: #34e6d2;
+  box-shadow: 0 14px 40px -12px rgba(34, 211, 192, 0.55);
+}
+
+/* ---- Scroll cue ---- */
+.hero__scroll {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: clamp(18px, 4vh, 34px);
+  transform: translateX(-50%);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--on-ink-soft);
+  text-decoration: none;
+  opacity: 0;
+  animation: heroFade 1s var(--ease) 0.9s forwards;
+}
+.hero__scroll:hover { color: var(--research-bright); text-decoration: none; }
+.hero__scroll svg { animation: heroNudge 1.8s var(--ease) infinite; }
+
+@keyframes heroFade {
+  to { opacity: 1; }
+}
+@keyframes heroRise {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes heroNudge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__word,
+  .hero__eyebrow,
+  .hero__lede,
+  .hero__actions,
+  .hero__hud,
+  .hero__scroll { opacity: 1; transform: none; animation: none; }
+  .hero__scroll svg { animation: none; }
+  .hero--fallback::after { animation: none; }
+}
+
+/* Hide HUD on small screens to avoid clutter near the title. */
+@media (max-width: 620px) {
+  .hero__hud { display: none; }
+  .hero__lede { max-width: none; }
+}
