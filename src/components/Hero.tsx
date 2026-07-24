@@ -348,9 +348,6 @@ export default function Hero() {
 
       <div className="hero__content">
         <p className="hero__eyebrow">
-          <span className="spectral-tick" aria-hidden="true">
-            <i /><i /><i /><i /><i /><i />
-          </span>
           <span className="hero__eyebrow-text">
             {roleParts.map((r, i) => (
               <span key={r}>
@@ -410,19 +407,6 @@ export default function Hero() {
         ))}
       </nav>
 
-      <a href="#explore" className="hero__scroll" aria-label="Scroll to explore">
-        <span>Scroll</span>
-        <svg viewBox="0 0 16 24" width="13" height="19" aria-hidden="true">
-          <path
-            d="M8 2v18M2 14l6 6 6-6"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </a>
     </section>
   );
 }

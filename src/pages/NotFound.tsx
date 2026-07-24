@@ -7,9 +7,6 @@ export default function NotFound() {
     <div className="notfound">
       <SEO title="Not found" />
       <div className="container notfound__inner">
-        <span className="spectral-tick" aria-hidden="true">
-          <i /><i /><i /><i /><i /><i />
-        </span>
         <p className="notfound__code">404</p>
         <h1 className="notfound__title">Page not found</h1>
         <p className="notfound__lead">

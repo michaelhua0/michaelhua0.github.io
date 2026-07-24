@@ -5,7 +5,7 @@
   margin-top: calc(-1 * var(--nav-h)); /* transparent nav sits over it */
   padding-top: var(--nav-h);
   display: grid;
-  grid-template-rows: 1fr auto auto;
+  grid-template-rows: 1fr auto;
   overflow: hidden;
   isolation: isolate;
   background:
@@ -85,18 +85,21 @@
   margin-inline: auto;
   padding-inline: clamp(22px, 5vw, 56px);
   padding-block: clamp(40px, 8vh, 88px);
+  text-align: center;
 }
 
 .hero__eyebrow {
   display: flex;
   align-items: center;
-  gap: 15px;
+  justify-content: center;
   margin: 0 0 clamp(20px, 3vh, 32px);
   opacity: 0;
   animation: heroFade 0.9s var(--ease) 0.15s forwards;
 }
-.hero__eyebrow .spectral-tick { height: 15px; }
 .hero__eyebrow-text {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
   font-family: var(--font-mono);
   font-size: clamp(0.64rem, 1.4vw, 0.78rem);
   font-weight: 500;
@@ -133,8 +136,8 @@
 }
 
 .hero__lede {
-  margin: clamp(22px, 3.5vh, 34px) 0 0;
-  max-width: 44ch;
+  margin: clamp(22px, 3.5vh, 34px) auto 0;
+  max-width: 52ch;
   font-size: clamp(1.08rem, 2.1vw, 1.35rem);
   line-height: 1.55;
   color: #cdd6e0;
@@ -244,45 +247,17 @@
   animation: heroProg 3.4s linear forwards;
 }
 
-/* ---- Scroll cue ---- */
-.hero__scroll {
-  position: relative;
-  z-index: 2;
-  justify-self: center;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  margin: 14px 0 clamp(14px, 3vh, 26px);
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--on-ink-soft);
-  text-decoration: none;
-  opacity: 0;
-  animation: heroFade 1s var(--ease) 0.9s forwards;
-}
-.hero__scroll:hover { color: var(--research-bright); text-decoration: none; }
-.hero__scroll svg { animation: heroNudge 1.8s var(--ease) infinite; }
-
 @keyframes heroFade { to { opacity: 1; } }
 @keyframes heroRise { to { opacity: 1; transform: translateY(0); } }
 @keyframes heroProg { to { transform: scaleX(1); } }
-@keyframes heroNudge {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(4px); }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .hero__word,
   .hero__eyebrow,
   .hero__lede,
   .hero__hud,
-  .hero__wayfind,
-  .hero__scroll { opacity: 1; transform: none; animation: none; }
-  .hero__way-prog,
-  .hero__scroll svg { animation: none; }
+  .hero__wayfind { opacity: 1; transform: none; animation: none; }
+  .hero__way-prog { animation: none; }
   .hero__way-prog { display: none; }
   .hero--fallback::after { animation: none; }
 }
