@@ -1,76 +1,41 @@
-# Michael Hua — Personal Research Portfolio
+# Michael Hua
 
-A standalone, production-ready portfolio site, migrated off Google Sites.
-Built with Vite + React 19 + TypeScript and React Router.
+I am a student at Cranbrook Schools interested in computer science, scientific
+research, app development, and documentary filmmaking. My work ranges from AI
+for medical imaging and plant-growth modeling to projects about public health
+history.
 
-**Live site:** https://michaelhua0.github.io/
+[Visit my portfolio](https://michaelhua0.github.io/)
 
-## Design
+## Research and engineering
 
-**"Spectral Field."** A discrete spectral scale encodes category — teal/green for
-AI & research, amber for history — used as data marks rather than a gradient
-wash. Display type is *Spectral*, body is *IBM Plex Sans*, labels use
-*IBM Plex Mono*. A dark constellation hero flows into a light editorial reading
-surface, tied together by a recurring spectral-tick divider.
+- I developed a convolutional transformer for 3D brain-vessel segmentation from
+  in-vivo MRI. The work was published in *Computers & Graphics*, presented at
+  Shape Modeling International, and qualified for the 2024 Regeneron ISEF and
+  National JSHS competitions.
+- My hyperspectral-imaging research uses spatial, spectral, and time-series data
+  to model plant growth. I qualified as a 2025 National JSHS finalist after
+  placing fifth at Michigan JSHS.
+- I built [AIGRO](https://michaelhua0.github.io/portfolio/aigro), a smart
+  cultivation app that connects environmental sensors, AI growth models, and
+  automated controls for indoor gardens and vertical farms.
 
-The homepage signature is the **Research Constellation**: a Canvas 2D knowledge
-graph around "Michael Hua" whose About / Portfolio / Publications nodes are real,
-focusable navigation links, surrounded by the topics his work touches
-(AI, ML, computer vision, hyperspectral imaging, transformers, 3D segmentation,
-app development, STEM, history). It responds to pointer/touch with parallax and
-attraction, respects `prefers-reduced-motion` (static fallback), and pauses when
-off-screen.
+[Explore my research and publications](https://michaelhua0.github.io/publications)
 
-## Run locally
+## History and storytelling
 
-```bash
-npm install
-npm run dev      # start the dev server (http://localhost:5173)
-npm run build    # type-check + production build to /dist
-npm run preview  # preview the production build
-```
+My National History Day project examined the fight for the 1906 Food and Drug
+Act and the development of consumer protections in the United States. The
+documentary and supporting research earned Michigan History Day awards for Best
+Use of Economic History and Top Two Documentary before advancing to the
+national competition.
 
-Use Node.js 22.
+I also created
+[History's Trigger](https://www.youtube.com/@HistorysTrigger), a documentary
+channel about assassinations that changed the course of history.
 
-## Add your images
+## Beyond my projects
 
-Image slots show an on-theme generated graphic until you drop in the real files.
-Put your original photos/screenshots in `public/images/` using the filenames
-listed in `public/images/README.md` (e.g. `aigro.jpg`, `about-1.jpg`). No code
-changes needed — they swap in automatically.
-
-## Project structure
-
-```
-src/
-  data/           Content as structured data (verbatim from the source site)
-    projects.ts     6 portfolio projects, in order
-    publications.ts 3 publications
-    site.ts         bio + metadata
-  components/      Reusable, data-driven UI
-    ResearchConstellation.tsx   the homepage canvas graph
-    Nav / Footer / Layout       shell + routing
-    SmartImage / GeneratedArt   images with on-theme fallback
-    YouTubeEmbed                lazy, responsive video
-    RichBlocks                  renders the project content model
-  pages/          Home, About, Portfolio, Publications, ProjectDetail, NotFound
-public/
-  images/         drop your originals here
-  favicon.svg     monogram
-scripts/
-  build-pages.mjs creates the GitHub Pages route fallback
-.github/
-  workflows/      builds and deploys the site on every push to main
-```
-
-## Deployment
-
-GitHub Actions builds and deploys the site to GitHub Pages whenever `main` is
-updated. The generated `404.html` keeps client-side routes such as `/about` and
-`/portfolio` working when opened directly.
-
-## Content
-
-All names, dates, awards, titles, descriptions, links, and YouTube IDs are taken
-verbatim from the original site. Editing content means editing the data files in
-`src/data/` — no markup duplication.
+I am a national-level saber fencer and an active community-service volunteer.
+You can find my project materials, papers, videos, and current work on my
+[portfolio](https://michaelhua0.github.io/).
