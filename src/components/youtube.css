@@ -1,4 +1,4 @@
-.yt { margin: 0 0 1.5rem; }
+.yt { margin: 0 0 1.75rem; }
 
 .yt__frame {
   position: relative;
@@ -6,8 +6,8 @@
   width: 100%;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: var(--ink);
-  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
 }
 
 .yt__iframe {
@@ -28,7 +28,7 @@
   cursor: pointer;
   background-size: cover;
   background-position: center;
-  background-color: var(--ink-2);
+  background-color: var(--surface-2);
   display: grid;
   place-items: center;
 }
@@ -36,23 +36,24 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(0deg, rgba(11, 14, 20, 0.35), rgba(11, 14, 20, 0.05));
+  background: linear-gradient(0deg, rgba(6, 8, 13, 0.5), rgba(6, 8, 13, 0.1));
   transition: background 0.25s var(--ease);
 }
-.yt__facade:hover::after { background: rgba(11, 14, 20, 0.15); }
+.yt__facade:hover::after { background: rgba(6, 8, 13, 0.2); }
 
 .yt__play {
   position: relative;
   z-index: 1;
-  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.35));
-  transition: transform 0.2s var(--ease);
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.5));
+  transition: transform 0.25s var(--ease-out);
 }
-.yt__facade:hover .yt__play { transform: scale(1.06); }
+.yt__facade:hover .yt__play { transform: scale(1.08); }
 
 .yt__caption {
   font-family: var(--font-mono);
-  font-size: 0.82rem;
-  color: var(--text-soft);
-  margin-top: 0.6rem;
-  line-height: 1.4;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--text-faint);
+  margin-top: 0.7rem;
+  line-height: 1.5;
 }

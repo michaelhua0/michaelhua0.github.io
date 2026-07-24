@@ -1,15 +1,16 @@
 .portfolio__note {
   font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
   color: var(--text-soft);
   border-left: 2px solid var(--accent);
-  padding-left: 16px;
-  max-width: 60ch;
+  padding: 6px 0 6px 18px;
+  max-width: 62ch;
 }
 .portfolio__grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
+  gap: 26px;
 }
 @media (max-width: 720px) {
   .portfolio__grid { grid-template-columns: 1fr; }
