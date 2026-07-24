@@ -50,14 +50,39 @@ export const projects: Project[] = [
   {
     slug: "decoding-light",
     category: "research",
-    tag: "Hyperspectral imaging · Self-supervised AI",
-    cardTitle: "Decoding Light: Physics-Aware Self-Supervised AI for Low-Cost HSI",
-    detailTitle: "Decoding Light: Physics-Aware Self-Supervised AI for Low-Cost HSI",
-    teaser: "Physics-aware self-supervised AI for low-cost hyperspectral imaging.",
+    tag: "Hyperspectral imaging · Physics-aware AI",
+    cardTitle: "Decoding Light With Physics-Aware AI",
+    detailTitle: "Decoding Light With Physics-Aware AI",
+    teaser:
+      "A low-cost imaging spectrometer and physics-aware transformer for hyperspectral reconstruction.",
     image: "decoding-light.jpg",
     motif: "spectral",
     body: [
-      { kind: "note", text: "Project page in development. Further information is forthcoming." },
+      p(
+        "I developed a low-cost Computed Tomography Imaging Spectrometer (CTIS) that captures zero-order, first-order, and diagonal diffraction patterns. Simplifying the hardware lowers the cost of hyperspectral imaging, but it also creates an underdetermined reconstruction problem with fewer measurements than unknown spectral values.",
+      ),
+      p(
+        "To solve this problem, I created the Physics-Aware Spatial-Spectral (PASS) Transformer. PASS combines physics-based backprojection with AI reconstruction and embeds diffraction and point-spread-function physics into its attention mechanisms. The model recovers information missing from the CTIS measurements, separates overlapping spectral components, and constrains its output to avoid hallucinated structures.",
+      ),
+      p(
+        "PASS learns through forward consistency with the CTIS imaging model, so training does not require costly ground-truth hyperspectral data. My experiments showed higher reconstruction fidelity than existing methods. I validated the integrated hardware and AI system through food-allergy detection, plant-stress monitoring, and environmental-contamination analysis.",
+      ),
+      { kind: "subheading", text: "Awards" },
+      {
+        kind: "note",
+        text:
+          "First Place Grand Award in Robotics and Intelligent Machines · ACM Special Award · Midjourney Special Award",
+      },
+      {
+        kind: "links",
+        items: [
+          {
+            label: "Official ISEF project page",
+            href: "https://isef.net/project/robo035-decoding-light-with-physics-aware-ai",
+            primary: true,
+          },
+        ],
+      },
     ],
   },
   {
