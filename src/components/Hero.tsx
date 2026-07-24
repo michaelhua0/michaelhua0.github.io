@@ -347,8 +347,8 @@ export default function Hero() {
         </h1>
 
         <p className="hero__lede">
-          Connecting <em>science</em>, <em>history</em>, and community impact — through
-          computer-vision research, apps that ship, and award-winning documentary film.
+          My work connects <em>computer vision</em> and <em>hyperspectral imaging</em> with
+          software development, documentary research, and public service.
         </p>
 
         <div className="hero__actions">
