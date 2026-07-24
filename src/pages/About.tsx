@@ -7,13 +7,17 @@ import "./about.css";
 export default function About() {
   return (
     <>
-      <SEO title="About" path="/about" description="About Michael Hua." />
-      <PageHeader eyebrow="Michael Hua" title="About Me" />
+      <SEO
+        title="About"
+        path="/about"
+        description="Michael Hua is a student researcher, software developer, documentary filmmaker, saber fencer, and community volunteer."
+      />
+      <PageHeader eyebrow="Profile" title="Michael Hua" />
 
       <section className="section about">
         <div className="container about__grid">
           <div className="about__copy">
-            <h2 className="about__heading">About Michael Hua</h2>
+            <h2 className="about__heading">Research, technology, and historical inquiry</h2>
             {bio.map((para, i) => (
               <p key={i}>{para}</p>
             ))}

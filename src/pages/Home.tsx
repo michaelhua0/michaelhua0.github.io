@@ -11,17 +11,17 @@ const destinations = [
   {
     to: "/about",
     label: "About",
-    blurb: "The person behind the research — student, fencer, and volunteer.",
+    blurb: "Academic background, research interests, fencing, and community service.",
   },
   {
     to: "/portfolio",
     label: "Portfolio",
-    blurb: "AI research, an app, a documentary, and a YouTube channel.",
+    blurb: "Research in artificial intelligence, software projects, and documentary work.",
   },
   {
     to: "/publications",
     label: "Publications",
-    blurb: "Peer-reviewed and competition papers, with full text.",
+    blurb: "Peer-reviewed research and competition papers with supporting materials.",
   },
 ];
 
@@ -41,7 +41,7 @@ export default function Home() {
               <i /><i /><i /><i /><i /><i />
             </span>
             <h2 id="about-me-heading" className="home-intro__heading">
-              About Me
+              Profile
             </h2>
           </div>
           <div className="home-intro__copy">
@@ -49,7 +49,7 @@ export default function Home() {
               <p key={i}>{para}</p>
             ))}
             <Link to="/about" className="btn">
-              More about Michael <span className="arrow" aria-hidden="true">→</span>
+              Read Michael's profile <span className="arrow" aria-hidden="true">→</span>
             </Link>
           </div>
         </div>
@@ -68,7 +68,7 @@ export default function Home() {
                 <h3 className="home-dest__title">{d.label}</h3>
                 <p className="home-dest__blurb">{d.blurb}</p>
                 <span className="home-dest__cta" aria-hidden="true">
-                  Enter <span className="arrow">→</span>
+                  Explore <span className="arrow">→</span>
                 </span>
               </Link>
               </Reveal>

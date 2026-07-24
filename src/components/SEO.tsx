@@ -8,7 +8,7 @@ interface Props {
 
 /** React 19 hoists <title>/<meta> to <head> automatically. */
 export default function SEO({ title, description = site.description, path = "" }: Props) {
-  const fullTitle = title === site.name ? site.name : `${title} — ${site.name}`;
+  const fullTitle = title === site.name ? site.name : `${title} | ${site.name}`;
   const url = `${site.url}${path}`;
   return (
     <>

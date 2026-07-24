@@ -40,7 +40,7 @@ export default function Nav() {
   return (
     <header className={`nav ${transparent ? "nav--transparent" : "nav--solid"}`}>
       <div className="nav__inner container">
-        <Link to="/" className="nav__brand" aria-label="Michael Hua — home">
+        <Link to="/" className="nav__brand" aria-label="Michael Hua, home">
           <span className="nav__mono" aria-hidden="true">
             <span className="spectral-tick">
               <i /><i /><i /><i /><i /><i />

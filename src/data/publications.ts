@@ -14,21 +14,21 @@ export const publications: Publication[] = [
     index: 1,
     category: "research",
     title:
-      "Multi-scale Knowledge Transfer Vision Transformer for 3D vessel shape segmentation",
-    journal: "Computers & Graphics Volume 122, August 2024",
+      "Multi-scale Knowledge Transfer Vision Transformer for 3D Vessel Shape Segmentation",
+    journal: "Computers & Graphics, Volume 122, August 2024",
     links: [
       {
-        label: "Publication",
+        label: "Journal article",
         href: "https://www.sciencedirect.com/science/article/abs/pii/S0097849324001110#preview-section-cited-by",
       },
       {
-        label: "Full paper",
+        label: "Manuscript",
         href: "https://drive.google.com/drive/u/0/folders/1qHb3ACtxRcbW1AObT_0jHse8wstzY_bM",
       },
     ],
     copy: [
-      "This paper presents a Multi-scale Knowledge Transfer Convolutional Transformer that achieves state-of-the-art accuracy in 3D brain vessel segmentation from in-vivo MRI, advancing early diagnosis and treatment of terminal brain disorders.",
-      "This paper was published in the peer-reviewed journal Computers and Graphics. This paper was also part of my 2024 Research Project that qualified to the 2024 Regeneron International Science and Engineering Fair (ISEF) and National Junior Science and Humanities Symposium (JSHS) competition. I also participated in the Shape Modeling International (SMI) conference held in Detroit, Michigan, from July 12th to July 14th, presenting this paper to professionals and researchers in corresponding fields.",
+      "This peer-reviewed paper presents a Multi-Scale Knowledge Transfer Convolutional Transformer for 3D cerebral-vessel segmentation in in vivo MRI. The architecture combines convolutional feature extraction, transformer encoders, and cross-scale knowledge transfer to improve segmentation at lower image resolutions. The method supports vascular visualization and quantitative analysis in medical-imaging research.",
+      "I developed this work for my 2024 research project, which qualified for Regeneron ISEF and the National Junior Science and Humanities Symposium. I presented the paper at Shape Modeling International in Detroit in July 2024 to researchers in computer graphics and medical imaging.",
     ],
   },
   {
@@ -39,13 +39,13 @@ export const publications: Publication[] = [
       "MSST Transformer: A Novel Multimodal Spatial-Spectral-Temporal Transformer for Time-series Hyperspectral Imaging in Plant Growth Modeling",
     links: [
       {
-        label: "Full paper",
+        label: "Manuscript",
         href: "https://drive.google.com/drive/u/0/folders/1qHb3ACtxRcbW1AObT_0jHse8wstzY_bM",
       },
     ],
     copy: [
-      "This paper presents a novel multimodal spatial-spectral-temporal transformer for analyzing complex hyperspectral data, enabling the construction of a highly accurate statistical growth model that supports precision control in vertical farming and advances urban agriculture applications.",
-      "This paper was submitted to the 2025 National Junior Science and Humanities Symposium (JSHS) competition. I qualified as a National JSHS finalist from the 2025 Michigan JSHS competition, placing 5th in the state.",
+      "This paper introduces a multimodal spatial-spectral-temporal transformer for plant-growth modeling. The model integrates hyperspectral imagery, environmental light measurements, and longitudinal features to estimate biomass and characterize early growth under different conditions. The work supports precision control in vertical farming and other urban-agriculture systems.",
+      "I submitted the paper to the 2025 Junior Science and Humanities Symposium. The project placed fifth at Michigan JSHS and advanced to the National JSHS competition.",
     ],
   },
   {
@@ -56,13 +56,13 @@ export const publications: Publication[] = [
       "Protecting the Public: The Uphill Battles for Consumer Rights through the Expansion of Responsibilities",
     links: [
       {
-        label: "Full paper",
+        label: "Research paper",
         href: "https://drive.google.com/drive/u/0/folders/1qHb3ACtxRcbW1AObT_0jHse8wstzY_bM",
       },
     ],
     copy: [
-      "This historical paper, including a process paper and annotated bibliography, was submitted along with my National History Day Documentary. It explores how America built its food and drug safety system by balancing consumer rights with government and corporate responsibilities. Through stories of early scandals, reformers like Dr. Wiley, and the fight for the 1906 Food and Drug Act, I show how protecting public health became a shared responsibility that still shapes our lives today.",
-      "This was was submitted to 2025 National History Day after qualifying from 2025 Michigan History Day along with my published documentary. My documentary, process paper, and annotated bibliography earned me the special award \u201CBest Use of Economic History\u201D and the grand award \u201CTop Two Documentary\u201D within the Michigan competition.",
+      "I wrote this historical paper alongside my National History Day documentary, process paper, and annotated bibliography. I examine how early public-health scandals, reformers such as Dr. Harvey Wiley, and competing ideas of corporate and federal responsibility shaped the 1906 Food and Drug Act. The project connects that legislative struggle to the consumer-protection system that followed.",
+      "Michigan History Day judges recognized the documentary and supporting research with the Best Use of Economic History award and the Top Two Documentary grand award. The project then advanced to the 2025 National History Day competition.",
     ],
   },
 ];
