@@ -3,16 +3,34 @@ import SEO from "../components/SEO";
 import Hero from "../components/Hero";
 import SectionHead from "../components/SectionHead";
 import ProjectCard from "../components/ProjectCard";
+import HomeGallery from "../components/HomeGallery";
 import { bio, site } from "../data/site";
 import { projects } from "../data/projects";
 import { publications } from "../data/publications";
 import "./home.css";
 
-const sheet: [string, string][] = [
-  ["Field", "Computer vision · Hyperspectral imaging"],
-  ["Institution", "Cranbrook Schools"],
-  ["Also", "Documentary film · Saber fencing"],
-  ["Based", "Bloomfield Hills, Michigan"],
+const profileNotes: [string, string][] = [
+  ["Current focus", "Physics-aware AI for computational imaging"],
+  ["Working across", "Computer vision · Hyperspectral sensing · Medical AI"],
+  ["Beyond research", "Documentary history · Saber fencing · Community service"],
+];
+
+const recognition = [
+  {
+    mark: "1st",
+    title: "Grand Award",
+    note: "Regeneron ISEF · Robotics and Intelligent Machines",
+  },
+  {
+    mark: "ACM",
+    title: "Special Award",
+    note: "Regeneron ISEF · Computing research",
+  },
+  {
+    mark: "MJ",
+    title: "Midjourney Special Award",
+    note: "Regeneron ISEF",
+  },
 ];
 
 const directory = [
@@ -30,49 +48,84 @@ export default function Home() {
       <Hero />
 
       <div className="home-body">
-        {/* Profile — an abstract with a data sheet in the margin */}
-        <section id="explore" className="section container home-profile" aria-labelledby="profile-h">
-          <SectionHead
-            title="Profile"
-            note="Bloomfield Hills · MI"
-            titleId="profile-h"
-          />
-          <div className="home-profile__grid">
-            <dl className="datasheet">
-              {sheet.map(([k, v]) => (
-                <div className="datasheet__row" key={k}>
-                  <dt>{k}</dt>
-                  <dd>{v}</dd>
+        <section id="explore" className="section home-profile" aria-labelledby="profile-h">
+          <div className="container">
+            <SectionHead
+              title="Profile"
+              note="Bloomfield Hills · MI"
+              titleId="profile-h"
+            />
+
+            <div className="home-profile__spread">
+              <figure className="home-profile__portrait">
+                <div className="home-profile__portrait-frame">
+                  <img
+                    src={`${import.meta.env.BASE_URL}images/about-portrait.jpg`}
+                    alt="Michael Hua wearing a light blue suit against a red background"
+                    width="932"
+                    height="1200"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
-              ))}
-            </dl>
-            <div className="home-profile__abstract">
-              {bio.map((para, i) => (
-                <p key={i}>{para}</p>
-              ))}
-              <Link to="/about" className="btn">
-                Full profile <span className="arrow" aria-hidden="true">→</span>
-              </Link>
+                <figcaption>
+                  <span>Michael Hua</span>
+                  <small>Student researcher · Cranbrook Schools</small>
+                </figcaption>
+              </figure>
+
+              <div className="home-profile__content">
+                <p className="home-profile__kicker">Researcher · Developer · Storyteller</p>
+                <h3 className="home-profile__statement">
+                  Michael builds systems that reveal what conventional images leave{" "}
+                  <em>hidden.</em>
+                </h3>
+
+                <div className="home-profile__abstract">
+                  <p>{bio[0]}</p>
+                  <p>
+                    He is most interested in the point where a research idea becomes something
+                    another person can test, use, or learn from. Away from his desk, Michael
+                    competes in saber fencing at the national level and volunteers in his
+                    community.
+                  </p>
+                </div>
+
+                <dl className="home-profile__notes">
+                  {profileNotes.map(([label, value]) => (
+                    <div className="home-profile__note" key={label}>
+                      <dt>{label}</dt>
+                      <dd>{value}</dd>
+                    </div>
+                  ))}
+                </dl>
+
+                <Link to="/about" className="btn home-profile__cta">
+                  More about Michael <span className="arrow" aria-hidden="true">→</span>
+                </Link>
+              </div>
             </div>
+
+            <aside className="home-profile__recognition" aria-labelledby="recognition-h">
+              <div className="home-profile__recognition-head">
+                <h3 id="recognition-h">Selected recognition</h3>
+                <span>Regeneron ISEF · 2026</span>
+              </div>
+              <ol>
+                {recognition.map((award) => (
+                  <li key={`${award.mark}-${award.note}`}>
+                    <strong>{award.mark}</strong>
+                    <div>
+                      <span>{award.title}</span>
+                      <small>{award.note}</small>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </aside>
           </div>
         </section>
 
-        {/* Directory — a ruled index, not a card wall */}
-        <section className="section--tight container home-dir" aria-labelledby="dir-h">
-          <SectionHead title="Directory" note={`${directory.length} sections`} titleId="dir-h" />
-          <nav className="dir" aria-label="Site sections">
-            {directory.map((d) => (
-              <Link key={d.to} to={d.to} className="dir__row">
-                <span className="dir__label">{d.label}</span>
-                <span className="dir__desc">{d.desc}</span>
-                <span className="dir__note">{d.note}</span>
-                <span className="dir__arrow" aria-hidden="true">→</span>
-              </Link>
-            ))}
-          </nav>
-        </section>
-
-        {/* Selected work — figures */}
         <section className="section container home-work" aria-labelledby="work-h">
           <SectionHead
             title="Selected work"
@@ -87,6 +140,22 @@ export default function Home() {
           <Link to="/portfolio" className="home-work__all">
             All projects <span className="arrow" aria-hidden="true">→</span>
           </Link>
+        </section>
+
+        <HomeGallery />
+
+        <section className="section--tight container home-dir" aria-labelledby="dir-h">
+          <SectionHead title="Keep exploring" note={`${directory.length} sections`} titleId="dir-h" />
+          <nav className="dir" aria-label="Site sections">
+            {directory.map((d) => (
+              <Link key={d.to} to={d.to} className="dir__row">
+                <span className="dir__label">{d.label}</span>
+                <span className="dir__desc">{d.desc}</span>
+                <span className="dir__note">{d.note}</span>
+                <span className="dir__arrow" aria-hidden="true">→</span>
+              </Link>
+            ))}
+          </nav>
         </section>
       </div>
     </>

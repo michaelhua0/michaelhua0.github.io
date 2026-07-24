@@ -56,6 +56,34 @@ export default function ProjectDetail() {
           <RichBlocks blocks={project.body} />
         </div>
 
+        {project.gallery && project.gallery.length > 0 && (
+          <section className="project__gallery" aria-labelledby="project-gallery-title">
+            <header className="project__gallery-head">
+              <div>
+                <span className="project__gallery-kicker">Photo journal</span>
+                <h2 id="project-gallery-title">Regeneron ISEF 2026</h2>
+              </div>
+              <p>Recognition, people, and a few moments beyond the project board.</p>
+            </header>
+            <div className="project__gallery-grid">
+              {project.gallery.map((photo, photoIndex) => (
+                <figure key={photo.src} className={`project__gallery-photo project__gallery-photo--${photoIndex + 1}`}>
+                  <img
+                    src={`${import.meta.env.BASE_URL}images/${photo.src}`}
+                    alt={photo.alt}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption>
+                    <span>{photo.caption}</span>
+                    <small>{photo.meta}</small>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </section>
+        )}
+
         <nav className="project__pager" aria-label="More projects">
           {prev ? (
             <Link to={`/portfolio/${prev.slug}`} className="project__pager-link project__pager-prev">

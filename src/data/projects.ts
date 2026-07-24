@@ -1,4 +1,6 @@
 /* Portfolio content is stored as structured data so pages stay data-driven. */
+import type { GalleryPhoto } from "./photos";
+import { isef2026Photos } from "./photos";
 
 export type Category = "research" | "history";
 
@@ -39,6 +41,8 @@ export interface Project {
   image: string;
   /** Motif used for the generated fallback art. */
   motif: "spectral" | "vessel" | "point-cloud" | "app" | "documentary" | "channel";
+  /** Optional photographs shown on the dedicated project page. */
+  gallery?: GalleryPhoto[];
   body: Block[];
 }
 
@@ -54,8 +58,9 @@ export const projects: Project[] = [
     detailTitle: "Decoding Light With Physics-Aware AI",
     teaser:
       "A low-cost imaging spectrometer and physics-aware transformer for high-fidelity hyperspectral reconstruction.",
-    image: "decoding-light.jpg",
+    image: "gallery/isef-acm-award-2026.jpg",
     motif: "spectral",
+    gallery: isef2026Photos,
     body: [
       p(
         "I developed a low-cost Computed Tomography Imaging Spectrometer (CTIS) that captures zero-order, first-order, and diagonal diffraction patterns. The simplified hardware reduces the cost of hyperspectral imaging, but it also creates an underdetermined inverse problem with fewer measurements than unknown spectral values.",

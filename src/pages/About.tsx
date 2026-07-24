@@ -1,10 +1,13 @@
+import { useState } from "react";
 import SEO from "../components/SEO";
 import PageHeader from "../components/PageHeader";
-import SmartImage from "../components/SmartImage";
-import { bio, aboutPhotos } from "../data/site";
+import { bio } from "../data/site";
 import "./about.css";
 
 export default function About() {
+  const [portraitMissing, setPortraitMissing] = useState(false);
+  const portraitUrl = `${import.meta.env.BASE_URL}images/about-portrait.jpg`;
+
   return (
     <>
       <SEO
@@ -12,27 +15,34 @@ export default function About() {
         path="/about"
         description="Michael Hua is a student researcher, software developer, documentary filmmaker, saber fencer, and community volunteer."
       />
-      <PageHeader eyebrow="Profile" title="Michael Hua" />
+      <PageHeader eyebrow="Profile" title="About me" />
 
       <section className="section about">
         <div className="container about__grid">
+          <figure className="about__portrait">
+            {portraitMissing ? (
+              <div className="about__portrait-placeholder" role="img" aria-label="Future portrait of Michael Hua">
+                <span className="about__portrait-mark" aria-hidden="true">MH</span>
+                <div>
+                  <p>Portrait reserved</p>
+                  <span>Red backdrop · light blue suit</span>
+                </div>
+              </div>
+            ) : (
+              <img
+                src={portraitUrl}
+                alt="Michael Hua wearing a light blue suit against a red background"
+                onError={() => setPortraitMissing(true)}
+                decoding="async"
+              />
+            )}
+            <figcaption>Michael Hua</figcaption>
+          </figure>
+
           <div className="about__copy">
             <h2 className="about__heading">Research, technology, and historical inquiry</h2>
             {bio.map((para, i) => (
               <p key={i}>{para}</p>
-            ))}
-          </div>
-
-          <div className="about__gallery" aria-label="Photographs of Michael Hua">
-            {aboutPhotos.map((photo, i) => (
-              <figure key={i} className={`about__photo about__photo--${i + 1}`}>
-                <SmartImage
-                  src={photo.src}
-                  alt={photo.alt}
-                  motif={photo.motif}
-                  ratio={i === 0 ? "4 / 5" : "1 / 1"}
-                />
-              </figure>
             ))}
           </div>
         </div>
