@@ -57,7 +57,6 @@
   --measure: 68ch;
   --page-max: 1200px;
   --gutter: clamp(20px, 4.5vw, 56px);
-  --frame: clamp(10px, 1.6vw, 22px);   /* instrument frame inset */
   --nav-h: 66px;
   --radius: 0px;
   --radius-lg: 0px;
@@ -168,20 +167,11 @@ img { max-width: 100%; display: block; }
 .sec-head { margin-bottom: clamp(28px, 4vw, 48px); }
 .sec-head__row {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 1fr auto;
   align-items: baseline;
   gap: clamp(14px, 3vw, 28px);
   padding-bottom: 16px;
 }
-.sec-head__mark {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--accent-bright);
-  letter-spacing: 0.04em;
-}
-.sec-head__mark .spectral-tick { height: 14px; }
 .sec-head__title {
   font-family: var(--font-display);
   font-weight: 560;
@@ -215,16 +205,6 @@ img { max-width: 100%; display: block; }
 @media (max-width: 560px) {
   .sec-head__note { display: none; }
 }
-
-/* Spectral bands — a real measurement mark (the "decoding light" motif). */
-.spectral-tick { display: inline-flex; gap: 3px; height: 12px; align-items: stretch; }
-.spectral-tick i { width: 4px; border-radius: 0; display: block; opacity: 0.95; }
-.spectral-tick i:nth-child(1) { background: var(--band-violet); }
-.spectral-tick i:nth-child(2) { background: var(--band-blue); }
-.spectral-tick i:nth-child(3) { background: var(--band-teal); }
-.spectral-tick i:nth-child(4) { background: var(--band-green); }
-.spectral-tick i:nth-child(5) { background: var(--band-amber); }
-.spectral-tick i:nth-child(6) { background: var(--band-red); }
 
 .sr-only {
   position: absolute; width: 1px; height: 1px;

@@ -33,7 +33,6 @@ export default function Home() {
         {/* Profile — an abstract with a data sheet in the margin */}
         <section id="explore" className="section container home-profile" aria-labelledby="profile-h">
           <SectionHead
-            mark={<span className="spectral-tick" aria-hidden="true"><i /><i /><i /><i /><i /><i /></span>}
             title="Profile"
             note="Bloomfield Hills · MI"
             titleId="profile-h"

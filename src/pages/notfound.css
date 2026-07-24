@@ -1,6 +1,5 @@
 .notfound { padding-block: clamp(88px, 16vw, 184px); }
 .notfound__inner { text-align: center; }
-.notfound__inner .spectral-tick { height: 16px; margin: 0 auto 24px; justify-content: center; }
 .notfound__code {
   font-family: var(--font-mono);
   font-size: 0.82rem;
