@@ -22,9 +22,11 @@ About page photos:
 
 | File | Used for |
 | --- | --- |
-| `about-1.jpg` | About — lead portrait (tall, ~4:5) |
-| `about-2.jpg` | About — supporting (square) |
-| `about-3.jpg` | About — supporting (square) |
+| `about-portrait.jpg` | About — red-background portrait in the light blue suit (vertical, ~3:4) |
+
+Gallery photos are stored in `public/images/gallery/`. The homepage includes two
+intentional placeholders, so future candid images can be added without changing
+the overall composition.
 
 ## How to get the originals from Google Sites
 
