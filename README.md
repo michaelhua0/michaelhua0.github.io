@@ -3,6 +3,8 @@
 A standalone, production-ready portfolio site, migrated off Google Sites.
 Built with Vite + React 19 + TypeScript and React Router.
 
+**Live site:** https://michaelhua0.github.io/
+
 ## Design
 
 **"Spectral Field."** A discrete spectral scale encodes category — teal/green for
@@ -28,7 +30,7 @@ npm run build    # type-check + production build to /dist
 npm run preview  # preview the production build
 ```
 
-Requires Node 18+.
+Use Node.js 22.
 
 ## Add your images
 
@@ -55,23 +57,17 @@ src/
 public/
   images/         drop your originals here
   favicon.svg     monogram
-  _redirects      SPA fallback (Netlify / Cloudflare Pages)
-vercel.json       SPA fallback (Vercel)
-netlify.toml      Netlify build config
+scripts/
+  build-pages.mjs creates the GitHub Pages route fallback
+.github/
+  workflows/      builds and deploys the site on every push to main
 ```
 
-## Deploy (gets you a standalone URL)
+## Deployment
 
-This is a static SPA — any static host works. Easiest options:
-
-- **Vercel:** import the GitHub repo at vercel.com → framework "Vite" → deploy.
-  `vercel.json` already handles client-side routing.
-- **Netlify:** import the repo → build `npm run build`, publish `dist`.
-  `netlify.toml` / `public/_redirects` handle routing.
-- **Cloudflare Pages:** build `npm run build`, output `dist`.
-
-If you deploy under a sub-path (e.g. GitHub Pages `user.github.io/repo`), set
-`base: "/repo/"` in `vite.config.ts`.
+GitHub Actions builds and deploys the site to GitHub Pages whenever `main` is
+updated. The generated `404.html` keeps client-side routes such as `/about` and
+`/portfolio` working when opened directly.
 
 ## Content
 
