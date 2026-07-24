@@ -33,7 +33,7 @@
   height: 46px;
   color: var(--text);
   text-decoration: none;
-  border-radius: 12px;
+  border-radius: 0;
   transition: color 0.2s var(--ease), background 0.2s var(--ease), transform 0.25s var(--ease);
 }
 .nav__brand:hover {

@@ -1,3 +1,28 @@
+/* The content below the hero veils the living field just enough to read,
+   while letting it glow faintly through so the whole page stays one scene. */
+.home-body {
+  position: relative;
+  z-index: 1;
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+}
+.home-body::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 240px;
+  transform: translateY(-100%);
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--bg) 90%, transparent));
+}
+
+/* Tilt wrapper — hosts the 3D hover on cards. */
+.tilt {
+  height: 100%;
+  transition: transform 0.3s var(--ease-out);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
 /* Intro / profile */
 .home-intro { border-bottom: 1px solid var(--border); }
 .home-intro__grid {
