@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import CTISMark from "./CTISMark";
 import "./footer.css";
 
 export default function Footer() {
@@ -7,10 +8,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="container footer__inner">
         <div className="footer__brand">
-          <span className="spectral-tick" aria-hidden="true">
-            <i /><i /><i /><i /><i /><i />
-          </span>
-          <span className="footer__name">Michael Hua</span>
+          <CTISMark className="footer__mark" />
         </div>
         <nav className="footer__nav" aria-label="Footer">
           <Link to="/">Home</Link>

@@ -22,14 +22,12 @@
   gap: 24px;
   padding-block: 48px;
 }
-.footer__brand { display: inline-flex; align-items: center; gap: 13px; }
-.footer__brand .spectral-tick { height: 17px; }
-.footer__name {
-  font-family: var(--font-display);
-  font-weight: 560;
-  font-size: 1.15rem;
-  color: var(--on-ink);
+.footer__brand {
+  display: inline-flex;
+  align-items: center;
+  color: var(--on-ink-soft);
 }
+.footer__mark { width: 38px; height: 38px; }
 .footer__nav { display: flex; flex-wrap: wrap; gap: 22px; }
 .footer__nav a {
   font-family: var(--font-mono);

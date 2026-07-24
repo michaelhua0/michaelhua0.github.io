@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
+import CTISMark from "./CTISMark";
 import "./nav.css";
 
 const links = [
@@ -41,12 +42,7 @@ export default function Nav() {
     <header className={`nav ${transparent ? "nav--transparent" : "nav--solid"}`}>
       <div className="nav__inner container">
         <Link to="/" className="nav__brand" aria-label="Michael Hua, home">
-          <span className="nav__mono" aria-hidden="true">
-            <span className="spectral-tick">
-              <i /><i /><i /><i /><i /><i />
-            </span>
-          </span>
-          <span className="nav__name">Michael Hua</span>
+          <CTISMark className="nav__mark" />
         </Link>
 
         <nav className="nav__links" aria-label="Primary">

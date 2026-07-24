@@ -28,20 +28,32 @@
 .nav__brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  color: inherit;
-  text-decoration: none;
-}
-.nav__brand:hover { text-decoration: none; }
-.nav__name {
-  font-family: var(--font-display);
-  font-weight: 560;
-  font-size: 1.2rem;
-  letter-spacing: -0.01em;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
   color: var(--text);
+  text-decoration: none;
+  border-radius: 12px;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease), transform 0.25s var(--ease);
 }
-.nav__mono .spectral-tick { height: 20px; }
-.nav__brand:hover .spectral-tick i { opacity: 1; }
+.nav__brand:hover {
+  color: var(--research-bright);
+  background: color-mix(in srgb, var(--surface-3) 52%, transparent);
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+.nav__brand:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+.nav__mark {
+  width: 39px;
+  height: 39px;
+}
+.nav__brand:hover .ctis-mark__order {
+  transform: scale(1.32);
+  filter: saturate(1.2) brightness(1.12);
+}
 
 /* Links (desktop) */
 .nav__links { display: flex; gap: 2px; align-items: center; }
@@ -68,7 +80,11 @@
 }
 
 /* Transparent (over dark hero) variant */
-.nav--transparent .nav__name { color: var(--on-ink); }
+.nav--transparent .nav__brand { color: var(--on-ink); }
+.nav--transparent .nav__brand:hover {
+  color: var(--research-bright);
+  background: rgba(255, 255, 255, 0.06);
+}
 .nav--transparent .nav__link { color: var(--on-ink-soft); }
 .nav--transparent .nav__link:hover { color: var(--on-ink); background: rgba(255, 255, 255, 0.06); }
 .nav--transparent .nav__link.is-active { color: var(--research-bright); }
