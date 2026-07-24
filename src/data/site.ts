@@ -1,15 +1,15 @@
 export const site = {
   name: "Michael Hua",
-  role: "Student researcher · App developer · Documentary creator",
-  url: "https://michaelhua.example", // update to your deployed domain
+  role: "Student researcher · Software developer · Documentary filmmaker",
+  url: "https://michaelhua0.github.io",
   description:
-    "Michael Hua — interdisciplinary student researcher in computer science, app developer, national STEM competition winner, and award-winning documentary creator.",
+    "Michael Hua is a student researcher and software developer whose work spans artificial intelligence, hyperspectral imaging, medical computer vision, and documentary history.",
 };
 
-/** The two biographical paragraphs, shared by Home and About (verbatim). */
+/** The two biographical paragraphs shared by Home and About. */
 export const bio: string[] = [
-  "Michael Hua is currently a Junior at Cranbrook Schools. He is an interdisciplinary student passionate about connecting science, history, and community impact. Michael is a student researcher in computer science, app developer, winner in national STEM competitions, and award-winning documentary creator.",
-  "In his free time, Michael enjoys playing the sport of fencing. He is a national-level saber fencer and an active volunteer dedicated to community service.",
+  "Michael Hua is a student at Cranbrook Schools whose work connects computer science, scientific research, and historical inquiry. He develops artificial intelligence systems for hyperspectral and medical imaging, builds software that translates research into practical tools, and produces documentary projects grounded in historical research.",
+  "His research has earned a First Place Grand Award at Regeneron ISEF and recognition from the National Junior Science and Humanities Symposium. Outside his academic work, Michael competes in saber fencing at the national level and volunteers in his community.",
 ];
 
 /** About-page photos. Drop files into /public/images; missing ones fall back to generated art. */

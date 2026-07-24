@@ -8,11 +8,16 @@ import "./portfolio.css";
 export default function Portfolio() {
   return (
     <>
-      <SEO title="Portfolio" path="/portfolio" description="Michael Hua's research, app, and documentary projects." />
-      <PageHeader eyebrow="Projects" title="Portfolio">
+      <SEO
+        title="Portfolio"
+        path="/portfolio"
+        description="Selected research, software, and documentary projects by Michael Hua."
+      />
+      <PageHeader eyebrow="Selected Work" title="Research and Creative Portfolio">
         <p className="portfolio__note">
-          Note: Please click the corresponding image or text for each project to get redirected to
-          its dedicated project page!
+          Explore work in artificial intelligence, hyperspectral imaging, software development,
+          and documentary history. Select a project to review its methods, results, and supporting
+          materials.
         </p>
       </PageHeader>
 

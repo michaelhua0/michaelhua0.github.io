@@ -11,11 +11,13 @@ export default function NotFound() {
           <i /><i /><i /><i /><i /><i />
         </span>
         <p className="notfound__code">404</p>
-        <h1 className="notfound__title">This page drifted off the graph</h1>
-        <p className="notfound__lead">The page you're looking for doesn't exist.</p>
+        <h1 className="notfound__title">Page not found</h1>
+        <p className="notfound__lead">
+          The address may be incorrect, or the page may have moved.
+        </p>
         <div className="notfound__links">
-          <Link to="/" className="btn btn--primary">Back to home</Link>
-          <Link to="/portfolio" className="btn">View portfolio</Link>
+          <Link to="/" className="btn btn--primary">Return home</Link>
+          <Link to="/portfolio" className="btn">Browse projects</Link>
         </div>
       </div>
     </div>

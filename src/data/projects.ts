@@ -1,5 +1,4 @@
-/* All portfolio content, verbatim from the source site.
-   Stored as structured data so pages stay data-driven. */
+/* Portfolio content is stored as structured data so pages stay data-driven. */
 
 export type Category = "research" | "history";
 
@@ -54,18 +53,18 @@ export const projects: Project[] = [
     cardTitle: "Decoding Light With Physics-Aware AI",
     detailTitle: "Decoding Light With Physics-Aware AI",
     teaser:
-      "A low-cost imaging spectrometer and physics-aware transformer for hyperspectral reconstruction.",
+      "A low-cost imaging spectrometer and physics-aware transformer for high-fidelity hyperspectral reconstruction.",
     image: "decoding-light.jpg",
     motif: "spectral",
     body: [
       p(
-        "I developed a low-cost Computed Tomography Imaging Spectrometer (CTIS) that captures zero-order, first-order, and diagonal diffraction patterns. Simplifying the hardware lowers the cost of hyperspectral imaging, but it also creates an underdetermined reconstruction problem with fewer measurements than unknown spectral values.",
+        "I developed a low-cost Computed Tomography Imaging Spectrometer (CTIS) that captures zero-order, first-order, and diagonal diffraction patterns. The simplified hardware reduces the cost of hyperspectral imaging, but it also creates an underdetermined inverse problem with fewer measurements than unknown spectral values.",
       ),
       p(
-        "To solve this problem, I created the Physics-Aware Spatial-Spectral (PASS) Transformer. PASS combines physics-based backprojection with AI reconstruction and embeds diffraction and point-spread-function physics into its attention mechanisms. The model recovers information missing from the CTIS measurements, separates overlapping spectral components, and constrains its output to avoid hallucinated structures.",
+        "I addressed this inverse problem with the Physics-Aware Spatial-Spectral (PASS) Transformer. PASS combines physics-based backprojection with learned reconstruction and encodes diffraction and point-spread-function physics within its attention mechanisms. The model recovers information from the null space of CTIS measurements, separates overlapping spectral components, and constrains its output against hallucinated structures.",
       ),
       p(
-        "PASS learns through forward consistency with the CTIS imaging model, so training does not require costly ground-truth hyperspectral data. My experiments showed higher reconstruction fidelity than existing methods. I validated the integrated hardware and AI system through food-allergy detection, plant-stress monitoring, and environmental-contamination analysis.",
+        "PASS uses forward consistency with the CTIS imaging model as its training signal, which removes the need for costly ground-truth hyperspectral data. My experiments showed higher reconstruction fidelity than existing methods. I validated the integrated hardware and AI system in food-allergy detection, plant-stress monitoring, and environmental-contamination analysis.",
       ),
       { kind: "subheading", text: "Awards" },
       {
@@ -93,18 +92,19 @@ export const projects: Project[] = [
       "Novel Multi-Scale Knowledge Transfer Convolutional Transformer for 3D Brain Vessel Segmentation",
     detailTitle:
       "Novel Multi-Scale Knowledge Transfer Transformer for 3D Brain Vessel Segmentation",
-    teaser: "A convolutional Transformer for 3D brain-vessel segmentation from in-vivo MRI.",
+    teaser:
+      "A hybrid convolutional transformer for segmenting cerebral vasculature in 3D in vivo MRI.",
     image: "brain-vessel.jpg",
     motif: "vessel",
     body: [
       p(
-        "In this project, I developed a novel Multi-scale Knowledge Transfer Convolutional Transformer to improve 3D brain-vessel segmentation from in-vivo MRI. The model combines convolutional layers and Transformer encoders within a U-net architecture and integrates a novel knowledge transfer mechanism to enhance performance on lower-resolution images. It outperforms existing methods and enables more accurate vessel segmentation and visualization for diagnosis and research.",
+        "I developed a Multi-Scale Knowledge Transfer Convolutional Transformer for automated segmentation of cerebral vasculature in 3D in vivo MRI. The model integrates convolutional feature extraction and transformer encoders within a U-Net architecture. A knowledge-transfer mechanism shares structural information across image scales and improves performance on lower-resolution volumes. Comparative experiments showed higher segmentation accuracy than existing methods, with applications in vascular visualization and quantitative analysis.",
       ),
       p(
-        "This project was submitted to 2024 JSHS and SEFMD (ISEF-qualifying regional fair), and it qualified for both National JSHS and Regeneron ISEF!",
+        "The project qualified for the 2024 Regeneron International Science and Engineering Fair and the National Junior Science and Humanities Symposium after regional competition at SEFMD and Michigan JSHS.",
       ),
       p(
-        "The project materials submitted to the 2024 Science and Engineering Fair of Metro Detroit (SEFMD) are linked below.",
+        "The links below include the official ISEF record, regional fair materials, the associated publication, and citation data.",
       ),
       {
         kind: "links",
@@ -127,7 +127,7 @@ export const projects: Project[] = [
       {
         kind: "citation",
         text:
-          "Michael J. Hua, Junjie Wu, and Zichun Zhong, \u201CMulti-scale Knowledge Transfer Vision Transformer for 3D vessel shape segmentation,\u201D Computers & Graphics, Vol. 122, 2024 (\u201C5 citations to date according to google scholar\u201D).",
+          "Michael J. Hua, Junjie Wu, and Zichun Zhong. \u201CMulti-scale Knowledge Transfer Vision Transformer for 3D vessel shape segmentation.\u201D Computers & Graphics 122 (2024).",
       },
     ],
   },
@@ -138,15 +138,16 @@ export const projects: Project[] = [
     cardTitle:
       "Novel Multimodal Spatial-Spectral-Temporal Transformer for Hyperspectral Imaging in Plant Growth Modeling",
     detailTitle: "Novel MSST Transformer for Hyperspectral Imaging in Plant Growth Modeling",
-    teaser: "A spatial-spectral-temporal transformer modeling plant growth from hyperspectral data.",
+    teaser:
+      "A multimodal transformer that estimates plant growth from hyperspectral imagery, environmental measurements, and temporal data.",
     image: "msst.jpg",
     motif: "spectral",
     body: [
       p(
-        "I developed a multimodal spatial-spectral-temporal transformer that models plant growth by integrating hyperspectral images, environmental light conditions, and time-series features. By capturing global spatial-spectral patterns and their temporal evolution, the system accurately predicts biomass outcomes and reveals how environmental factors impact early plant development. It enables advances in precision and urban agriculture.",
+        "I designed a multimodal spatial-spectral-temporal transformer that combines hyperspectral imagery, environmental light conditions, and longitudinal measurements. The architecture models spatial-spectral relationships within each observation and temporal changes across observations. It predicts biomass and quantifies how early plant growth responds to environmental conditions, with applications in precision-controlled agriculture and vertical farming.",
       ),
       p(
-        "The project materials submitted to the 2025 Science and Engineering Fair of Metro Detroit (SEFMD) are linked below.",
+        "The project placed fifth at the 2025 Michigan Junior Science and Humanities Symposium and advanced to the National JSHS competition. The link below contains the materials submitted to the Science and Engineering Fair of Metro Detroit.",
       ),
       {
         kind: "links",
@@ -163,10 +164,11 @@ export const projects: Project[] = [
   {
     slug: "aigro",
     category: "research",
-    tag: "App development · Physical AI",
-    cardTitle: "AIGRO app",
+    tag: "Mobile application · Physical AI",
+    cardTitle: "AIGRO: AI-Assisted Cultivation",
     detailTitle: "AIGRO",
-    teaser: "A smart cultivation app linking real-world sensors to a physical AI growth system.",
+    teaser:
+      "A mobile cultivation platform that connects environmental sensors, predictive growth models, and automated controls.",
     image: "aigro.jpg",
     motif: "app",
     body: [
@@ -176,7 +178,7 @@ export const projects: Project[] = [
         segments: [
           {
             text:
-              "AIGro is a smart cultivation app I built to bring reliable, efficient, data-driven plant care to indoor gardens and vertical farms. It links real-world sensors to a physical AI system that learns, understands, predicts, and refines growing conditions to create the most optimal environment for plant. The AI models were mainly designed in my ",
+              "I developed AIGRO for data-informed plant care in indoor gardens and vertical farms. The application adapts models from my ",
           },
           {
             text: "MSST transformer research project",
@@ -185,12 +187,12 @@ export const projects: Project[] = [
           },
           {
             text:
-              " and converted to mobile-compatible forms. AIGRO combines real-world environmental sensing, adaptive AI growth modeling, and autonomous controls into one system.",
+              " for mobile deployment. It combines environmental sensor data, predictive growth modeling, and automated controls within a single cultivation platform.",
           },
         ],
       },
       p(
-        "My developed application was submitted to the 2025 Congressional App Challenge for judging. (Results pending)",
+        "I submitted AIGRO to the 2025 Congressional App Challenge.",
       ),
     ],
   },
@@ -198,9 +200,10 @@ export const projects: Project[] = [
     slug: "national-history-day",
     category: "history",
     tag: "2025 National History Day · Documentary",
-    cardTitle: "2025 NHD; The 1906 Food and Drug Act",
-    detailTitle: "2025 National History Day Research Project",
-    teaser: "From Poison to Protection: how America built its food and drug safety system.",
+    cardTitle: "From Poison to Protection: The 1906 Food and Drug Act",
+    detailTitle: "From Poison to Protection: The 1906 Food and Drug Act",
+    teaser:
+      "A documentary and historical study of the reform movement that produced the 1906 Food and Drug Act.",
     image: "nhd.jpg",
     motif: "documentary",
     body: [
@@ -210,9 +213,11 @@ export const projects: Project[] = [
         title: "From Poison to Protection: The 1906 Food and Drug Act",
       },
       p(
-        "My project explores how America built its food and drug safety system by balancing consumer rights with government and corporate responsibilities. Through stories of early scandals, reformers like Dr. Wiley, and the fight for the 1906 Food and Drug Act, I show how protecting public health became a shared responsibility that still shapes our lives today.",
+        "I examined how reformers, federal officials, and industry leaders contested responsibility for food and drug safety in the United States. The documentary traces early public-health scandals, the work of Dr. Harvey Wiley, and the legislative struggle that produced the 1906 Food and Drug Act. It places modern consumer protections within the political and economic debates that shaped their development.",
       ),
-      p("My NHD Project's submitted materials are linked below."),
+      p(
+        "At the 2025 Michigan History Day competition, the project received the Best Use of Economic History award and the Top Two Documentary grand award. It then advanced to the National History Day competition.",
+      ),
       {
         kind: "links",
         items: [
@@ -224,10 +229,11 @@ export const projects: Project[] = [
   {
     slug: "historys-trigger",
     category: "history",
-    tag: "YouTube · Documentary filmmaking",
-    cardTitle: "History's Trigger YouTube Channel",
-    detailTitle: "My YouTube Channel: History's Trigger",
-    teaser: "A student-run documentary channel on the assassinations that changed history.",
+    tag: "Historical research · Documentary filmmaking",
+    cardTitle: "History's Trigger",
+    detailTitle: "History's Trigger: Documentary History",
+    teaser:
+      "An independent documentary series about political assassinations and their historical consequences.",
     image: "historys-trigger.jpg",
     motif: "channel",
     body: [
@@ -242,10 +248,10 @@ export const projects: Project[] = [
         ],
       },
       p(
-        "My \u201CHistory's Trigger\u201D channel is a student-run, film/ documentary-based YouTube Channel, which explores the major assassinations that changed the course of history. Each episode dives into the people involved, the motives behind the attacks, and how one violent moment could reshape nations and ideologies. My channel revisits the events that left a lasting mark on the world with engaging storytelling and in-depth research.",
+        "I created History's Trigger as an independent documentary channel. Each episode examines a political assassination through the people involved, the motives behind the attack, its political context, and its long-term consequences. I write each script from historical research and use documentary film to connect individual acts of violence with changes in governments, movements, and public life.",
       ),
       p(
-        "This passion project fulfilled one of my childhood goals of having my own YouTube channel! (Although not for video games as I had hoped)",
+        "The channel gives me a public format for independent historical research, scriptwriting, narration, and film production.",
       ),
       { kind: "subheading", text: "Episodes" },
       {

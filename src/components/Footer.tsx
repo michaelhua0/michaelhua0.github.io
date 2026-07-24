@@ -18,7 +18,7 @@ export default function Footer() {
           <Link to="/portfolio">Portfolio</Link>
           <Link to="/publications">Publications</Link>
           <a href="https://www.youtube.com/@HistorysTrigger" target="_blank" rel="noopener noreferrer">
-            YouTube
+            History's Trigger
           </a>
         </nav>
         <p className="footer__meta">© {year} Michael Hua</p>

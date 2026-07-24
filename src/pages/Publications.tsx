@@ -10,9 +10,14 @@ export default function Publications() {
       <SEO
         title="Publications"
         path="/publications"
-        description="Michael Hua's publications, including peer-reviewed and competition papers."
+        description="Peer-reviewed research and competition papers by Michael Hua in computer vision, hyperspectral imaging, and history."
       />
-      <PageHeader eyebrow="Papers" title="Michael Hua's Publications" />
+      <PageHeader eyebrow="Research Papers" title="Publications and Competition Papers">
+        <p>
+          Peer-reviewed research, technical manuscripts, and historical scholarship with links to
+          published articles and project materials.
+        </p>
+      </PageHeader>
 
       <section className="section--tight">
         <div className="container pubs">
