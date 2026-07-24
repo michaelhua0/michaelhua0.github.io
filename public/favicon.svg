@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="14" fill="#0b0e14"/>
+  <!-- spectral tick -->
+  <g>
+    <rect x="14" y="16" width="4" height="12" rx="1" fill="#7c5cff"/>
+    <rect x="20" y="16" width="4" height="12" rx="1" fill="#2e6ff2"/>
+    <rect x="26" y="16" width="4" height="12" rx="1" fill="#12b5a5"/>
+    <rect x="32" y="16" width="4" height="12" rx="1" fill="#3fbf5f"/>
+    <rect x="38" y="16" width="4" height="12" rx="1" fill="#e0a100"/>
+    <rect x="44" y="16" width="4" height="12" rx="1" fill="#e5484d"/>
+  </g>
+  <text x="32" y="50" font-family="Georgia, 'Times New Roman', serif" font-size="24" font-weight="600"
+        text-anchor="middle" fill="#e7ecf2" letter-spacing="1">MH</text>
+</svg>

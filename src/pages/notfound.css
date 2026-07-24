@@ -1,0 +1,12 @@
+.notfound { padding-block: clamp(64px, 14vw, 160px); }
+.notfound__inner { text-align: center; }
+.notfound__inner .spectral-tick { height: 16px; margin: 0 auto 20px; justify-content: center; }
+.notfound__code {
+  font-family: var(--font-mono);
+  color: var(--text-faint);
+  letter-spacing: 0.2em;
+  margin: 0;
+}
+.notfound__title { font-size: clamp(1.8rem, 5vw, 2.8rem); margin: 8px 0 12px; }
+.notfound__lead { color: var(--text-soft); margin: 0 auto 28px; max-width: 40ch; }
+.notfound__links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }

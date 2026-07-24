@@ -1,0 +1,80 @@
+# Michael Hua — Personal Research Portfolio
+
+A standalone, production-ready portfolio site, migrated off Google Sites.
+Built with Vite + React 19 + TypeScript and React Router.
+
+## Design
+
+**"Spectral Field."** A discrete spectral scale encodes category — teal/green for
+AI & research, amber for history — used as data marks rather than a gradient
+wash. Display type is *Spectral*, body is *IBM Plex Sans*, labels use
+*IBM Plex Mono*. A dark constellation hero flows into a light editorial reading
+surface, tied together by a recurring spectral-tick divider.
+
+The homepage signature is the **Research Constellation**: a Canvas 2D knowledge
+graph around "Michael Hua" whose About / Portfolio / Publications nodes are real,
+focusable navigation links, surrounded by the topics his work touches
+(AI, ML, computer vision, hyperspectral imaging, transformers, 3D segmentation,
+app development, STEM, history). It responds to pointer/touch with parallax and
+attraction, respects `prefers-reduced-motion` (static fallback), and pauses when
+off-screen.
+
+## Run locally
+
+```bash
+npm install
+npm run dev      # start the dev server (http://localhost:5173)
+npm run build    # type-check + production build to /dist
+npm run preview  # preview the production build
+```
+
+Requires Node 18+.
+
+## Add your images
+
+Image slots show an on-theme generated graphic until you drop in the real files.
+Put your original photos/screenshots in `public/images/` using the filenames
+listed in `public/images/README.md` (e.g. `aigro.jpg`, `about-1.jpg`). No code
+changes needed — they swap in automatically.
+
+## Project structure
+
+```
+src/
+  data/           Content as structured data (verbatim from the source site)
+    projects.ts     6 portfolio projects, in order
+    publications.ts 3 publications
+    site.ts         bio + metadata
+  components/      Reusable, data-driven UI
+    ResearchConstellation.tsx   the homepage canvas graph
+    Nav / Footer / Layout       shell + routing
+    SmartImage / GeneratedArt   images with on-theme fallback
+    YouTubeEmbed                lazy, responsive video
+    RichBlocks                  renders the project content model
+  pages/          Home, About, Portfolio, Publications, ProjectDetail, NotFound
+public/
+  images/         drop your originals here
+  favicon.svg     monogram
+  _redirects      SPA fallback (Netlify / Cloudflare Pages)
+vercel.json       SPA fallback (Vercel)
+netlify.toml      Netlify build config
+```
+
+## Deploy (gets you a standalone URL)
+
+This is a static SPA — any static host works. Easiest options:
+
+- **Vercel:** import the GitHub repo at vercel.com → framework "Vite" → deploy.
+  `vercel.json` already handles client-side routing.
+- **Netlify:** import the repo → build `npm run build`, publish `dist`.
+  `netlify.toml` / `public/_redirects` handle routing.
+- **Cloudflare Pages:** build `npm run build`, output `dist`.
+
+If you deploy under a sub-path (e.g. GitHub Pages `user.github.io/repo`), set
+`base: "/repo/"` in `vite.config.ts`.
+
+## Content
+
+All names, dates, awards, titles, descriptions, links, and YouTube IDs are taken
+verbatim from the original site. Editing content means editing the data files in
+`src/data/` — no markup duplication.
