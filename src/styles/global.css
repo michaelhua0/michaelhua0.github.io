@@ -1,49 +1,46 @@
 /* ============================================================
-   Michael Hua — design system
-   A dark, editorial research portfolio. Deep slate surfaces,
-   a scholarly serif type system (Fraunces + Newsreader) offset
-   by a technical mono, and a signature teal accent carried over
-   from the hero, with gold as its counterpart for history work.
-   Depth comes from hairlines and light, not heavy shadow.
+   Michael Hua — "Instrument" design system
+   The site is treated as a scientific readout: a hairline frame,
+   a faint measurement grid, monospace anchored to real data
+   (wavelengths, venues, dates, figure indices), and the spectral
+   bands used as measurement marks. Display serif for headlines,
+   a reading serif for prose, mono for the instrument voice.
+   Sharp geometry; depth from hairlines and light, not shadow.
    ============================================================ */
 
 :root {
   color-scheme: dark;
 
   /* --- surfaces (deep → raised) --- */
-  --bg:          #090c12;   /* page */
-  --surface-1:   #0d1119;   /* sections / footer */
-  --surface-2:   #111826;   /* cards, panels */
-  --surface-3:   #17202f;   /* hover / elevated */
-  --border:      #1e2735;   /* hairline */
-  --border-strong:#2b3747;  /* stronger divider */
+  --bg:           #080b11;   /* page */
+  --surface-1:    #0c1017;   /* sections / footer */
+  --surface-2:    #10151f;   /* panels, figures */
+  --surface-3:    #151c28;   /* hover / elevated */
+  --border:       #1c2431;   /* hairline */
+  --border-strong:#2a3444;   /* stronger divider */
+  --grid-line:    rgba(180, 200, 225, 0.035); /* measurement grid */
 
-  /* --- legacy aliases: keep older component CSS working on the new palette --- */
-  --ink:      #06080d;
-  --ink-2:    var(--surface-2);
+  /* legacy aliases so older component CSS keeps resolving */
+  --ink: #05070c;  --ink-2: var(--surface-2);
   --graphite: var(--border);
-  --paper:    var(--bg);
-  --paper-2:  var(--surface-2);
+  --paper: var(--bg);  --paper-2: var(--surface-2);
   --hairline: var(--border);
 
-  /* --- text --- */
-  --text:       #eaeef4;   /* primary */
-  --text-soft:  #aab6c6;   /* secondary */
-  --text-faint: #6d7b8d;   /* meta / captions */
-  --on-ink:      var(--text);
-  --on-ink-soft: #9aa7b7;
+  /* --- text (contrast-checked on --bg) --- */
+  --text:       #eef2f7;   /* primary */
+  --text-soft:  #b2bdcb;   /* secondary */
+  --text-faint: #8793a4;   /* meta / captions (≥4.5:1) */
+  --on-ink: var(--text);  --on-ink-soft: #9aa7b7;
 
-  /* --- accents (carried from the hero) --- */
-  --research:        #21b7a6;   /* deep teal — solid fills */
-  --research-bright: #3fe0cc;   /* luminous teal — on dark */
-  --history:         #cf9a35;   /* deep gold */
-  --history-bright:  #ecc164;   /* luminous gold */
+  /* --- accents (from the spectral hero) --- */
+  --research:        #21b7a6;
+  --research-bright: #45e2ce;
+  --history:         #cf9a35;
+  --history-bright:  #eec469;
+  --accent: var(--research);  --accent-bright: var(--research-bright);
+  --focus: #45e2ce;
 
-  --accent:        var(--research);
-  --accent-bright: var(--research-bright);
-  --focus:         #3fe0cc;
-
-  /* --- the spectrum (refined; the "decoding light" motif) --- */
+  /* --- the spectrum: measurement marks, never gradient text --- */
   --band-violet: #8b7bff;
   --band-blue:   #4f8dff;
   --band-teal:   #2fd4bf;
@@ -57,21 +54,19 @@
   --font-mono:    "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
   /* --- layout --- */
-  --measure: 66ch;
-  --page-max: 1180px;
-  --nav-h: 68px;
-  --radius: 6px;
-  --radius-lg: 14px;
+  --measure: 68ch;
+  --page-max: 1200px;
+  --gutter: clamp(20px, 4.5vw, 56px);
+  --frame: clamp(10px, 1.6vw, 22px);   /* instrument frame inset */
+  --nav-h: 66px;
+  --radius: 0px;
+  --radius-lg: 0px;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-
-  --shadow: 0 30px 70px -40px rgba(0, 0, 0, 0.85);
-  --glow: 0 20px 60px -28px color-mix(in srgb, var(--accent-bright) 55%, transparent);
 }
 
 * { box-sizing: border-box; }
-
 html { scroll-behavior: smooth; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -96,25 +91,26 @@ body {
   overflow-x: hidden;
 }
 
-/* Atmospheric field — faint fixed glows keep large dark areas alive. */
+/* Faint fixed measurement grid — the instrument's baseline field. */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background:
-    radial-gradient(60% 42% at 82% -8%, rgba(63, 224, 204, 0.07), transparent 60%),
-    radial-gradient(50% 40% at 5% 8%, rgba(236, 193, 100, 0.045), transparent 60%),
-    radial-gradient(80% 60% at 50% 120%, rgba(63, 224, 204, 0.05), transparent 60%);
+  background-image:
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+    radial-gradient(70% 50% at 84% -6%, rgba(69, 226, 206, 0.05), transparent 60%),
+    radial-gradient(60% 45% at 4% 6%, rgba(238, 196, 105, 0.035), transparent 60%);
+  background-size: clamp(80px, 12vw, 160px) 100%, 100% 100%, 100% 100%;
 }
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
   font-optical-sizing: auto;
   font-weight: 560;
-  line-height: 1.08;
-  letter-spacing: -0.015em;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
   color: var(--text);
   margin: 0 0 0.5em;
   text-wrap: balance;
@@ -124,74 +120,105 @@ p { margin: 0 0 1em; }
 
 a { color: var(--accent-bright); text-decoration: none; }
 a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
-
 strong, b { font-weight: 600; }
 em { font-style: italic; }
-
 img { max-width: 100%; display: block; }
 
-::selection { background: color-mix(in srgb, var(--accent-bright) 32%, transparent); color: #fff; }
+::selection { background: color-mix(in srgb, var(--accent-bright) 30%, transparent); color: #fff; }
 
-:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 3px;
-  border-radius: 3px;
-}
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 
-/* Custom scrollbar — subtle, matches the dark shell. */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-strong) transparent;
-}
-*::-webkit-scrollbar { width: 11px; height: 11px; }
-*::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
-  border-radius: 999px;
-  border: 3px solid var(--bg);
-}
+* { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb { background: var(--border-strong); border: 3px solid var(--bg); }
 *::-webkit-scrollbar-thumb:hover { background: #3a475a; }
 
-/* ---- utility / structural ---- */
-
+/* ---- structural ---- */
 .container {
   width: 100%;
   max-width: var(--page-max);
   margin-inline: auto;
-  padding-inline: clamp(22px, 5vw, 56px);
+  padding-inline: var(--gutter);
 }
+.section { padding-block: clamp(72px, 10vw, 132px); }
+.section--tight { padding-block: clamp(48px, 6vw, 84px); }
 
-.eyebrow {
+/* ---- the instrument voice: mono readouts anchored to real data ---- */
+.readout {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   font-weight: 500;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--text-faint);
-  margin: 0 0 0.75rem;
-  display: block;
 }
-
+.eyebrow { /* legacy alias → readout */
+  font-family: var(--font-mono);
+  font-size: 0.7rem; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--text-faint); margin: 0 0 0.75rem; display: block;
+}
 .meta {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--text-faint);
-  letter-spacing: 0.02em;
+  font-size: 0.76rem; color: var(--text-faint); letter-spacing: 0.02em;
 }
 
-/* Signature motif: discrete spectral bands — "decoding light."
-   Refined to a slim, deliberate readout used across the shell. */
-.spectral-tick {
+/* Section header — a labelled readout on a rule that draws itself in.
+   One deliberate system, reused everywhere (no eyebrow-on-every-block). */
+.sec-head { margin-bottom: clamp(28px, 4vw, 48px); }
+.sec-head__row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  gap: clamp(14px, 3vw, 28px);
+  padding-bottom: 16px;
+}
+.sec-head__mark {
   display: inline-flex;
-  gap: 3px;
-  height: 12px;
-  align-items: stretch;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent-bright);
+  letter-spacing: 0.04em;
 }
-.spectral-tick i {
-  width: 4px;
-  border-radius: 999px;
+.sec-head__mark .spectral-tick { height: 14px; }
+.sec-head__title {
+  font-family: var(--font-display);
+  font-weight: 560;
+  font-size: clamp(1.6rem, 3.6vw, 2.5rem);
+  line-height: 1.0;
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+.sec-head__note {
+  justify-self: end;
+  align-self: center;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+.sec-head__rule {
   display: block;
-  opacity: 0.92;
+  height: 1px;
+  background: var(--border-strong);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.85s var(--ease-out);
 }
+.sec-head.is-in .sec-head__rule { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  .sec-head__rule { transform: scaleX(1); }
+}
+@media (max-width: 560px) {
+  .sec-head__note { display: none; }
+}
+
+/* Spectral bands — a real measurement mark (the "decoding light" motif). */
+.spectral-tick { display: inline-flex; gap: 3px; height: 12px; align-items: stretch; }
+.spectral-tick i { width: 4px; border-radius: 0; display: block; opacity: 0.95; }
 .spectral-tick i:nth-child(1) { background: var(--band-violet); }
 .spectral-tick i:nth-child(2) { background: var(--band-blue); }
 .spectral-tick i:nth-child(3) { background: var(--band-teal); }
@@ -204,71 +231,94 @@ img { max-width: 100%; display: block; }
   padding: 0; margin: -1px; overflow: hidden;
   clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
-
 .skip-link {
   position: absolute; left: 12px; top: -60px;
   background: var(--surface-3); color: var(--text);
-  padding: 10px 16px; border-radius: var(--radius);
-  z-index: 1000; transition: top 0.2s var(--ease);
+  padding: 10px 16px; z-index: 1000; transition: top 0.2s var(--ease);
   font-family: var(--font-mono); font-size: 0.85rem;
   border: 1px solid var(--border-strong);
 }
 .skip-link:focus { top: 12px; }
 
-/* ---- buttons / links ---- */
+/* ---- buttons: sharp instrument controls with a scan fill ---- */
 .btn {
-  display: inline-flex; align-items: center; gap: 0.55em;
+  position: relative;
+  display: inline-flex; align-items: center; gap: 0.6em;
   font-family: var(--font-mono);
-  font-size: 0.8rem; font-weight: 500; letter-spacing: 0.04em;
-  padding: 0.72em 1.25em;
-  border-radius: 999px;
+  font-size: 0.74rem; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.85em 1.4em;
   border: 1px solid var(--border-strong);
-  background: color-mix(in srgb, var(--surface-3) 60%, transparent);
+  background: transparent;
   color: var(--text);
   cursor: pointer;
-  transition: border-color 0.25s var(--ease), background 0.25s var(--ease),
-              transform 0.25s var(--ease), color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  overflow: hidden;
+  transition: border-color 0.3s var(--ease), color 0.3s var(--ease);
   text-decoration: none;
 }
-.btn:hover {
-  border-color: color-mix(in srgb, var(--accent-bright) 60%, var(--border-strong));
-  color: var(--text);
-  transform: translateY(-2px);
-  text-decoration: none;
-  box-shadow: 0 12px 30px -22px rgba(0, 0, 0, 0.9);
-}
-.btn .arrow { transition: transform 0.25s var(--ease); display: inline-block; }
-.btn:hover .arrow { transform: translateX(3px); }
-
-.btn--primary {
+.btn::before {
+  content: "";
+  position: absolute; inset: 0;
   background: var(--accent-bright);
-  border-color: var(--accent-bright);
-  color: #04140f;
-  font-weight: 600;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out);
+  z-index: -1;
 }
-.btn--primary:hover {
-  background: #5cead8;
-  border-color: #5cead8;
-  color: #04140f;
-  box-shadow: var(--glow);
-}
+.btn:hover { border-color: var(--accent-bright); color: #04140f; text-decoration: none; }
+.btn:hover::before { transform: scaleX(1); }
+.btn .arrow { transition: transform 0.25s var(--ease); display: inline-block; }
+.btn:hover .arrow { transform: translateX(4px); }
+.btn--primary { background: var(--accent-bright); border-color: var(--accent-bright); color: #04140f; font-weight: 600; }
+.btn--primary::before { background: var(--text); }
+.btn--primary:hover { color: var(--bg); border-color: var(--text); }
 
-/* Section rhythm */
-.section { padding-block: clamp(64px, 9vw, 120px); }
-.section--tight { padding-block: clamp(44px, 6vw, 80px); }
-
-/* Long-title hierarchy helper */
 .long-title {
   font-family: var(--font-display);
-  font-weight: 560;
-  letter-spacing: -0.02em;
-  line-height: 1.04;
+  font-weight: 560; letter-spacing: -0.025em; line-height: 1.02;
 }
 
-/* A hairline rule with a spectral seed at its left — editorial divider. */
-.rule {
-  height: 1px;
-  border: 0;
-  background: linear-gradient(90deg, var(--border-strong), transparent 70%);
-  margin: 0;
+/* ---- figure frame: images presented as instrument captures ---- */
+.figure {
+  position: relative;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.figure__ticks::before,
+.figure__ticks::after {
+  content: "";
+  position: absolute;
+  width: 9px; height: 9px;
+  border: 1px solid var(--research-bright);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 2;
+}
+.figure__ticks::before { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
+.figure__ticks::after { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+
+/* ---- scan reveal: the authored "acquire" motion for figures ----
+   Content is visible by default; JS adds .is-armed to enable the wipe,
+   so a failed script never hides a figure. */
+.scan { position: relative; }
+.scan__media { transition: clip-path 0.9s var(--ease-out); }
+.scan.is-armed .scan__media { clip-path: inset(0 100% 0 0); }
+.scan.is-armed.is-shown .scan__media { clip-path: inset(0 0 0 0); }
+.scan__line {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 2px;
+  background: linear-gradient(180deg, transparent, var(--research-bright), transparent);
+  box-shadow: 0 0 18px 2px color-mix(in srgb, var(--research-bright) 60%, transparent);
+  opacity: 0; z-index: 3; pointer-events: none;
+}
+.scan.is-armed.is-shown .scan__line { animation: scanSweep 0.9s var(--ease-out) forwards; }
+@keyframes scanSweep {
+  0%   { left: 0; opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scan__media { clip-path: none; }
+  .scan__line { display: none; }
 }

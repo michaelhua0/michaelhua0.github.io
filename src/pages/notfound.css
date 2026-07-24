@@ -1,18 +1,20 @@
-.notfound { padding-block: clamp(72px, 14vw, 168px); }
+.notfound { padding-block: clamp(88px, 16vw, 184px); }
 .notfound__inner { text-align: center; }
-.notfound__inner .spectral-tick { height: 16px; margin: 0 auto 22px; justify-content: center; }
+.notfound__inner .spectral-tick { height: 16px; margin: 0 auto 24px; justify-content: center; }
 .notfound__code {
   font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   color: var(--text-faint);
-  letter-spacing: 0.3em;
+  letter-spacing: 0.34em;
   margin: 0;
 }
+.notfound__code::before { content: "ERR "; color: var(--band-red); }
 .notfound__title {
   font-family: var(--font-display);
   font-size: clamp(2rem, 5vw, 3rem);
-  margin: 10px 0 14px;
+  margin: 12px 0 14px;
   color: var(--text);
+  letter-spacing: -0.02em;
 }
 .notfound__lead { color: var(--text-soft); margin: 0 auto 32px; max-width: 42ch; font-size: 1.1rem; }
 .notfound__links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }

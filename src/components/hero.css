@@ -127,13 +127,9 @@
   animation: heroRise 1s var(--ease) forwards;
 }
 .hero__word--accent {
-  background: linear-gradient(96deg, #57ecd8 0%, #7fe6a0 48%, var(--history-bright) 108%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  /* keep the gradient word readable over the bright field */
-  filter: drop-shadow(0 2px 18px rgba(4, 8, 12, 0.7));
+  font-style: italic;         /* emphasis by style, not gradient */
+  color: #f6f9fc;
+  letter-spacing: -0.045em;
 }
 
 .hero__lede {

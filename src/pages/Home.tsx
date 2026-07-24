@@ -1,28 +1,24 @@
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
 import Hero from "../components/Hero";
+import SectionHead from "../components/SectionHead";
 import ProjectCard from "../components/ProjectCard";
-import Reveal from "../components/Reveal";
 import { bio, site } from "../data/site";
 import { projects } from "../data/projects";
+import { publications } from "../data/publications";
 import "./home.css";
 
-const destinations = [
-  {
-    to: "/about",
-    label: "About",
-    blurb: "Academic background, research interests, fencing, and community service.",
-  },
-  {
-    to: "/portfolio",
-    label: "Portfolio",
-    blurb: "Research in artificial intelligence, software projects, and documentary work.",
-  },
-  {
-    to: "/publications",
-    label: "Publications",
-    blurb: "Peer-reviewed research and competition papers with supporting materials.",
-  },
+const sheet: [string, string][] = [
+  ["Field", "Computer vision · Hyperspectral imaging"],
+  ["Institution", "Cranbrook Schools"],
+  ["Also", "Documentary film · Saber fencing"],
+  ["Based", "Bloomfield Hills, Michigan"],
+];
+
+const directory = [
+  { to: "/about", label: "About", desc: "Background, research interests & service", note: "profile" },
+  { to: "/portfolio", label: "Portfolio", desc: "Research, software & documentary work", note: `${projects.length} projects` },
+  { to: "/publications", label: "Publications", desc: "Peer-reviewed & competition papers", note: `${publications.length} papers` },
 ];
 
 export default function Home() {
@@ -33,68 +29,67 @@ export default function Home() {
       <SEO title={site.name} path="/" />
       <Hero />
 
-      {/* About Me intro */}
-      <section id="explore" className="section home-intro" aria-labelledby="about-me-heading">
-        <div className="container home-intro__grid">
-          <div className="home-intro__label">
-            <span className="spectral-tick" aria-hidden="true">
-              <i /><i /><i /><i /><i /><i />
-            </span>
-            <h2 id="about-me-heading" className="home-intro__heading">
-              Profile
-            </h2>
-          </div>
-          <div className="home-intro__copy">
-            {bio.map((para, i) => (
-              <p key={i}>{para}</p>
-            ))}
-            <Link to="/about" className="btn">
-              Read Michael's profile <span className="arrow" aria-hidden="true">→</span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Three destinations */}
-      <section className="section--tight home-dest" aria-label="Explore the site">
-        <div className="container">
-          <div className="home-dest__grid">
-            {destinations.map((d, i) => (
-              <Reveal key={d.to} delay={i * 80} className="home-dest__cell">
-              <Link to={d.to} className="home-dest__card">
-                <span className="home-dest__num" aria-hidden="true">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="home-dest__title">{d.label}</h3>
-                <p className="home-dest__blurb">{d.blurb}</p>
-                <span className="home-dest__cta" aria-hidden="true">
-                  Explore <span className="arrow">→</span>
-                </span>
+      <div className="home-body">
+        {/* Profile — an abstract with a data sheet in the margin */}
+        <section id="explore" className="section container home-profile" aria-labelledby="profile-h">
+          <SectionHead
+            mark={<span className="spectral-tick" aria-hidden="true"><i /><i /><i /><i /><i /><i /></span>}
+            title="Profile"
+            note="Bloomfield Hills · MI"
+            titleId="profile-h"
+          />
+          <div className="home-profile__grid">
+            <dl className="datasheet">
+              {sheet.map(([k, v]) => (
+                <div className="datasheet__row" key={k}>
+                  <dt>{k}</dt>
+                  <dd>{v}</dd>
+                </div>
+              ))}
+            </dl>
+            <div className="home-profile__abstract">
+              {bio.map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
+              <Link to="/about" className="btn">
+                Full profile <span className="arrow" aria-hidden="true">→</span>
               </Link>
-              </Reveal>
-            ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Selected work peek */}
-      <section className="section home-work" aria-labelledby="selected-work-heading">
-        <div className="container">
-          <div className="home-work__head">
-            <h2 id="selected-work-heading">Selected work</h2>
-            <Link to="/portfolio" className="home-work__all">
-              All projects <span className="arrow" aria-hidden="true">→</span>
-            </Link>
-          </div>
+        {/* Directory — a ruled index, not a card wall */}
+        <section className="section--tight container home-dir" aria-labelledby="dir-h">
+          <SectionHead title="Directory" note={`${directory.length} sections`} titleId="dir-h" />
+          <nav className="dir" aria-label="Site sections">
+            {directory.map((d) => (
+              <Link key={d.to} to={d.to} className="dir__row">
+                <span className="dir__label">{d.label}</span>
+                <span className="dir__desc">{d.desc}</span>
+                <span className="dir__note">{d.note}</span>
+                <span className="dir__arrow" aria-hidden="true">→</span>
+              </Link>
+            ))}
+          </nav>
+        </section>
+
+        {/* Selected work — figures */}
+        <section className="section container home-work" aria-labelledby="work-h">
+          <SectionHead
+            title="Selected work"
+            note={`${projects.length} total`}
+            titleId="work-h"
+          />
           <div className="home-work__grid">
             {peek.map((p, i) => (
-              <Reveal key={p.slug} delay={i * 80}>
-                <ProjectCard project={p} index={i} />
-              </Reveal>
+              <ProjectCard key={p.slug} project={p} index={i} />
             ))}
           </div>
-        </div>
-      </section>
+          <Link to="/portfolio" className="home-work__all">
+            All projects <span className="arrow" aria-hidden="true">→</span>
+          </Link>
+        </section>
+      </div>
     </>
   );
 }

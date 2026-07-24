@@ -1,79 +1,58 @@
-.pubs { display: flex; flex-direction: column; gap: 22px; }
+.pubs { display: flex; flex-direction: column; }
 
+/* Each publication is a catalogue entry: a reference number, the record,
+   and a hairline separating it from the next. No colored side-tab. */
 .pub {
   --accent: var(--research-bright);
   position: relative;
   display: grid;
-  grid-template-columns: 68px 1fr;
-  gap: 24px;
-  padding: 36px clamp(24px, 4vw, 44px);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface-2);
+  grid-template-columns: 72px 1fr;
+  gap: clamp(18px, 4vw, 40px);
+  padding: clamp(30px, 4vw, 44px) clamp(4px, 1.5vw, 18px);
+  border-top: 1px solid var(--border-strong);
   scroll-margin-top: calc(var(--nav-h) + 24px);
-  transition: border-color 0.3s var(--ease), transform 0.35s var(--ease-out),
-              box-shadow 0.35s var(--ease), background 0.3s var(--ease);
+  transition: background 0.3s var(--ease);
 }
+.pub:last-child { border-bottom: 1px solid var(--border-strong); }
 .pub.cat-history { --accent: var(--history-bright); }
-.pub::before {
-  content: "";
-  position: absolute;
-  left: 0; top: 22px; bottom: 22px;
-  width: 3px;
-  border-radius: 999px;
-  background: var(--accent);
-  opacity: 0;
-  transition: opacity 0.3s var(--ease);
-}
-.pub:hover {
-  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
-  background: var(--surface-3);
-  transform: translateY(-3px);
-  box-shadow: 0 24px 54px -36px rgba(0, 0, 0, 0.9);
-}
-.pub:hover::before { opacity: 1; }
+.pub:hover { background: color-mix(in srgb, var(--surface-2) 55%, transparent); }
 .pub:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
-/* Briefly highlight a publication when linked directly */
-.pub:target {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
-}
-.pub:target::before { opacity: 1; }
+.pub:target { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.pub:target .pub__index { color: var(--accent); }
 
 .pub__index {
   font-family: var(--font-mono);
-  font-size: 1.4rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  color: var(--accent);
+  color: var(--text-faint);
   line-height: 1;
-  padding-top: 8px;
+  padding-top: 10px;
+  letter-spacing: 0.02em;
 }
+.pub__index::before { content: "REF "; font-size: 0.6rem; letter-spacing: 0.16em; }
+
 .pub__title {
   font-family: var(--font-display);
   font-weight: 560;
-  font-size: clamp(1.35rem, 3vw, 1.85rem);
-  margin: 0 0 10px;
-  line-height: 1.16;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  margin: 0 0 12px;
+  line-height: 1.14;
   color: var(--text);
+  letter-spacing: -0.02em;
 }
 .pub__journal {
   font-family: var(--font-mono);
-  font-size: 0.82rem;
-  letter-spacing: 0.02em;
-  color: var(--text-faint);
-  margin: 0 0 18px;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  color: var(--accent);
+  margin: 0 0 20px;
 }
 .pub__copy { max-width: var(--measure); }
-.pub__copy p { font-size: 1.08rem; line-height: 1.72; color: var(--text-soft); }
+.pub__copy p { font-size: 1.06rem; line-height: 1.72; color: var(--text-soft); }
 .pub__copy p:first-of-type { color: var(--text); }
-.pub__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 22px;
-}
+.pub__links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
 
 @media (max-width: 620px) {
   .pub { grid-template-columns: 1fr; gap: 10px; }
-  .pub__index { font-size: 1.05rem; padding-top: 0; }
+  .pub__index { padding-top: 0; }
 }
