@@ -50,17 +50,6 @@
   width: 39px;
   height: 39px;
 }
-.nav__brand:hover .tensor-mark__core {
-  transform: scale(1.18);
-  filter: drop-shadow(0 0 7px rgba(63, 224, 204, 0.62));
-}
-.nav__brand:hover .tensor-mark__grid {
-  opacity: 0.48;
-}
-.nav__brand:hover .tensor-mark__face {
-  opacity: 0.88;
-}
-
 /* Links (desktop) */
 .nav__links { display: flex; gap: 2px; align-items: center; }
 .nav__link {
