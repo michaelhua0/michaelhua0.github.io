@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
-import ResearchConstellation from "../components/ResearchConstellation";
+import Hero from "../components/Hero";
 import ProjectCard from "../components/ProjectCard";
 import Reveal from "../components/Reveal";
 import { bio, site } from "../data/site";
@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <>
       <SEO title={site.name} path="/" />
-      <ResearchConstellation />
+      <Hero />
 
       {/* About Me intro */}
       <section id="explore" className="section home-intro" aria-labelledby="about-me-heading">
