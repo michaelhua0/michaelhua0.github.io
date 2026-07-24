@@ -1,0 +1,52 @@
+.pubs { display: flex; flex-direction: column; gap: 20px; }
+
+.pub {
+  --accent: var(--research);
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 20px;
+  padding: 32px clamp(20px, 4vw, 40px);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--paper-2);
+  scroll-margin-top: calc(var(--nav-h) + 20px);
+}
+.pub.cat-history { --accent: var(--history); }
+.pub:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+/* Briefly highlight a publication when linked directly */
+.pub:target {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.pub__index {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  color: var(--accent);
+  line-height: 1;
+  padding-top: 6px;
+}
+.pub__title {
+  font-size: clamp(1.3rem, 3vw, 1.75rem);
+  margin: 0 0 8px;
+  line-height: 1.15;
+}
+.pub__journal {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-faint);
+  margin: 0 0 16px;
+}
+.pub__copy { max-width: var(--measure); }
+.pub__copy p { font-size: 1.02rem; color: var(--text); }
+.pub__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+@media (max-width: 620px) {
+  .pub { grid-template-columns: 1fr; gap: 8px; }
+  .pub__index { font-size: 1.1rem; padding-top: 0; }
+}

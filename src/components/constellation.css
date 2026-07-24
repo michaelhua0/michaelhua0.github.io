@@ -1,0 +1,150 @@
+.const {
+  position: relative;
+  width: 100%;
+  min-height: calc(100svh - var(--nav-h));
+  margin-top: calc(-1 * var(--nav-h)); /* let the transparent nav sit over it */
+  padding-top: var(--nav-h);
+  background:
+    radial-gradient(120% 90% at 50% 30%, #121826 0%, var(--ink) 60%);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.const__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.const__layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none; /* only the interactive nodes re-enable it */
+}
+
+/* Each label is absolutely positioned; JS sets transform to match its node. */
+.const__node {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+  white-space: nowrap;
+}
+
+/* Center — the hero title sits on the central node */
+.const__center { text-align: center; }
+.const__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--on-ink);
+  font-size: clamp(2.1rem, 6vw, 3.9rem);
+  line-height: 1;
+  margin: 0;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 30px rgba(11, 14, 20, 0.8);
+}
+.const__role {
+  font-family: var(--font-mono);
+  font-size: clamp(0.68rem, 1.6vw, 0.85rem);
+  letter-spacing: 0.06em;
+  color: var(--on-ink-soft);
+  margin: 0.7rem 0 0;
+}
+
+/* Primary destination chips (real links) */
+.const__primary {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  color: var(--on-ink);
+  background: rgba(16, 20, 29, 0.6);
+  border: 1px solid rgba(231, 236, 242, 0.18);
+  padding: 9px 16px;
+  border-radius: 999px;
+  text-decoration: none;
+  backdrop-filter: blur(4px);
+  transition: border-color 0.22s var(--ease), background 0.22s var(--ease),
+              color 0.22s var(--ease), box-shadow 0.22s var(--ease);
+}
+.const__primary:hover,
+.const__primary:focus-visible {
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--research-bright);
+  border-color: var(--research-bright);
+  box-shadow: 0 8px 30px rgba(34, 211, 192, 0.25);
+}
+.const__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--research-bright);
+  transition: background 0.22s var(--ease);
+}
+.const__primary:hover .const__dot,
+.const__primary:focus-visible .const__dot { background: var(--ink); }
+
+/* Signal (secondary) labels — content, not links */
+.const__signal {
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 1.4vw, 0.72rem);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--on-ink-soft);
+  padding-top: 12px; /* offset below its dot */
+}
+.const__signal.cat-history { color: var(--history-bright); }
+.const__signal.cat-research { color: rgba(34, 211, 192, 0.72); }
+
+/* Invitation / scroll cue */
+.const__invite {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: clamp(20px, 5vh, 44px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+.const__invite-text {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1rem, 2.6vw, 1.35rem);
+  color: var(--on-ink);
+  opacity: 0.9;
+}
+.const__scroll {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--on-ink-soft);
+  text-decoration: none;
+}
+.const__scroll:hover { color: var(--research-bright); text-decoration: none; }
+.const__scroll svg { animation: nudge 1.8s var(--ease) infinite; }
+@keyframes nudge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .const__scroll svg { animation: none; }
+}
+
+/* Tighten the field on small screens so labels don't collide badly */
+@media (max-width: 620px) {
+  .const__primary { font-size: 0.8rem; padding: 7px 12px; }
+  .const__signal { font-size: 0.55rem; }
+}

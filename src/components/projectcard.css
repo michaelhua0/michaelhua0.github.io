@@ -1,0 +1,89 @@
+.pcard {
+  --cat: var(--research);
+  height: 100%;
+}
+.pcard.cat-history { --cat: var(--history); }
+
+.pcard__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--paper-2);
+  transition: border-color 0.25s var(--ease), transform 0.25s var(--ease),
+              box-shadow 0.25s var(--ease);
+}
+.pcard__link:hover,
+.pcard__link:focus-visible {
+  text-decoration: none;
+  border-color: var(--cat);
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px -24px rgba(11, 14, 20, 0.4);
+}
+
+.pcard__media {
+  position: relative;
+  border-bottom: 1px solid var(--hairline);
+}
+.pcard__media > div { border-radius: 0; }
+.pcard__num {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: #fff;
+  background: rgba(11, 14, 20, 0.55);
+  padding: 3px 8px;
+  border-radius: var(--radius);
+  backdrop-filter: blur(2px);
+}
+
+.pcard__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 22px 22px;
+  flex: 1;
+}
+.pcard__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.pcard__cat-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--cat);
+}
+.pcard__title {
+  font-size: 1.28rem;
+  line-height: 1.15;
+  margin: 0;
+  color: var(--text);
+}
+.pcard__teaser {
+  font-size: 0.95rem;
+  color: var(--text-soft);
+  margin: 0;
+}
+.pcard__cta {
+  margin-top: auto;
+  padding-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--cat);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.pcard__link:hover .pcard__cta .arrow { transform: translateX(3px); }
+.pcard__cta .arrow { transition: transform 0.2s var(--ease); }
