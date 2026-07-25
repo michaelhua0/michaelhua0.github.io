@@ -11,9 +11,9 @@ import "./hero.css";
    spectrometer decoding incoming light), and disperses those
    bands into RGB fringing near the pointer — a literal reading
    of "decoding light" rather than a generic flowing blob.
-   A pushbroom scanline sweeps the frame, and a click fires a
-   radial band-shockwave. Falls back to a static gradient when
-   WebGL is unavailable or the visitor prefers reduced motion.
+   A pushbroom scanline sweeps the frame. Falls back to a static
+   gradient when WebGL is unavailable or the visitor prefers
+   reduced motion.
    ============================================================ */
 
 const VERT = `
@@ -27,8 +27,6 @@ uniform vec2  u_res;
 uniform float u_time;
 uniform vec2  u_mouse;      // 0..1, y flipped to match uv
 uniform float u_active;     // 0..1 pointer influence
-uniform vec2  u_click;      // last click, in p-space
-uniform float u_clickAge;   // seconds since last click (large if none yet)
 
 const float BANDS = 6.0;
 
@@ -109,17 +107,6 @@ void main(){
   float lens = u_active * 0.5 * exp(-mDist * 2.6);
   vec2 pd = p + (m - p) * lens;
 
-  // ---- click shockwave: radial band expanding outward from last click ----
-  vec2 toClick = p - u_click;
-  float clickDist = length(toClick) + 1e-4;
-  vec2 clickDir = toClick / clickDist;
-  float ringR = u_clickAge * 1.7;
-  float ringDist = abs(clickDist - ringR);
-  float ringDecay = exp(-u_clickAge * 1.6);
-  float ringGlow = exp(-ringDist * 16.0) * ringDecay;
-  float ringPush = exp(-ringDist * 7.0) * ringDecay;
-  pd += clickDir * ringPush * 0.16;
-
   vec2 sp = pd * 1.7 + vec2(0.0, t * 0.5);
 
   // ---- chromatic dispersion: sample R/G/B slightly apart, radial to the cursor ----
@@ -155,9 +142,8 @@ void main(){
   float fil = pow(clamp(1.0 - abs(fG - 0.55) * 3.2, 0.0, 1.0), 2.0);
   col += bright * fil * 0.22;
 
-  // pointer bloom + click flash
+  // pointer bloom
   col += bright * u_active * exp(-mDist * 3.4) * 0.32;
-  col += vec3(1.0, 0.96, 0.9) * ringGlow * 1.3;
 
   // ---- pushbroom scanline: a hyperspectral sensor sweeping the frame ----
   float scanY = fract(u_time * 0.05);
@@ -214,6 +200,8 @@ export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const probeRef = useRef<HTMLSpanElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const wayfindRef = useRef<HTMLElement>(null);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
@@ -260,13 +248,34 @@ export default function Hero() {
     const uTime = gl.getUniformLocation(prog, "u_time");
     const uMouse = gl.getUniformLocation(prog, "u_mouse");
     const uActive = gl.getUniformLocation(prog, "u_active");
-    const uClick = gl.getUniformLocation(prog, "u_click");
-    const uClickAge = gl.getUniformLocation(prog, "u_clickAge");
 
     let W = 0;
     let H = 0;
     let cssW = 0;
     let cssH = 0;
+    // regions (in hero-local px) where the cursor probe stays hidden —
+    // padded around the title/copy and the wayfinding band so the readout
+    // only appears over open field, not on top of text.
+    type Rect = { left: number; top: number; right: number; bottom: number };
+    let excludeRects: Rect[] = [];
+    const PROBE_PAD = 28;
+    const computeExcludeRects = () => {
+      const heroRect = hero.getBoundingClientRect();
+      const rects: Rect[] = [];
+      const add = (el: Element | null) => {
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        rects.push({
+          left: r.left - heroRect.left - PROBE_PAD,
+          top: r.top - heroRect.top - PROBE_PAD,
+          right: r.right - heroRect.left + PROBE_PAD,
+          bottom: r.bottom - heroRect.top + PROBE_PAD,
+        });
+      };
+      add(contentRef.current);
+      add(wayfindRef.current);
+      excludeRects = rects;
+    };
     const resize = () => {
       const rect = hero.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 1.75);
@@ -280,13 +289,13 @@ export default function Hero() {
       canvas.style.height = rect.height + "px";
       gl.viewport(0, 0, W, H);
       gl.uniform2f(uRes, W, H);
+      computeExcludeRects();
     };
     resize();
 
     // pointer — targets are lerped for buttery motion
     const mouse = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5, a: 0, ta: 0 };
     const start = performance.now();
-    const click = { x: 0, y: 0, at: -9999 };
     const onMove = (e: PointerEvent) => {
       const rect = hero.getBoundingClientRect();
       mouse.tx = (e.clientX - rect.left) / rect.width;
@@ -296,17 +305,10 @@ export default function Hero() {
     const onLeave = () => {
       mouse.ta = 0;
     };
-    const onDown = (e: PointerEvent) => {
-      onMove(e);
-      const aspect = W / H;
-      click.x = (mouse.tx - 0.5) * aspect;
-      click.y = (mouse.ty - 0.5) * 1.0;
-      click.at = (performance.now() - start) / 1000;
-    };
     if (!reduced) {
       hero.addEventListener("pointermove", onMove);
       hero.addEventListener("pointerleave", onLeave);
-      hero.addEventListener("pointerdown", onDown);
+      hero.addEventListener("pointerdown", onMove);
     }
 
     let raf = 0;
@@ -320,15 +322,16 @@ export default function Hero() {
       gl.uniform1f(uTime, t);
       gl.uniform2f(uMouse, mouse.x, mouse.y);
       gl.uniform1f(uActive, mouse.a);
-      gl.uniform2f(uClick, click.x, click.y);
-      gl.uniform1f(uClickAge, t - click.at);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
 
       const probe = probeRef.current;
       if (probe) {
-        if (mouse.a > 0.02) {
-          const px = mouse.x * cssW;
-          const py = (1 - mouse.y) * cssH;
+        const px = mouse.x * cssW;
+        const py = (1 - mouse.y) * cssH;
+        const inExcluded = excludeRects.some(
+          (r) => px >= r.left && px <= r.right && py >= r.top && py <= r.bottom,
+        );
+        if (mouse.a > 0.02 && !inExcluded) {
           probe.style.transform = `translate3d(${px}px, ${py}px, 0)`;
           probe.style.opacity = String(mouse.a * 0.9);
           const nm = Math.round(400 + (1 - mouse.y) * 300);
@@ -357,8 +360,6 @@ export default function Hero() {
       gl.uniform1f(uTime, 12.0);
       gl.uniform2f(uMouse, 0.5, 0.5);
       gl.uniform1f(uActive, 0);
-      gl.uniform2f(uClick, 0, 0);
-      gl.uniform1f(uClickAge, 9999.0);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
 
@@ -439,17 +440,13 @@ export default function Hero() {
       {/* cursor probe — reads the field's simulated wavelength under the pointer */}
       {!failed && <span ref={probeRef} className="hero__probe" aria-hidden="true" />}
 
-      {/* corner data readouts — tech texture */}
+      {/* corner data readout — tech texture */}
       <div className="hero__hud hero__hud--tl" aria-hidden="true">
         <span>SPECTRAL&nbsp;FIELD</span>
         <span>λ 400–700 nm</span>
       </div>
-      <div className="hero__hud hero__hud--tr" aria-hidden="true">
-        <span>EST. 2024</span>
-        <span>CRANBROOK, MI</span>
-      </div>
 
-      <div className="hero__content">
+      <div className="hero__content" ref={contentRef}>
         <p className="hero__eyebrow">
           <span className="hero__eyebrow-text">
             {roleParts.map((r, i) => (
@@ -478,6 +475,7 @@ export default function Hero() {
 
       {/* Auto-cycling destination band — animated wayfinding into the site. */}
       <nav
+        ref={wayfindRef}
         className="hero__wayfind"
         aria-label="Explore the site"
         onMouseEnter={() => setPaused(true)}
