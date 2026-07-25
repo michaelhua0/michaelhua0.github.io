@@ -29,7 +29,13 @@ export default function ProjectCard({
       <Link ref={ref} to={`/portfolio/${project.slug}`} className="pcard__link">
         <div className={`pcard__media figure figure__ticks scan ${armed ? "is-armed" : ""} ${inView ? "is-shown" : ""}`}>
           <div className="scan__media">
-            <SmartImage src={project.image} alt={project.cardTitle} motif={project.motif} ratio="16 / 10" />
+            <SmartImage
+              src={project.image}
+              alt={project.cardTitle}
+              motif={project.motif}
+              ratio="16 / 10"
+              fit={project.imageFit}
+            />
           </div>
           <span className="scan__line" aria-hidden="true" />
           <span className="pcard__fig" aria-hidden="true">{fig}</span>

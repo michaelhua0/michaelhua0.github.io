@@ -39,6 +39,8 @@ export interface Project {
   teaser: string;
   /** Local image file (dropped into /public/images). Falls back to generated art. */
   image: string;
+  /** Use contain for diagrams, logos, and document pages that should remain uncropped. */
+  imageFit?: "cover" | "contain";
   /** Motif used for the generated fallback art. */
   motif: "spectral" | "vessel" | "point-cloud" | "app" | "documentary" | "channel";
   /** Optional photographs shown on the dedicated project page. */
@@ -58,7 +60,7 @@ export const projects: Project[] = [
     detailTitle: "Decoding Light With Physics-Aware AI",
     teaser:
       "A low-cost imaging spectrometer and physics-aware transformer for high-fidelity hyperspectral reconstruction.",
-    image: "gallery/isef-acm-award-2026.jpg",
+    image: "decoding-light.jpg",
     motif: "spectral",
     gallery: isef2026Photos,
     body: [
@@ -99,7 +101,8 @@ export const projects: Project[] = [
       "Novel Multi-Scale Knowledge Transfer Transformer for 3D Brain Vessel Segmentation",
     teaser:
       "A hybrid convolutional transformer for segmenting cerebral vasculature in 3D in vivo MRI.",
-    image: "brain-vessel.jpg",
+    image: "brain-vessel.png",
+    imageFit: "contain",
     motif: "vessel",
     body: [
       p(
@@ -145,7 +148,8 @@ export const projects: Project[] = [
     detailTitle: "Novel MSST Transformer for Hyperspectral Imaging in Plant Growth Modeling",
     teaser:
       "A multimodal transformer that estimates plant growth from hyperspectral imagery, environmental measurements, and temporal data.",
-    image: "msst.jpg",
+    image: "msst.png",
+    imageFit: "contain",
     motif: "spectral",
     body: [
       p(
@@ -174,7 +178,8 @@ export const projects: Project[] = [
     detailTitle: "AIGRO",
     teaser:
       "A mobile cultivation platform that connects environmental sensors, predictive growth models, and automated controls.",
-    image: "aigro.jpg",
+    image: "aigro.png",
+    imageFit: "contain",
     motif: "app",
     body: [
       { kind: "video", id: "CRbAQMoCaJg", title: "AIGRO" },

@@ -86,8 +86,8 @@ export default function Home() {
                   <p>
                     He is most interested in the point where a research idea becomes something
                     another person can test, use, or learn from. Away from his desk, Michael
-                    competes in saber fencing at the national level and volunteers in his
-                    community.
+                    competes in saber fencing at the national level and serves as co-president of
+                    the Association of Chinese Americans Teen Volunteer Council (ACA TVC).
                   </p>
                 </div>
 

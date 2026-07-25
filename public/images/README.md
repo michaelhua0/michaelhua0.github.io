@@ -12,11 +12,19 @@ Project cards / detail pages:
 | File | Used for |
 | --- | --- |
 | `decoding-light.jpg` | Decoding Light |
-| `brain-vessel.jpg` | Novel Multi-Scale Knowledge Transfer Transformer (3D Brain Vessel Segmentation) |
-| `msst.jpg` | Novel MSST Transformer (Hyperspectral Imaging in Plant Growth Modeling) |
-| `aigro.jpg` | AIGRO |
+| `brain-vessel.png` | Novel Multi-Scale Knowledge Transfer Transformer (3D Brain Vessel Segmentation) |
+| `msst.png` | Novel MSST Transformer (Hyperspectral Imaging in Plant Growth Modeling) |
+| `aigro.png` | AIGRO |
 | `nhd.jpg` | 2025 National History Day |
 | `historys-trigger.jpg` | History's Trigger |
+
+Publication and competition paper previews:
+
+| File | Used for |
+| --- | --- |
+| `publication-vessel-transformer.png` | Computers & Graphics vessel-segmentation paper |
+| `publication-msst.png` | MSST competition paper |
+| `nhd-paper.png` | National History Day process paper |
 
 About page photos:
 
