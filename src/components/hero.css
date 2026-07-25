@@ -171,44 +171,44 @@
 
 /* ---- Auto-cycling wayfinding band ---- */
 .hero__wayfind {
+  --wayfind-gutter: clamp(22px, 5vw, 56px);
   position: relative;
   z-index: 2;
+  isolation: isolate;
   width: 100%;
   max-width: var(--page-max);
   margin-inline: auto;
-  padding-inline: clamp(22px, 5vw, 56px);
+  padding-inline: var(--wayfind-gutter);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  opacity: 0;
-  animation: heroFade 1s var(--ease) 0.62s forwards;
+  opacity: 1;
 }
-/* elevated frosted panel so the row lifts off the field and reads bright */
+/* A restrained backing panel separates the destinations from the moving field. */
 .hero__wayfind::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: 0 var(--wayfind-gutter);
   z-index: -1;
-  background:
-    linear-gradient(180deg, rgba(21, 32, 44, 0.9), rgba(8, 15, 23, 0.96));
-  border-top: 1px solid rgba(145, 255, 239, 0.5);
+  background: linear-gradient(180deg, rgba(19, 29, 40, 0.9), rgba(8, 14, 22, 0.96));
+  border-top: 1px solid rgba(141, 232, 220, 0.3);
   box-shadow:
-    0 -22px 58px rgba(45, 205, 197, 0.13),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+    0 -12px 36px rgba(45, 205, 197, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 .hero__way {
   position: relative;
+  isolation: isolate;
   display: flex;
   align-items: center;
   gap: 16px;
   padding: clamp(18px, 2.4vh, 26px) 20px;
-  color: #edf6fa;
-  background:
-    linear-gradient(145deg, rgba(131, 244, 231, 0.11), rgba(78, 137, 178, 0.04) 58%, rgba(255, 255, 255, 0.025));
+  color: #e5edf4;
+  background: rgba(151, 218, 215, 0.035);
   text-decoration: none;
   overflow: hidden;
-  box-shadow: inset 0 0 0 1px rgba(188, 236, 238, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(188, 236, 238, 0.06);
   transition:
     background 0.4s var(--ease),
     box-shadow 0.4s var(--ease),
@@ -219,43 +219,41 @@
 .hero__way:hover,
 .hero__way:focus-visible,
 .hero__way.is-active {
-  background:
-    linear-gradient(145deg, rgba(92, 241, 220, 0.22), rgba(57, 137, 171, 0.1) 64%, rgba(255, 255, 255, 0.05));
+  background: rgba(90, 205, 194, 0.1);
   box-shadow:
-    inset 0 0 0 1px rgba(127, 255, 238, 0.28),
-    inset 0 14px 32px rgba(73, 225, 210, 0.08),
-    0 0 34px rgba(52, 210, 199, 0.1);
+    inset 0 0 0 1px rgba(127, 236, 222, 0.18),
+    inset 0 12px 28px rgba(73, 225, 210, 0.04);
 }
 .hero__way:focus-visible {
-  outline: 2px solid #b8fff4;
+  outline: 2px solid #93e8dc;
   outline-offset: -3px;
 }
 .hero__way::before {
-  /* A concentrated spectral bloom makes the selected destination luminous. */
+  /* Decorative wash is explicitly kept below the link content. */
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(circle at 18% 0%, rgba(137, 255, 236, 0.34), transparent 58%),
-    linear-gradient(180deg, rgba(69, 226, 206, 0.18), rgba(69, 226, 206, 0.03));
-  opacity: 0.15;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(85, 221, 205, 0.1), transparent 72%);
+  opacity: 0;
   transition: opacity 0.45s var(--ease);
 }
 .hero__way.is-active::before,
 .hero__way:hover::before,
-.hero__way:focus-visible::before { opacity: 1; }
-/* bright accent bar on the active cell */
+.hero__way:focus-visible::before { opacity: 0.7; }
+/* A fine spectral edge marks the current destination without dominating it. */
 .hero__way::after {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #d4fff9, var(--research-bright), #8bcfff);
-  box-shadow:
-    0 0 12px rgba(106, 255, 234, 0.85),
-    0 0 28px rgba(69, 226, 206, 0.48);
+  z-index: 2;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(90deg, #a9eee4, var(--research-bright), #77b9d5);
+  box-shadow: 0 0 10px rgba(69, 226, 206, 0.38);
   transform: scaleX(0.12);
   transform-origin: left center;
   transition: transform 0.4s var(--ease);
@@ -265,44 +263,50 @@
 .hero__way:focus-visible::after { transform: scaleX(1); }
 
 .hero__way-n {
+  position: relative;
+  z-index: 1;
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.06em;
-  color: #9dfff0;
-  text-shadow:
-    0 0 8px rgba(69, 226, 206, 0.75),
-    0 0 20px rgba(69, 226, 206, 0.38);
+  color: #80dfd1;
+  text-shadow: 0 0 9px rgba(69, 226, 206, 0.28);
   transition: color 0.3s var(--ease);
 }
-.hero__way-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.hero__way-text {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
 .hero__way-label {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 650;
   font-size: clamp(1.12rem, 2.1vw, 1.4rem);
   line-height: 1.1;
-  color: #ffffff;
-  text-shadow:
-    0 0 1px rgba(255, 255, 255, 0.75),
-    0 0 18px rgba(159, 237, 255, 0.28);
+  color: #f3f6f8;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.32);
   transition: color 0.3s var(--ease);
 }
 .hero__way-desc {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   letter-spacing: 0.05em;
-  color: #e4eef5;
+  color: #cbd7e0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .hero__way-arrow {
+  position: relative;
+  z-index: 1;
   margin-left: auto;
   font-size: 1.15rem;
-  color: #f4ffff;
+  color: #dbe8ed;
   opacity: 1;
   transform: translateX(-2px);
-  text-shadow: 0 0 12px rgba(92, 242, 222, 0.5);
   transition: transform 0.3s var(--ease), color 0.3s var(--ease), opacity 0.3s var(--ease);
 }
 .hero__way.is-active .hero__way-arrow,
@@ -314,6 +318,7 @@
 
 .hero__way-prog {
   position: absolute;
+  z-index: 3;
   left: 0;
   bottom: 0;
   height: 2px;
