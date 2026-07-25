@@ -182,26 +182,36 @@
   opacity: 0;
   animation: heroFade 1s var(--ease) 0.62s forwards;
 }
+/* solid dark backing so the row reads at full brightness over the field */
+.hero__wayfind::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(6, 10, 16, 0.72), rgba(6, 10, 16, 0.92));
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
 .hero__way {
   position: relative;
   display: flex;
   align-items: center;
   gap: 16px;
   padding: clamp(18px, 2.4vh, 26px) 20px;
-  border-top: 1px solid rgba(233, 240, 248, 0.28);
+  border-top: 1px solid rgba(233, 240, 248, 0.45);
   color: var(--on-ink-soft);
   text-decoration: none;
   overflow: hidden;
   transition: background 0.4s var(--ease), color 0.3s var(--ease);
 }
-.hero__way + .hero__way { border-left: 1px solid rgba(233, 240, 248, 0.16); }
+.hero__way + .hero__way { border-left: 1px solid rgba(233, 240, 248, 0.22); }
 .hero__way:hover { text-decoration: none; }
 .hero__way::before {
   /* soft wash that fades in on the active cell */
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(69, 226, 206, 0.16), rgba(69, 226, 206, 0.03));
+  background: linear-gradient(180deg, rgba(69, 226, 206, 0.22), rgba(69, 226, 206, 0.05));
   opacity: 0;
   transition: opacity 0.45s var(--ease);
 }
@@ -210,9 +220,9 @@
 .hero__way-n {
   font-family: var(--font-mono);
   font-size: 0.74rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.06em;
-  color: var(--on-ink-soft);
+  color: var(--research-bright);
   transition: color 0.3s var(--ease);
 }
 .hero__way-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -228,7 +238,7 @@
   font-family: var(--font-mono);
   font-size: 0.68rem;
   letter-spacing: 0.05em;
-  color: var(--on-ink-soft);
+  color: #c4cedb;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -236,15 +246,11 @@
 .hero__way-arrow {
   margin-left: auto;
   font-size: 1.1rem;
-  color: var(--on-ink-soft);
-  opacity: 0.85;
+  color: #dbe4ee;
+  opacity: 1;
   transform: translateX(-2px);
   transition: transform 0.3s var(--ease), color 0.3s var(--ease), opacity 0.3s var(--ease);
 }
-.hero__way.is-active .hero__way-n,
-.hero__way:hover .hero__way-n { color: var(--research-bright); }
-.hero__way.is-active .hero__way-label,
-.hero__way:hover .hero__way-label { color: #fff; }
 .hero__way.is-active .hero__way-arrow,
 .hero__way:hover .hero__way-arrow {
   color: var(--research-bright);
