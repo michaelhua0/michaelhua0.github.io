@@ -15,18 +15,22 @@ const profileNotes: [string, string][] = [
   ["Beyond research", "Documentary history · Saber fencing · Community service"],
 ];
 
-/** The headline award, pulled out so it can lead the status readout. */
-const topAward = {
-  rank: "1st",
-  title: "Grand Award",
-  note: "Regeneron ISEF · Robotics & Intelligent Machines",
-};
-
-/** Supporting recognition, shown as a compact readout beneath the headline. */
 const recognition = [
-  { mark: "ACM", title: "Special Award", note: "Computing research" },
-  { mark: "MJ", title: "Midjourney Special Award", note: "Regeneron ISEF" },
-  { mark: "JSHS", title: "National finalist", note: "Junior Science & Humanities Symposium" },
+  {
+    mark: "1st",
+    title: "Grand Award",
+    note: "Regeneron ISEF · Robotics and Intelligent Machines",
+  },
+  {
+    mark: "ACM",
+    title: "Special Award",
+    note: "Regeneron ISEF · Computing research",
+  },
+  {
+    mark: "MJ",
+    title: "Midjourney Special Award",
+    note: "Regeneron ISEF",
+  },
 ];
 
 const directory = [
@@ -51,32 +55,6 @@ export default function Home() {
               note="Bloomfield Hills · MI"
               titleId="profile-h"
             />
-
-            {/* Status readout — leads with the headline award for immediate credibility. */}
-            <aside className="home-status" aria-labelledby="status-h">
-              <div className="home-status__head">
-                <h3 id="status-h" className="home-status__label">
-                  Selected recognition
-                </h3>
-                <span className="home-status__meta">Regeneron ISEF · 2026</span>
-              </div>
-
-              <div className="home-status__lead">
-                <span className="home-status__rank">{topAward.rank}</span>
-                <span className="home-status__lead-title">{topAward.title}</span>
-                <span className="home-status__lead-note">{topAward.note}</span>
-              </div>
-
-              <ul className="home-status__more">
-                {recognition.map((award) => (
-                  <li key={`${award.mark}-${award.note}`}>
-                    <span className="home-status__more-mark">{award.mark}</span>
-                    <span className="home-status__more-title">{award.title}</span>
-                    <span className="home-status__more-note">{award.note}</span>
-                  </li>
-                ))}
-              </ul>
-            </aside>
 
             <div className="home-profile__spread">
               <figure className="home-profile__portrait">
@@ -127,6 +105,24 @@ export default function Home() {
                 </Link>
               </div>
             </div>
+
+            <aside className="home-profile__recognition" aria-labelledby="recognition-h">
+              <div className="home-profile__recognition-head">
+                <h3 id="recognition-h">Selected recognition</h3>
+                <span>Regeneron ISEF · 2026</span>
+              </div>
+              <ol>
+                {recognition.map((award) => (
+                  <li key={`${award.mark}-${award.note}`}>
+                    <strong>{award.mark}</strong>
+                    <div>
+                      <span>{award.title}</span>
+                      <small>{award.note}</small>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </aside>
           </div>
         </section>
 
