@@ -52,6 +52,7 @@
   color: var(--text);
   letter-spacing: -0.03em;
 }
+.project__sig { margin-top: 20px; }
 
 .project__lead {
   position: relative;

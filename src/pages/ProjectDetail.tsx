@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import SEO from "../components/SEO";
 import RichBlocks from "../components/RichBlocks";
 import SmartImage from "../components/SmartImage";
+import SpectralSignature from "../components/SpectralSignature";
 import { getProject, projects } from "../data/projects";
 import NotFound from "./NotFound";
 import "./projectdetail.css";
@@ -39,6 +40,12 @@ export default function ProjectDetail() {
             {project.tag}
           </span>
           <h1 className="project__title long-title">{project.detailTitle}</h1>
+          <SpectralSignature
+            domain={project.domain}
+            seed={project.slug}
+            showLabel
+            className="spectral-sig--lg project__sig"
+          />
         </header>
 
         {!leadsWithVideo && (

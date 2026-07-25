@@ -1,0 +1,48 @@
+.scanfx {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.scanfx__line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--research-bright) 22%,
+    #eafffb 50%,
+    var(--research-bright) 78%,
+    transparent
+  );
+  box-shadow: 0 0 18px 2px rgba(69, 226, 206, 0.5);
+  will-change: transform, opacity;
+  animation: scanfxSweep 0.72s var(--ease-out) both;
+}
+
+/* comet tail trailing the line */
+.scanfx__line::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 2px;
+  height: 130px;
+  background: linear-gradient(180deg, rgba(69, 226, 206, 0.16), transparent);
+}
+
+@keyframes scanfxSweep {
+  0% { transform: translateY(-6px); opacity: 0; }
+  12% { opacity: 1; }
+  86% { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scanfx { display: none; }
+}

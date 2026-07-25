@@ -1,0 +1,77 @@
+/* The rail lives in the left page margin; only shown when the viewport is
+   wide enough that the margin exists and it cannot overlap the content. */
+.rail {
+  display: none;
+}
+
+/* Only on screens wide enough that a comfortable margin exists beside the
+   1200px content column — the rail and its readout stay entirely in that
+   margin and never touch the content. */
+@media (min-width: 1440px) {
+  .rail {
+    position: fixed;
+    top: 50%;
+    left: calc((100vw - var(--page-max)) / 2 - 46px);
+    transform: translateY(-50%);
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+  }
+}
+
+.rail__cap {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.rail__track {
+  position: relative;
+  width: 3px;
+  height: clamp(220px, 34vh, 340px);
+  border-radius: 2px;
+  opacity: 0.5;
+}
+
+.rail__marker {
+  position: absolute;
+  left: 50%;
+  width: 13px;
+  height: 13px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--rail-color, var(--research-bright));
+  box-shadow:
+    0 0 0 3px rgba(6, 10, 16, 0.9),
+    0 0 14px 2px color-mix(in srgb, var(--rail-color, var(--research-bright)) 70%, transparent);
+}
+
+/* Readout extends leftward from the marker, into the outer margin, so it
+   never reaches toward the content column. */
+.rail__readout {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--text-soft);
+  background: rgba(6, 10, 16, 0.7);
+  padding: 2px 6px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.rail__unit {
+  font-family: var(--font-mono);
+  font-size: 0.54rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}

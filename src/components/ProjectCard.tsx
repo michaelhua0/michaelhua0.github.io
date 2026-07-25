@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { Project } from "../data/projects";
 import SmartImage from "./SmartImage";
+import SpectralSignature from "./SpectralSignature";
 import { useInView } from "../hooks/useInView";
 import "./projectcard.css";
 
@@ -46,7 +47,10 @@ export default function ProjectCard({
         </div>
 
         <div className="pcard__body">
-          <span className="pcard__tag">{project.tag}</span>
+          <span className="pcard__sig-row">
+            <SpectralSignature domain={project.domain} seed={project.slug} className="pcard__sig" />
+            <span className="pcard__tag">{project.tag}</span>
+          </span>
           <Title className="pcard__title long-title">{project.cardTitle}</Title>
           <p className="pcard__teaser">{project.teaser}</p>
           <span className="pcard__cta" aria-hidden="true">
