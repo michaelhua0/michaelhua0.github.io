@@ -13,6 +13,8 @@ interface Props {
   ratio?: string;
   /** Preserve the complete image for diagrams, logos, and document pages. */
   fit?: "cover" | "contain";
+  /** Background shown around a contained image. */
+  imageBackground?: string;
 }
 
 /**
@@ -27,9 +29,12 @@ export default function SmartImage({
   className,
   ratio = "16 / 10",
   fit = "cover",
+  imageBackground,
 }: Props) {
   const [failed, setFailed] = useState(false);
   const url = `${import.meta.env.BASE_URL}images/${src}`;
+  const frameBackground =
+    imageBackground ?? (fit === "contain" ? "#f4f3ef" : "var(--ink-2)");
 
   return (
     <div
@@ -38,7 +43,7 @@ export default function SmartImage({
         position: "relative",
         aspectRatio: ratio,
         overflow: "hidden",
-        background: "var(--ink-2)",
+        background: frameBackground,
         borderRadius: "inherit",
       }}
     >
@@ -56,7 +61,7 @@ export default function SmartImage({
             height: "100%",
             objectFit: fit,
             display: "block",
-            background: fit === "contain" ? "#f4f3ef" : "transparent",
+            background: frameBackground,
           }}
         />
       )}

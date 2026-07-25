@@ -49,6 +49,7 @@ export default function ProjectDetail() {
               motif={project.motif}
               ratio="16 / 9"
               fit={project.imageFit}
+              imageBackground={project.imageBackground}
             />
           </div>
         )}

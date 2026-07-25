@@ -35,6 +35,7 @@ export default function ProjectCard({
               motif={project.motif}
               ratio="16 / 10"
               fit={project.imageFit}
+              imageBackground={project.imageBackground}
             />
           </div>
           <span className="scan__line" aria-hidden="true" />
