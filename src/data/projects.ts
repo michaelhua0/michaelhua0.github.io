@@ -48,8 +48,6 @@ export interface Project {
   imageRatio?: string;
   /** Optional backdrop used when a contained image does not fill its frame. */
   imageBackground?: string;
-  /** Marks a card image as a video thumbnail and adds a play affordance. */
-  cardMedia?: "video";
   /** Motif used for the generated fallback art. */
   motif: "spectral" | "vessel" | "point-cloud" | "app" | "documentary" | "channel";
   /** Optional photographs shown on the dedicated project page. */
@@ -231,9 +229,7 @@ export const projects: Project[] = [
     teaser:
       "A documentary and historical study of the reform movement that produced the 1906 Food and Drug Act.",
     image: "nhd.jpg",
-    imageFit: "contain",
-    imageBackground: "var(--surface-2)",
-    cardMedia: "video",
+    imageRatio: "16 / 9",
     motif: "documentary",
     body: [
       {
@@ -266,6 +262,7 @@ export const projects: Project[] = [
       "An independent documentary series about political assassinations and their historical consequences.",
     image: "historys-trigger.jpg",
     imageFit: "contain",
+    imageRatio: "16 / 9",
     motif: "channel",
     body: [
       {
