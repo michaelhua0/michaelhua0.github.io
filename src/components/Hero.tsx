@@ -200,7 +200,9 @@ export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const probeRef = useRef<HTMLSpanElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const eyebrowRef = useRef<HTMLSpanElement>(null);
+  const ledeRef = useRef<HTMLParagraphElement>(null);
   const wayfindRef = useRef<HTMLElement>(null);
   const [failed, setFailed] = useState(false);
 
@@ -253,27 +255,45 @@ export default function Hero() {
     let H = 0;
     let cssW = 0;
     let cssH = 0;
-    // regions (in hero-local px) where the cursor probe stays hidden —
-    // padded around the title/copy and the wayfinding band so the readout
-    // only appears over open field, not on top of text.
+    // regions (in hero-local px) where the cursor probe stays hidden — tight
+    // boxes around the rendered glyphs (not the full-width centered blocks
+    // that contain them) so the readout covers as much open field as
+    // possible and only hides right on top of actual text.
     type Rect = { left: number; top: number; right: number; bottom: number };
     let excludeRects: Rect[] = [];
-    const PROBE_PAD = 28;
     const computeExcludeRects = () => {
       const heroRect = hero.getBoundingClientRect();
       const rects: Rect[] = [];
-      const add = (el: Element | null) => {
-        if (!el) return;
-        const r = el.getBoundingClientRect();
+      const addRect = (r: { left: number; top: number; right: number; bottom: number } | null, pad: number) => {
+        if (!r) return;
         rects.push({
-          left: r.left - heroRect.left - PROBE_PAD,
-          top: r.top - heroRect.top - PROBE_PAD,
-          right: r.right - heroRect.left + PROBE_PAD,
-          bottom: r.bottom - heroRect.top + PROBE_PAD,
+          left: r.left - heroRect.left - pad,
+          top: r.top - heroRect.top - pad,
+          right: r.right - heroRect.left + pad,
+          bottom: r.bottom - heroRect.top + pad,
         });
       };
-      add(contentRef.current);
-      add(wayfindRef.current);
+
+      // the name — union of just the two word spans, not the full h1 width
+      const words = titleRef.current?.querySelectorAll<HTMLElement>(".hero__word");
+      if (words && words.length) {
+        let l = Infinity;
+        let t = Infinity;
+        let rt = -Infinity;
+        let b = -Infinity;
+        words.forEach((w) => {
+          const wr = w.getBoundingClientRect();
+          l = Math.min(l, wr.left);
+          t = Math.min(t, wr.top);
+          rt = Math.max(rt, wr.right);
+          b = Math.max(b, wr.bottom);
+        });
+        addRect({ left: l, top: t, right: rt, bottom: b }, 10);
+      }
+
+      addRect(eyebrowRef.current?.getBoundingClientRect() ?? null, 8);
+      addRect(ledeRef.current?.getBoundingClientRect() ?? null, 8);
+      addRect(wayfindRef.current?.getBoundingClientRect() ?? null, 20);
       excludeRects = rects;
     };
     const resize = () => {
@@ -446,9 +466,9 @@ export default function Hero() {
         <span>λ 400–700 nm</span>
       </div>
 
-      <div className="hero__content" ref={contentRef}>
+      <div className="hero__content">
         <p className="hero__eyebrow">
-          <span className="hero__eyebrow-text">
+          <span className="hero__eyebrow-text" ref={eyebrowRef}>
             {roleParts.map((r, i) => (
               <span key={r}>
                 {r}
@@ -458,7 +478,7 @@ export default function Hero() {
           </span>
         </p>
 
-        <h1 className="hero__title">
+        <h1 className="hero__title" ref={titleRef}>
           <span className="hero__word" style={{ animationDelay: "0.05s" }}>
             {w1}
           </span>{" "}
@@ -467,7 +487,7 @@ export default function Hero() {
           </span>
         </h1>
 
-        <p className="hero__lede">
+        <p className="hero__lede" ref={ledeRef}>
           My work connects <em>computer vision</em> and <em>hyperspectral imaging</em> with
           software development, documentary research, and public service.
         </p>
