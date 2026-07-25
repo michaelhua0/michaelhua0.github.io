@@ -32,146 +32,65 @@ export const isef2026Photos: GalleryPhoto[] = [
   },
 ];
 
+/* Candid moments. Each is its own tightly-cropped file, so the gallery grid
+   stays clean and new photos can simply be appended. */
 export const momentsPhotos: GalleryPhoto[] = [
   {
-    src: "gallery/moments-collage-1.jpg",
+    src: "gallery/moment-fencing.jpg",
     alt: "Michael Hua in fencing gear holding a saber",
     caption: "Saber fencing",
     meta: "Portrait",
   },
   {
-    src: "gallery/moments-collage-1.jpg",
-    alt: "Michael Hua presenting a brain vessel segmentation research poster",
-    caption: "Research presentation",
-    meta: "Computer vision",
-  },
-  {
-    src: "gallery/moments-collage-1.jpg",
-    alt: "Michael Hua presenting his research in a lecture hall",
-    caption: "Research talk",
-    meta: "Presentation",
-  },
-  {
-    src: "gallery/moments-collage-1.jpg",
-    alt: "Michael Hua standing beside his hyperspectral imaging research poster",
-    caption: "Poster session",
-    meta: "Hyperspectral imaging",
-  },
-  {
-    src: "gallery/moments-collage-2.jpg",
-    alt: "Michael Hua with friends at Regeneron ISEF",
+    src: "gallery/moment-isef-group.jpg",
+    alt: "Michael Hua with friends beneath the Regeneron ISEF welcome sign",
     caption: "Regeneron ISEF",
-    meta: "Friends",
+    meta: "With friends",
   },
   {
-    src: "gallery/moments-collage-2.jpg",
+    src: "gallery/moment-brain-poster.jpg",
+    alt: "Michael Hua presenting his brain vessel segmentation research poster",
+    caption: "Brain vessel segmentation",
+    meta: "Poster session",
+  },
+  {
+    src: "gallery/moment-history-award.jpg",
     alt: "Michael Hua holding his Michigan History Day National Finalist award",
     caption: "Michigan History Day",
     meta: "National Finalist",
   },
   {
-    src: "gallery/moments-collage-2.jpg",
+    src: "gallery/moment-research-talk.jpg",
+    alt: "Michael Hua presenting his research to an audience in a lecture hall",
+    caption: "Research talk",
+    meta: "Presentation",
+  },
+  {
+    src: "gallery/moment-jshs-friends.jpg",
     alt: "Michael Hua and two friends posing with playful props at JSHS",
     caption: "JSHS with friends",
     meta: "Competition day",
   },
+  {
+    src: "gallery/moment-msst-poster.jpg",
+    alt: "Michael Hua standing beside his hyperspectral imaging research poster",
+    caption: "Hyperspectral imaging",
+    meta: "Poster session",
+  },
 ];
 
-export type HomePhotoCrop =
-  | "fencing"
-  | "brain-poster"
-  | "research-talk"
-  | "msst-poster"
-  | "isef-group"
-  | "history-award"
-  | "jshs-friends";
-
-export type HomeGalleryItem =
-  | {
-      kind: "photo";
-      id: string;
-      photo: GalleryPhoto;
-      layout:
-        | "feature"
-        | "candid"
-        | "portrait-left"
-        | "research-wide"
-        | "talk-wide"
-        | "portrait-right"
-        | "tile-left"
-        | "tile-center"
-        | "tile-right";
-      crop?: HomePhotoCrop;
-    }
-  | {
-      kind: "placeholder";
-      title: string;
-      note: string;
-      layout: "left" | "right";
-    };
-
-export const homeGalleryItems: HomeGalleryItem[] = [
-  { kind: "photo", id: "isef-selfie", photo: isef2026Photos[3], layout: "feature" },
-  { kind: "photo", id: "acm-award", photo: isef2026Photos[0], layout: "candid" },
-  {
-    kind: "photo",
-    id: "fencing",
-    photo: momentsPhotos[0],
-    layout: "portrait-left",
-    crop: "fencing",
-  },
-  {
-    kind: "photo",
-    id: "brain-poster",
-    photo: momentsPhotos[1],
-    layout: "research-wide",
-    crop: "brain-poster",
-  },
-  {
-    kind: "photo",
-    id: "research-talk",
-    photo: momentsPhotos[2],
-    layout: "talk-wide",
-    crop: "research-talk",
-  },
-  {
-    kind: "photo",
-    id: "msst-poster",
-    photo: momentsPhotos[3],
-    layout: "portrait-right",
-    crop: "msst-poster",
-  },
-  {
-    kind: "photo",
-    id: "isef-group",
-    photo: momentsPhotos[4],
-    layout: "tile-left",
-    crop: "isef-group",
-  },
-  {
-    kind: "photo",
-    id: "history-award",
-    photo: momentsPhotos[5],
-    layout: "tile-center",
-    crop: "history-award",
-  },
-  {
-    kind: "photo",
-    id: "jshs-friends",
-    photo: momentsPhotos[6],
-    layout: "tile-right",
-    crop: "jshs-friends",
-  },
-  {
-    kind: "placeholder",
-    title: "The next candid",
-    note: "Reserved for an unplanned, genuinely good moment.",
-    layout: "left",
-  },
-  {
-    kind: "placeholder",
-    title: "More soon",
-    note: "A place for travel, fencing, friends, and work in progress.",
-    layout: "right",
-  },
+/* The Home gallery is a single flat, uniform grid. Order interleaves subjects
+   for visual variety; append new GalleryPhoto entries and the grid reflows. */
+export const homeGalleryItems: GalleryPhoto[] = [
+  momentsPhotos[0], // fencing
+  momentsPhotos[1], // isef group
+  momentsPhotos[2], // brain poster
+  momentsPhotos[3], // history award
+  momentsPhotos[4], // research talk
+  momentsPhotos[5], // jshs friends
+  momentsPhotos[6], // msst poster
+  isef2026Photos[0], // acm award
+  isef2026Photos[3], // midjourney selfie
+  isef2026Photos[1], // midjourney award
+  isef2026Photos[2], // midjourney stage
 ];
