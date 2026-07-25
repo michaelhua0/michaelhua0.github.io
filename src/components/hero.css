@@ -316,22 +316,8 @@
   transform: translateX(2px);
 }
 
-.hero__way-prog {
-  position: absolute;
-  z-index: 3;
-  left: 0;
-  bottom: 0;
-  height: 2px;
-  width: 100%;
-  background: linear-gradient(90deg, var(--research-bright), var(--history-bright));
-  transform-origin: left center;
-  transform: scaleX(0);
-  animation: heroProg 3.4s linear forwards;
-}
-
 @keyframes heroFade { to { opacity: 1; } }
 @keyframes heroRise { to { opacity: 1; transform: translateY(0); } }
-@keyframes heroProg { to { transform: scaleX(1); } }
 
 @media (prefers-reduced-motion: reduce) {
   .hero__word,
@@ -339,8 +325,6 @@
   .hero__lede,
   .hero__hud,
   .hero__wayfind { opacity: 1; transform: none; animation: none; }
-  .hero__way-prog { animation: none; }
-  .hero__way-prog { display: none; }
   .hero--fallback::after { animation: none; }
   .hero__probe { display: none; }
 }
