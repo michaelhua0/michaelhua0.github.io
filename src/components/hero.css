@@ -70,29 +70,6 @@
 .hero__hud span { white-space: nowrap; }
 .hero__hud--tl { top: calc(var(--nav-h) + 24px); left: clamp(22px, 5vw, 56px); }
 
-/* ---- cursor probe — follows the pointer, reads the field beneath it ---- */
-.hero__probe {
-  position: absolute;
-  z-index: 3;
-  top: 0;
-  left: 0;
-  padding: 3px 8px;
-  transform: translate3d(-999px, -999px, 0);
-  translate: 14px 14px;
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--research-bright);
-  background: rgba(6, 10, 16, 0.55);
-  border: 1px solid rgba(69, 226, 206, 0.28);
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  will-change: transform, opacity;
-}
-
 /* ---- Content ---- */
 .hero__content {
   position: relative;
@@ -327,7 +304,6 @@
   .hero__hud,
   .hero__wayfind { opacity: 1; transform: none; animation: none; }
   .hero--fallback::after { animation: none; }
-  .hero__probe { display: none; }
 }
 
 @media (max-width: 720px) {
@@ -338,5 +314,4 @@
 @media (max-width: 620px) {
   .hero__hud { display: none; }
   .hero__lede { max-width: none; }
-  .hero__probe { display: none; }
 }
