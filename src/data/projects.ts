@@ -41,6 +41,8 @@ export interface Project {
   image: string;
   /** Use contain for diagrams, logos, and document pages that should remain uncropped. */
   imageFit?: "cover" | "contain";
+  /** Optional backdrop used when a contained image does not fill its frame. */
+  imageBackground?: string;
   /** Motif used for the generated fallback art. */
   motif: "spectral" | "vessel" | "point-cloud" | "app" | "documentary" | "channel";
   /** Optional photographs shown on the dedicated project page. */
@@ -61,6 +63,8 @@ export const projects: Project[] = [
     teaser:
       "A low-cost imaging spectrometer and physics-aware transformer for high-fidelity hyperspectral reconstruction.",
     image: "decoding-light.jpg",
+    imageFit: "contain",
+    imageBackground: "#211b1b",
     motif: "spectral",
     gallery: isef2026Photos,
     body: [
