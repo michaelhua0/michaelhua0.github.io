@@ -521,9 +521,6 @@ export default function Hero() {
             <span className="hero__way-arrow" aria-hidden="true">
               →
             </span>
-            {i === active && (
-              <span key={active} className="hero__way-prog" aria-hidden="true" />
-            )}
           </Link>
         ))}
       </nav>
