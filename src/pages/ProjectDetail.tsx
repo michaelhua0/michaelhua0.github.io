@@ -83,10 +83,6 @@ export default function ProjectDetail() {
                     loading="lazy"
                     decoding="async"
                   />
-                  <figcaption>
-                    <span>{photo.caption}</span>
-                    <small>{photo.meta}</small>
-                  </figcaption>
                 </figure>
               ))}
             </div>

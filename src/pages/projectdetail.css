@@ -145,27 +145,6 @@
   filter: saturate(0.94);
 }
 
-.project__gallery-photo figcaption {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding-top: 9px;
-  color: var(--text);
-  font-size: 0.94rem;
-  line-height: 1.35;
-}
-
-.project__gallery-photo figcaption small {
-  flex: 0 0 auto;
-  color: var(--text-faint);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding-top: 0.35em;
-}
-
 /* Pager */
 .project__pager {
   display: grid;
@@ -205,10 +184,6 @@
   .project__gallery-photo--4 {
     grid-column: 1;
     margin-top: 0;
-  }
-  .project__gallery-photo figcaption {
-    flex-direction: column;
-    gap: 4px;
   }
   .project__pager { grid-template-columns: 1fr; }
   .project__pager-link + .project__pager-link { border-left: 0; border-top: 1px solid var(--border); }

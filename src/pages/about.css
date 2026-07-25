@@ -72,14 +72,6 @@
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.72);
 }
-.about__portrait figcaption {
-  padding-top: 12px;
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text-faint);
-}
 .about__copy {
   padding-top: clamp(14px, 4vw, 52px);
 }

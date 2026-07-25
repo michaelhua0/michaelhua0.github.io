@@ -36,7 +36,6 @@ export default function About() {
                 decoding="async"
               />
             )}
-            <figcaption>Michael Hua</figcaption>
           </figure>
 
           <div className="about__copy">

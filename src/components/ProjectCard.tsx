@@ -41,6 +41,17 @@ export default function ProjectCard({
               fit={project.imageFit}
               imageBackground={project.imageBackground}
             />
+            {project.cardMedia === "video" && (
+              <span className="pcard__video-mark" aria-hidden="true">
+                <svg viewBox="0 0 68 48" width="68" height="48">
+                  <path
+                    d="M66.5 7.7c-.8-3-2.5-4.7-5.4-5.5C55.5 1 34 1 34 1S12.5 1 6.9 2.2c-2.9.8-4.6 2.5-5.4 5.5C0 13.3 0 24 0 24s0 10.7 1.5 16.3c.8 3 2.5 4.7 5.4 5.5C12.5 47 34 47 34 47s21.5 0 27.1-1.2c2.9-.8 4.6-2.5 5.4-5.5C68 34.7 68 24 68 24s0-10.7-1.5-16.3z"
+                    fill="#e5484d"
+                  />
+                  <path d="M27 34l18-10-18-10z" fill="#fff" />
+                </svg>
+              </span>
+            )}
           </div>
           <span className="scan__line" aria-hidden="true" />
           <span className="pcard__fig" aria-hidden="true">{fig}</span>
