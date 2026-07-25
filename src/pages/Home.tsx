@@ -23,11 +23,15 @@ const recognition = [
   },
   {
     mark: "ACM",
-    title: "Special Award",
+    logo: "logos/acm.jpg",
+    logoAlt: "ACM",
+    title: "ACM Special Award",
     note: "Regeneron ISEF · Computing research",
   },
   {
     mark: "MJ",
+    logo: "logos/midjourney.svg",
+    logoAlt: "Midjourney",
     title: "Midjourney Special Award",
     note: "Regeneron ISEF",
   },
@@ -114,7 +118,18 @@ export default function Home() {
               <ol>
                 {recognition.map((award) => (
                   <li key={`${award.mark}-${award.note}`}>
-                    <strong>{award.mark}</strong>
+                    {award.logo ? (
+                      <span className="home-profile__reco-logo">
+                        <img
+                          src={`${import.meta.env.BASE_URL}images/${award.logo}`}
+                          alt={award.logoAlt}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </span>
+                    ) : (
+                      <strong>{award.mark}</strong>
+                    )}
                     <div>
                       <span>{award.title}</span>
                       <small>{award.note}</small>
