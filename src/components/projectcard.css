@@ -33,24 +33,6 @@
 .pcard__link:hover .scan__media { filter: saturate(1.05) brightness(1.04); }
 .scan__media { transition: filter 0.4s var(--ease); }
 
-.pcard__video-mark {
-  position: absolute;
-  inset: 50% auto auto 50%;
-  z-index: 3;
-  display: grid;
-  place-items: center;
-  transform: translate(-50%, -50%);
-  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.52));
-  transition: transform 0.28s var(--ease-out), filter 0.28s var(--ease);
-  pointer-events: none;
-}
-
-.pcard__link:hover .pcard__video-mark,
-.pcard__link:focus-visible .pcard__video-mark {
-  transform: translate(-50%, -50%) scale(1.08);
-  filter: drop-shadow(0 8px 22px rgba(0, 0, 0, 0.62));
-}
-
 .pcard__fig {
   position: absolute;
   top: 10px; left: 10px;
