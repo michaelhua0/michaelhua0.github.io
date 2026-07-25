@@ -72,10 +72,6 @@ export default function Home() {
                     decoding="async"
                   />
                 </div>
-                <figcaption>
-                  <span>Michael Hua</span>
-                  <small>Student researcher · Cranbrook Schools</small>
-                </figcaption>
               </figure>
 
               <div className="home-profile__content">

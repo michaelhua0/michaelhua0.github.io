@@ -22,10 +22,6 @@ export default function HomeGallery() {
             return (
               <li key={photo.src} className="home-gallery__photo">
                 <img src={photoUrl} alt={photo.alt} loading="lazy" decoding="async" />
-                <span className="home-gallery__cap">
-                  <span className="home-gallery__cap-title">{photo.caption}</span>
-                  <span className="home-gallery__cap-meta">{photo.meta}</span>
-                </span>
               </li>
             );
           })}
