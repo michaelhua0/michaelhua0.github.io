@@ -1,0 +1,59 @@
+.spectral-sig {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.spectral-sig__svg {
+  display: block;
+  width: clamp(84px, 12vw, 128px);
+  height: 22px;
+  overflow: visible;
+}
+
+.spectral-sig__axis {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.spectral-sig__tick {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.spectral-sig__mark {
+  stroke: var(--sig-color);
+  stroke-width: 2;
+}
+
+.spectral-sig__mark-glow {
+  stroke: var(--sig-color);
+  stroke-width: 6;
+  opacity: 0.4;
+  filter: blur(1.5px);
+}
+
+.spectral-sig__dot {
+  fill: var(--sig-color);
+}
+
+.spectral-sig__label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Larger presentation for the detail header. */
+.spectral-sig--lg .spectral-sig__svg {
+  width: clamp(140px, 24vw, 220px);
+  height: 32px;
+}
+.spectral-sig--lg .spectral-sig__label {
+  font-size: 0.68rem;
+}

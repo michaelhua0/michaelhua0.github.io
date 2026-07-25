@@ -53,6 +53,11 @@
   padding: 22px 22px 24px;
   flex: 1;
 }
+.pcard__sig-row {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
 .pcard__tag {
   font-family: var(--font-mono);
   font-size: 0.66rem;
