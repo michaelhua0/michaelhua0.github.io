@@ -4,6 +4,7 @@ import Hero from "../components/Hero";
 import SectionHead from "../components/SectionHead";
 import ProjectCard from "../components/ProjectCard";
 import HomeGallery from "../components/HomeGallery";
+import HomeGlobe from "../components/HomeGlobe";
 import { bio, site } from "../data/site";
 import { projects } from "../data/projects";
 import { publications } from "../data/publications";
@@ -140,6 +141,8 @@ export default function Home() {
             </aside>
           </div>
         </section>
+
+        <HomeGlobe />
 
         <section className="section container home-work" aria-labelledby="work-h">
           <SectionHead
