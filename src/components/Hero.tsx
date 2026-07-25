@@ -405,7 +405,7 @@ export default function Hero() {
       canvas.removeEventListener("webglcontextlost", onLost);
       hero.removeEventListener("pointermove", onMove);
       hero.removeEventListener("pointerleave", onLeave);
-      hero.removeEventListener("pointerdown", onDown);
+      hero.removeEventListener("pointerdown", onMove);
       gl.deleteProgram(prog);
       gl.deleteShader(vs);
       gl.deleteShader(fs);

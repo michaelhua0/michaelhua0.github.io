@@ -13,7 +13,7 @@ export default function HomeGallery() {
         </p>
 
         <div className="home-gallery__grid">
-          {homeGalleryItems.map((item, index) => {
+          {homeGalleryItems.map((item) => {
             if (item.kind === "placeholder") {
               return (
                 <figure
@@ -30,10 +30,14 @@ export default function HomeGallery() {
             }
 
             const photoUrl = `${import.meta.env.BASE_URL}images/${item.photo.src}`;
+            const cropClass = item.crop
+              ? ` home-gallery__photo--crop home-gallery__crop--${item.crop}`
+              : "";
+
             return (
               <figure
-                key={item.photo.src}
-                className={`home-gallery__photo home-gallery__photo--${item.layout}`}
+                key={item.id}
+                className={`home-gallery__photo home-gallery__photo--${item.layout}${cropClass}`}
               >
                 <div className="home-gallery__media">
                   <img
@@ -43,13 +47,6 @@ export default function HomeGallery() {
                     decoding="async"
                   />
                 </div>
-                <figcaption>
-                  <span>{item.photo.caption}</span>
-                  <small>{item.photo.meta}</small>
-                </figcaption>
-                <span className="home-gallery__index" aria-hidden="true">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
               </figure>
             );
           })}
