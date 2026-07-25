@@ -69,11 +69,6 @@
 }
 .hero__hud span { white-space: nowrap; }
 .hero__hud--tl { top: calc(var(--nav-h) + 24px); left: clamp(22px, 5vw, 56px); }
-.hero__hud--tr {
-  top: calc(var(--nav-h) + 24px);
-  right: clamp(22px, 5vw, 56px);
-  text-align: right;
-}
 
 /* ---- cursor probe — follows the pointer, reads the field beneath it ---- */
 .hero__probe {
