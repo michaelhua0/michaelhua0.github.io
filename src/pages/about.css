@@ -1,7 +1,7 @@
 .about {
-  --text: #f7f9fc;
-  --text-soft: #d2dae4;
-  --text-faint: #a7b3c3;
+  --text: var(--read-text);
+  --text-soft: var(--read-text-soft);
+  --text-faint: var(--read-text-faint);
 }
 
 .about__grid {

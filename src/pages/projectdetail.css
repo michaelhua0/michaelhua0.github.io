@@ -1,10 +1,10 @@
 .project {
   --accent: var(--research-bright);
-  --text: #f7f9fc;
-  --text-soft: #d2dae4;
-  --text-faint: #a7b3c3;
-  --border: #263246;
-  --border-strong: #3a4a62;
+  --text: var(--read-text);
+  --text-soft: var(--read-text-soft);
+  --text-faint: var(--read-text-faint);
+  --border: var(--read-border);
+  --border-strong: var(--read-border-strong);
 }
 .project.cat-history { --accent: var(--history-bright); }
 
