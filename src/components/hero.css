@@ -188,11 +188,14 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(180deg, rgba(18, 25, 36, 0.82), rgba(11, 16, 24, 0.94));
-  border-top: 1px solid rgba(120, 220, 210, 0.28);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  background:
+    linear-gradient(180deg, rgba(21, 32, 44, 0.9), rgba(8, 15, 23, 0.96));
+  border-top: 1px solid rgba(145, 255, 239, 0.5);
+  box-shadow:
+    0 -22px 58px rgba(45, 205, 197, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 .hero__way {
   position: relative;
@@ -200,23 +203,47 @@
   align-items: center;
   gap: 16px;
   padding: clamp(18px, 2.4vh, 26px) 20px;
-  color: var(--on-ink-soft);
+  color: #edf6fa;
+  background:
+    linear-gradient(145deg, rgba(131, 244, 231, 0.11), rgba(78, 137, 178, 0.04) 58%, rgba(255, 255, 255, 0.025));
   text-decoration: none;
   overflow: hidden;
-  transition: background 0.4s var(--ease), color 0.3s var(--ease);
+  box-shadow: inset 0 0 0 1px rgba(188, 236, 238, 0.08);
+  transition:
+    background 0.4s var(--ease),
+    box-shadow 0.4s var(--ease),
+    color 0.3s var(--ease);
 }
-.hero__way + .hero__way { border-left: 1px solid rgba(233, 240, 248, 0.14); }
+.hero__way + .hero__way { border-left: 1px solid rgba(196, 242, 241, 0.22); }
 .hero__way:hover { text-decoration: none; }
+.hero__way:hover,
+.hero__way:focus-visible,
+.hero__way.is-active {
+  background:
+    linear-gradient(145deg, rgba(92, 241, 220, 0.22), rgba(57, 137, 171, 0.1) 64%, rgba(255, 255, 255, 0.05));
+  box-shadow:
+    inset 0 0 0 1px rgba(127, 255, 238, 0.28),
+    inset 0 14px 32px rgba(73, 225, 210, 0.08),
+    0 0 34px rgba(52, 210, 199, 0.1);
+}
+.hero__way:focus-visible {
+  outline: 2px solid #b8fff4;
+  outline-offset: -3px;
+}
 .hero__way::before {
-  /* soft wash that fades in on the active cell */
+  /* A concentrated spectral bloom makes the selected destination luminous. */
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(69, 226, 206, 0.24), rgba(69, 226, 206, 0.06));
-  opacity: 0;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(137, 255, 236, 0.34), transparent 58%),
+    linear-gradient(180deg, rgba(69, 226, 206, 0.18), rgba(69, 226, 206, 0.03));
+  opacity: 0.15;
   transition: opacity 0.45s var(--ease);
 }
-.hero__way.is-active::before { opacity: 1; }
+.hero__way.is-active::before,
+.hero__way:hover::before,
+.hero__way:focus-visible::before { opacity: 1; }
 /* bright accent bar on the active cell */
 .hero__way::after {
   content: "";
@@ -224,23 +251,28 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
-  background: var(--research-bright);
-  box-shadow: 0 0 12px rgba(69, 226, 206, 0.7);
-  transform: scaleX(0);
+  height: 3px;
+  background: linear-gradient(90deg, #d4fff9, var(--research-bright), #8bcfff);
+  box-shadow:
+    0 0 12px rgba(106, 255, 234, 0.85),
+    0 0 28px rgba(69, 226, 206, 0.48);
+  transform: scaleX(0.12);
   transform-origin: left center;
   transition: transform 0.4s var(--ease);
 }
 .hero__way.is-active::after,
-.hero__way:hover::after { transform: scaleX(1); }
+.hero__way:hover::after,
+.hero__way:focus-visible::after { transform: scaleX(1); }
 
 .hero__way-n {
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.06em;
-  color: var(--research-bright);
-  text-shadow: 0 0 10px rgba(69, 226, 206, 0.45);
+  color: #9dfff0;
+  text-shadow:
+    0 0 8px rgba(69, 226, 206, 0.75),
+    0 0 20px rgba(69, 226, 206, 0.38);
   transition: color 0.3s var(--ease);
 }
 .hero__way-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
@@ -250,14 +282,16 @@
   font-size: clamp(1.12rem, 2.1vw, 1.4rem);
   line-height: 1.1;
   color: #ffffff;
-  text-shadow: 0 0 1px rgba(255, 255, 255, 0.6), 0 1px 14px rgba(120, 200, 255, 0.25);
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.75),
+    0 0 18px rgba(159, 237, 255, 0.28);
   transition: color 0.3s var(--ease);
 }
 .hero__way-desc {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   letter-spacing: 0.05em;
-  color: #d5deea;
+  color: #e4eef5;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -265,9 +299,10 @@
 .hero__way-arrow {
   margin-left: auto;
   font-size: 1.15rem;
-  color: #eef3f9;
+  color: #f4ffff;
   opacity: 1;
   transform: translateX(-2px);
+  text-shadow: 0 0 12px rgba(92, 242, 222, 0.5);
   transition: transform 0.3s var(--ease), color 0.3s var(--ease), opacity 0.3s var(--ease);
 }
 .hero__way.is-active .hero__way-arrow,

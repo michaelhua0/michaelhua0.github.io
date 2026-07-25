@@ -47,7 +47,7 @@ export default function ProjectDetail() {
               src={project.image}
               alt={project.detailTitle}
               motif={project.motif}
-              ratio="16 / 9"
+              ratio={project.imageRatio ?? "16 / 9"}
               fit={project.imageFit}
               imageBackground={project.imageBackground}
             />

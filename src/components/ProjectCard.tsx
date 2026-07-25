@@ -27,13 +27,16 @@ export default function ProjectCard({
   return (
     <article className={`pcard cat-${project.category}`}>
       <Link ref={ref} to={`/portfolio/${project.slug}`} className="pcard__link">
-        <div className={`pcard__media figure figure__ticks scan ${armed ? "is-armed" : ""} ${inView ? "is-shown" : ""}`}>
+        <div
+          className={`pcard__media figure figure__ticks scan ${armed ? "is-armed" : ""} ${inView ? "is-shown" : ""}`}
+          style={{ aspectRatio: project.imageRatio ?? "16 / 10" }}
+        >
           <div className="scan__media">
             <SmartImage
               src={project.image}
               alt={project.cardTitle}
               motif={project.motif}
-              ratio="16 / 10"
+              ratio={project.imageRatio ?? "16 / 10"}
               fit={project.imageFit}
               imageBackground={project.imageBackground}
             />
