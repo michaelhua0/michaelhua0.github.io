@@ -4,6 +4,8 @@ export interface Publication {
   title: string;
   category: "research" | "history";
   journal?: string;
+  image: string;
+  imageAlt: string;
   links: { label: string; href: string }[];
   copy: string[];
 }
@@ -16,6 +18,8 @@ export const publications: Publication[] = [
     title:
       "Multi-scale Knowledge Transfer Vision Transformer for 3D Vessel Shape Segmentation",
     journal: "Computers & Graphics, Volume 122, August 2024",
+    image: "publication-vessel-transformer.png",
+    imageAlt: "First page of the vessel shape segmentation paper in Computers and Graphics",
     links: [
       {
         label: "Journal article",
@@ -37,6 +41,8 @@ export const publications: Publication[] = [
     category: "research",
     title:
       "MSST Transformer: A Novel Multimodal Spatial-Spectral-Temporal Transformer for Time-series Hyperspectral Imaging in Plant Growth Modeling",
+    image: "publication-msst.png",
+    imageAlt: "Title page of the MSST Transformer competition paper",
     links: [
       {
         label: "Manuscript",
@@ -54,6 +60,8 @@ export const publications: Publication[] = [
     category: "history",
     title:
       "Protecting the Public: The Uphill Battles for Consumer Rights through the Expansion of Responsibilities",
+    image: "nhd-paper.png",
+    imageAlt: "Title page of the National History Day process paper about the 1906 Food and Drug Act",
     links: [
       {
         label: "Research paper",

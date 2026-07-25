@@ -11,6 +11,8 @@ interface Props {
   className?: string;
   /** aspect ratio, e.g. "16 / 10" */
   ratio?: string;
+  /** Preserve the complete image for diagrams, logos, and document pages. */
+  fit?: "cover" | "contain";
 }
 
 /**
@@ -18,7 +20,14 @@ interface Props {
  * Until then (or if it fails to load) it shows a themed scientific graphic —
  * never stock photos or AI-generated people.
  */
-export default function SmartImage({ src, alt, motif, className, ratio = "16 / 10" }: Props) {
+export default function SmartImage({
+  src,
+  alt,
+  motif,
+  className,
+  ratio = "16 / 10",
+  fit = "cover",
+}: Props) {
   const [failed, setFailed] = useState(false);
   const url = `${import.meta.env.BASE_URL}images/${src}`;
 
@@ -42,7 +51,13 @@ export default function SmartImage({ src, alt, motif, className, ratio = "16 / 1
           loading="lazy"
           decoding="async"
           onError={() => setFailed(true)}
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: fit,
+            display: "block",
+            background: fit === "contain" ? "#f4f3ef" : "transparent",
+          }}
         />
       )}
     </div>

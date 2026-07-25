@@ -13,7 +13,7 @@ export default function About() {
       <SEO
         title="About"
         path="/about"
-        description="Michael Hua is a student researcher, software developer, documentary filmmaker, saber fencer, and community volunteer."
+        description="Michael Hua is a student researcher, software developer, documentary filmmaker, saber fencer, and ACA TVC co-president."
       />
       <PageHeader eyebrow="Profile" title="About me" />
 
