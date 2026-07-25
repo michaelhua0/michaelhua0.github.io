@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import landTopologyData from "world-atlas/land-110m.json";
 import "./homeglobe.css";
 
 type Coordinates = {
@@ -10,11 +11,28 @@ type GlobeView = Coordinates;
 type GeoPoint = readonly [longitude: number, latitude: number];
 type ViewPoint = { x: number; y: number; z: number };
 
+type LandTopology = {
+  transform: {
+    scale: [number, number];
+    translate: [number, number];
+  };
+  arcs: Array<Array<[number, number]>>;
+  objects: {
+    land: {
+      type: "GeometryCollection";
+      geometries: Array<{
+        type: "MultiPolygon";
+        arcs: number[][][];
+      }>;
+    };
+  };
+};
+
 const HOME_GLOBE_SETTINGS = {
   michigan: {
     latitude: 44.3,
     longitude: -85.6,
-    label: "Michigan · Home",
+    label: "Michigan, USA",
   },
   initialView: {
     latitude: 12,
@@ -24,45 +42,11 @@ const HOME_GLOBE_SETTINGS = {
     latitude: 44.3,
     longitude: -85.6,
   },
-  mobileBreakpoint: 760,
   gridInterval: 30,
   radiusScale: 0.37,
-  scrollSmoothing: 0.14,
+  scrollStartViewport: 0.92,
+  scrollEndViewport: 0.2,
 } as const;
-
-/* Deliberately simplified silhouettes: enough geography to read as a world
-   map while staying consistent with the site's instrument-like visual voice. */
-const LANDMASSES: GeoPoint[][] = [
-  [
-    [-168, 72], [-148, 70], [-136, 58], [-127, 50], [-124, 40], [-116, 31],
-    [-103, 23], [-93, 18], [-84, 10], [-78, 20], [-82, 26], [-79, 34],
-    [-71, 43], [-60, 48], [-66, 55], [-79, 59], [-86, 67], [-110, 73],
-  ],
-  [
-    [-81, 12], [-72, 10], [-62, 5], [-52, -2], [-46, -15], [-52, -30],
-    [-60, -43], [-70, -53], [-75, -38], [-79, -18],
-  ],
-  [
-    [-10, 36], [0, 43], [10, 45], [18, 55], [10, 62], [20, 70],
-    [38, 69], [45, 58], [35, 48], [28, 40], [12, 36],
-  ],
-  [
-    [-18, 34], [-5, 37], [12, 35], [30, 31], [40, 12], [47, -12],
-    [35, -25], [22, -35], [10, -34], [1, -22], [-8, 2], [-16, 18],
-  ],
-  [
-    [35, 74], [68, 72], [100, 76], [132, 70], [160, 62], [175, 52],
-    [151, 45], [142, 36], [124, 28], [108, 8], [91, 8], [78, 20],
-    [63, 25], [48, 31], [38, 48],
-  ],
-  [
-    [112, -11], [129, -13], [143, -10], [153, -24], [145, -39],
-    [126, -35], [114, -25],
-  ],
-  [
-    [-54, 82], [-28, 79], [-20, 68], [-42, 59], [-58, 66],
-  ],
-];
 
 const clamp = (value: number, min = 0, max = 1) => Math.min(max, Math.max(min, value));
 const toRadians = (degrees: number) => (degrees * Math.PI) / 180;
@@ -71,6 +55,38 @@ const smoothstep = (from: number, to: number, value: number) => {
   const progress = clamp((value - from) / (to - from));
   return progress * progress * (3 - 2 * progress);
 };
+
+function decodeLandContours(topology: LandTopology) {
+  const [scaleX, scaleY] = topology.transform.scale;
+  const [translateX, translateY] = topology.transform.translate;
+
+  const decodeArc = (arcIndex: number): GeoPoint[] => {
+    const reversed = arcIndex < 0;
+    const source = topology.arcs[reversed ? ~arcIndex : arcIndex];
+    let x = 0;
+    let y = 0;
+    const coordinates = source.map(([deltaX, deltaY]) => {
+      x += deltaX;
+      y += deltaY;
+      return [x * scaleX + translateX, y * scaleY + translateY] as GeoPoint;
+    });
+    return reversed ? coordinates.reverse() : coordinates;
+  };
+
+  const stitchRing = (arcIndexes: number[]) =>
+    arcIndexes.flatMap((arcIndex, index) => {
+      const arc = decodeArc(arcIndex);
+      return index === 0 ? arc : arc.slice(1);
+    });
+
+  return topology.objects.land.geometries.flatMap((geometry) =>
+    geometry.arcs.map((polygon) => stitchRing(polygon[0])),
+  );
+}
+
+/* Natural Earth’s 1:110m land data keeps coastlines recognizable without a
+   geographic runtime or a large 3D dependency. */
+const LAND_CONTOURS = decodeLandContours(landTopologyData as unknown as LandTopology);
 
 function withAlpha(color: string, alpha: number) {
   const value = color.trim();
@@ -102,25 +118,6 @@ function project(point: Coordinates, view: GlobeView): ViewPoint {
   };
 }
 
-function densify(contour: GeoPoint[], stepsPerEdge = 5) {
-  const points: Coordinates[] = [];
-  contour.forEach(([longitude, latitude], index) => {
-    const [nextLongitude, nextLatitude] = contour[(index + 1) % contour.length];
-    let longitudeDelta = nextLongitude - longitude;
-    if (longitudeDelta > 180) longitudeDelta -= 360;
-    if (longitudeDelta < -180) longitudeDelta += 360;
-
-    for (let step = 0; step < stepsPerEdge; step += 1) {
-      const progress = step / stepsPerEdge;
-      points.push({
-        longitude: longitude + longitudeDelta * progress,
-        latitude: mix(latitude, nextLatitude, progress),
-      });
-    }
-  });
-  return points;
-}
-
 function clipToFront(points: ViewPoint[]) {
   const clipped: ViewPoint[] = [];
   points.forEach((current, index) => {
@@ -144,7 +141,6 @@ function clipToFront(points: ViewPoint[]) {
 export default function HomeGlobe() {
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const currentProgressRef = useRef(0);
   const targetProgressRef = useRef(0);
   const animationFrameRef = useRef(0);
 
@@ -156,7 +152,6 @@ export default function HomeGlobe() {
     const context = canvas.getContext("2d");
     if (!context) return;
 
-    const rootStyles = getComputedStyle(document.documentElement);
     const sectionStyles = getComputedStyle(section);
     const token = (name: string, fallback: string) =>
       sectionStyles.getPropertyValue(name).trim() || fallback;
@@ -176,9 +171,6 @@ export default function HomeGlobe() {
     );
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const compactLayout = window.matchMedia(
-      `(max-width: ${HOME_GLOBE_SETTINGS.mobileBreakpoint}px)`,
-    );
     let canvasWidth = 1;
     let canvasHeight = 1;
     let deviceScale = 1;
@@ -305,8 +297,10 @@ export default function HomeGlobe() {
         drawVisibleLine(line, view, centerX, centerY, radius);
       }
 
-      LANDMASSES.forEach((landmass) => {
-        const points = densify(landmass).map((coordinate) => project(coordinate, view));
+      LAND_CONTOURS.forEach((landmass) => {
+        const points = landmass.map(([longitude, latitude]) =>
+          project({ longitude, latitude }, view),
+        );
         const visible = clipToFront(points);
         if (visible.length < 3) return;
 
@@ -388,18 +382,8 @@ export default function HomeGlobe() {
     };
 
     const render = () => {
-      const target = targetProgressRef.current;
-      const current = currentProgressRef.current;
-      const difference = target - current;
-      const next =
-        Math.abs(difference) < 0.001
-          ? target
-          : current + difference * HOME_GLOBE_SETTINGS.scrollSmoothing;
-      currentProgressRef.current = next;
-      draw(next);
-
-      if (next !== target) animationFrameRef.current = requestAnimationFrame(render);
-      else animationFrameRef.current = 0;
+      animationFrameRef.current = 0;
+      draw(targetProgressRef.current);
     };
 
     const requestDraw = () => {
@@ -407,19 +391,17 @@ export default function HomeGlobe() {
     };
 
     const updateProgress = () => {
-      if (reducedMotion.matches || compactLayout.matches) {
+      if (reducedMotion.matches) {
         targetProgressRef.current = 1;
-        currentProgressRef.current = 1;
         cancelAnimationFrame(animationFrameRef.current);
         animationFrameRef.current = 0;
         draw(1);
         return;
       } else {
         const rect = section.getBoundingClientRect();
-        const stickyTop =
-          Number.parseFloat(rootStyles.getPropertyValue("--nav-h")) || 0;
-        const travel = Math.max(1, section.offsetHeight - (window.innerHeight - stickyTop));
-        targetProgressRef.current = clamp((stickyTop - rect.top) / travel);
+        const start = window.innerHeight * HOME_GLOBE_SETTINGS.scrollStartViewport;
+        const end = window.innerHeight * HOME_GLOBE_SETTINGS.scrollEndViewport;
+        targetProgressRef.current = clamp((start - rect.top) / (start - end));
       }
       requestDraw();
     };
@@ -439,7 +421,6 @@ export default function HomeGlobe() {
     window.addEventListener("scroll", updateProgress, { passive: true });
     window.addEventListener("resize", resize);
     reducedMotion.addEventListener("change", updateProgress);
-    compactLayout.addEventListener("change", updateProgress);
     resize();
 
     return () => {
@@ -448,7 +429,6 @@ export default function HomeGlobe() {
       window.removeEventListener("scroll", updateProgress);
       window.removeEventListener("resize", resize);
       reducedMotion.removeEventListener("change", updateProgress);
-      compactLayout.removeEventListener("change", updateProgress);
     };
   }, []);
 
@@ -456,18 +436,10 @@ export default function HomeGlobe() {
     <section ref={sectionRef} className="home-globe" aria-labelledby="home-globe-title">
       <div className="container home-globe__stage">
         <div className="home-globe__copy">
-          <span className="home-globe__kicker">Home coordinates · 44.3° N, 85.6° W</span>
           <h2 id="home-globe-title">
-            From Michigan,
-            <em> looking outward.</em>
+            Hometown:
+            <span> Troy, Michigan.</span>
           </h2>
-          <p>
-            A fixed point on a wider map—where research, community, and curiosity begin.
-          </p>
-          <div className="home-globe__progress" aria-hidden="true">
-            <span />
-          </div>
-          <span className="home-globe__instruction">Scroll to locate home</span>
         </div>
 
         <figure className="home-globe__figure">
@@ -475,15 +447,10 @@ export default function HomeGlobe() {
             ref={canvasRef}
             className="home-globe__canvas"
             role="img"
-            aria-label="A stylized globe rotating from a world view to Michigan at 44.3 degrees north and 85.6 degrees west."
+            aria-label="A stylized globe rotating toward Michigan, USA."
           >
             Stylized globe centered on Michigan.
           </canvas>
-          <figcaption>
-            <span>World view</span>
-            <span aria-hidden="true">→</span>
-            <span>Michigan · Home</span>
-          </figcaption>
         </figure>
       </div>
     </section>
