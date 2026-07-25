@@ -1,6 +1,7 @@
 /* Portfolio content is stored as structured data so pages stay data-driven. */
 import type { GalleryPhoto } from "./photos";
 import { isef2026Photos } from "./photos";
+import type { Domain } from "./spectrum";
 
 export type Category = "research" | "history";
 
@@ -29,6 +30,8 @@ export interface LinkItem {
 export interface Project {
   slug: string;
   category: Category;
+  /** Finer spectral domain — places the project on the 400–700 nm spine. */
+  domain: Domain;
   /** Short label shown on the card and detail eyebrow. */
   tag: string;
   /** Title used on the Portfolio index card. */
@@ -59,6 +62,7 @@ export const projects: Project[] = [
   {
     slug: "decoding-light",
     category: "research",
+    domain: "hyperspectral",
     tag: "Hyperspectral imaging · Physics-aware AI",
     cardTitle: "Decoding Light With Physics-Aware AI",
     detailTitle: "Decoding Light With Physics-Aware AI",
@@ -100,6 +104,7 @@ export const projects: Project[] = [
   {
     slug: "brain-vessel-segmentation",
     category: "research",
+    domain: "medical",
     tag: "Computer vision · Medical imaging",
     cardTitle:
       "Novel Multi-Scale Knowledge Transfer Convolutional Transformer for 3D Brain Vessel Segmentation",
@@ -148,6 +153,7 @@ export const projects: Project[] = [
   {
     slug: "msst-transformer",
     category: "research",
+    domain: "hyperspectral",
     tag: "Hyperspectral imaging · Transformers",
     cardTitle:
       "Novel Multimodal Spatial-Spectral-Temporal Transformer for Hyperspectral Imaging in Plant Growth Modeling",
@@ -179,6 +185,7 @@ export const projects: Project[] = [
   {
     slug: "aigro",
     category: "research",
+    domain: "physical-ai",
     tag: "Mobile application · Physical AI",
     cardTitle: "AIGRO: AI-Assisted Cultivation",
     detailTitle: "AIGRO",
@@ -215,6 +222,7 @@ export const projects: Project[] = [
   {
     slug: "national-history-day",
     category: "history",
+    domain: "history",
     tag: "2025 National History Day · Documentary",
     cardTitle: "From Poison to Protection: The 1906 Food and Drug Act",
     detailTitle: "From Poison to Protection: The 1906 Food and Drug Act",
@@ -245,6 +253,7 @@ export const projects: Project[] = [
   {
     slug: "historys-trigger",
     category: "history",
+    domain: "history",
     tag: "Historical research · Documentary filmmaking",
     cardTitle: "History's Trigger",
     detailTitle: "History's Trigger: Documentary History",

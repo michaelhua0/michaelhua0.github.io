@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { SPECTRUM_RAMP } from "../data/spectrum";
 
 type Motif = "spectral" | "vessel" | "point-cloud" | "app" | "documentary" | "channel";
 
@@ -12,7 +13,8 @@ function makeRng(seed: number) {
 const hash = (str: string) =>
   Array.from(str).reduce((a, c) => (a * 31 + c.charCodeAt(0)) % 2147483647, 7);
 
-const bands = ["#7c5cff", "#2e6ff2", "#12b5a5", "#3fbf5f", "#e0a100", "#e5484d"];
+// Draws from the one canonical spectral ramp (mirrors the CSS --band-* tokens).
+const bands = SPECTRUM_RAMP;
 
 export default function GeneratedArt({
   motif,

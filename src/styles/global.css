@@ -32,6 +32,16 @@
   --text-faint: #8793a4;   /* meta / captions (≥4.5:1) */
   --on-ink: var(--text);  --on-ink-soft: #9aa7b7;
 
+  /* Reading-surface palette — one source of truth for the lighter text/borders
+     used by the prose surfaces below the hero (Home body, Project detail,
+     About). Pages remap --text/--border to these instead of hardcoding, so the
+     values live in exactly one place. */
+  --read-text:         #f7f9fc;
+  --read-text-soft:    #d2dae4;
+  --read-text-faint:   #a7b3c3;
+  --read-border:       #263246;
+  --read-border-strong:#3a4a62;
+
   /* --- accents (from the spectral hero) --- */
   --research:        #21b7a6;
   --research-bright: #45e2ce;
@@ -160,6 +170,10 @@ img { max-width: 100%; display: block; }
 .meta {
   font-family: var(--font-mono);
   font-size: 0.76rem; color: var(--text-faint); letter-spacing: 0.02em;
+}
+/* Instrument numerals lock into columns like a real readout. */
+.readout, .eyebrow, .meta, .sec-head__note {
+  font-variant-numeric: tabular-nums;
 }
 
 /* Section header — a labelled readout on a rule that draws itself in.
