@@ -11,9 +11,8 @@ import "./hero.css";
    spectrometer decoding incoming light), and disperses those
    bands into RGB fringing near the pointer — a literal reading
    of "decoding light" rather than a generic flowing blob.
-   A pushbroom scanline sweeps the frame. Falls back to a static
-   gradient when WebGL is unavailable or the visitor prefers
-   reduced motion.
+   Falls back to a static gradient when WebGL is unavailable or
+   the visitor prefers reduced motion.
    ============================================================ */
 
 const VERT = `
@@ -144,14 +143,6 @@ void main(){
 
   // pointer bloom
   col += bright * u_active * exp(-mDist * 3.4) * 0.32;
-
-  // ---- pushbroom scanline: a hyperspectral sensor sweeping the frame ----
-  float scanY = fract(u_time * 0.05);
-  float scanDist = abs(uv.y - scanY);
-  float scanLine = exp(-scanDist * 220.0);
-  float scanGlow = exp(-scanDist * 18.0) * 0.15;
-  float ticks = step(0.982, fract(uv.x * 90.0));
-  col += vec3(0.75, 0.92, 1.0) * (scanLine * 0.9 + scanGlow * ticks);
 
   // starfield — faint drifting motes
   vec2 gp = uv * u_res.xy / 2.2;

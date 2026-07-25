@@ -30,12 +30,12 @@
   font-size: clamp(1.04rem, 1.8vw, 1.2rem);
 }
 
-/* A uniform, dense grid: equal square tiles that reflow as photos are added,
-   so the gallery stays neat and organized however many frames it holds. */
+/* Masonry columns: images keep their true aspect ratio (never cropped) and
+   pack into balanced columns, so the gallery looks composed at any count.
+   Add photos of any shape and they slot in without breaking the layout. */
 .home-gallery__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(clamp(116px, 20vw, 176px), 1fr));
-  gap: clamp(8px, 1.1vw, 13px);
+  column-width: clamp(168px, 23vw, 240px);
+  column-gap: clamp(8px, 1.1vw, 13px);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -43,18 +43,17 @@
 
 .home-gallery__photo {
   position: relative;
-  margin: 0;
-  aspect-ratio: 1;
+  margin: 0 0 clamp(8px, 1.1vw, 13px);
   overflow: hidden;
+  break-inside: avoid;
   border: 1px solid color-mix(in srgb, var(--border-strong) 82%, transparent);
   background: var(--bg);
 }
 
 .home-gallery__photo img {
   width: 100%;
-  height: 100%;
+  height: auto;
   display: block;
-  object-fit: cover;
   filter: saturate(0.94) contrast(1.02);
   transition: transform 600ms var(--ease-out), filter 400ms var(--ease);
 }
@@ -116,9 +115,9 @@
     text-align: center;
     gap: 8px;
   }
-  /* Slightly smaller floor keeps a comfortable 2–3 columns on phones. */
+  /* Narrower columns keep a comfortable 2 columns on phones. */
   .home-gallery__grid {
-    grid-template-columns: repeat(auto-fill, minmax(clamp(104px, 30vw, 150px), 1fr));
+    column-width: clamp(140px, 44vw, 180px);
   }
   /* Captions can't be hovered on touch — show them softly by default. */
   .home-gallery__cap {

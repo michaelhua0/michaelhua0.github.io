@@ -79,8 +79,8 @@ export const momentsPhotos: GalleryPhoto[] = [
   },
 ];
 
-/* The Home gallery is a single flat, uniform grid. Order interleaves subjects
-   for visual variety; append new GalleryPhoto entries and the grid reflows. */
+/* The Home gallery uses a masonry layout that preserves each photo's aspect
+   ratio. Order interleaves subjects for visual variety. */
 export const homeGalleryItems: GalleryPhoto[] = [
   momentsPhotos[0], // fencing
   momentsPhotos[1], // isef group
