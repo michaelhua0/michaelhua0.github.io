@@ -8,8 +8,17 @@ picking it up needs no other context.** Findings are cited as `file:line` relati
 root. Every claim was verified against source, build output, or computed WCAG math; nothing here
 is inferred from a screenshot, because no browser automation was available during the review.
 
-**Read order:** the diagnosis first (it explains *why* the surface problems exist and why fixing
-them in the listed order matters), then the plan. The scores and issue list are supporting evidence.
+**Read order — do not skip the first two sections:**
+
+1. **AUDIENCE** — who this site is for, and six hard guardrails on what not to change.
+2. **INPUTS REQUIRED FROM THE OWNER** — the never-fabricate rule and the `TODO(owner)` convention.
+3. **Design Specificity Verdict** — *why* the surface problems exist and why the fix order matters.
+4. **The Plan** — start at *Execution order*, which overrides the move numbering.
+5. **Appendix A** — ten further in-scope findings that are not covered by the six moves.
+6. **Appendix B** — how to verify your work.
+
+The score tables, Priority Issues, Persona Red Flags, and Minor Observations are supporting
+evidence for the plan, not separate work items.
 
 **Priority key:** P0 blocking · P1 major, fix before shipping · P2 minor · P3 polish.
 
@@ -86,6 +95,43 @@ Relative to a review that assumed an academic-first audience:
 - **Unchanged:** every bug, and the entire type/token/motion cleanup. Mechanical inconsistency
   and gratuitous motion read as machine-authored to *any* viewer regardless of background, so
   Moves 3, 4 and 5 are not softened by the audience reframing at all.
+
+---
+
+# INPUTS REQUIRED FROM THE OWNER — and the never-fabricate rule
+
+Some work in this plan needs values that do not exist in the repository. **You cannot derive
+them, and you must not invent them.**
+
+## The rule
+
+> **Never fabricate a metric, a benchmark result, a citation, a date, an award, an affiliation, a
+> contact detail, a URL, or a photo caption.** If a value is required and not present in the
+> repository, write `TODO(owner): <what is needed>` in the code or content, implement everything
+> around it so the structure is complete and renders correctly, and list it in your summary.
+> A visible `TODO(owner)` is a success. A plausible invented value is a failure, and it is worse
+> than leaving the work undone.
+
+This rule is not boilerplate. This site already ships fabricated scientific data as decoration —
+`SpectralSignature.tsx:63-68` generates spectral emission peaks from a hash of the URL slug — and
+removing that is one of the plan's goals. Do not replace it with a different invention.
+
+## Inputs, and how to proceed without them
+
+| Needed for | Missing value | What to do |
+|---|---|---|
+| **Move 2 item 3** — contact (P0) | Email, GitHub URL, LinkedIn URL, CV PDF | **Owner has confirmed: leave as TODO.** Build the full contact section, the `site.ts` shape, the footer column, and the About placement. Populate with `TODO(owner)` strings, e.g. `email: "TODO(owner): email address"`. The section must render without layout breakage while the values are placeholders — do not hide it behind a conditional. Do not guess an address from the repo, the git config, or the domain. |
+| **Move 6 item 3** — share cards (P0) | A real Open Graph image | Wire `og:image` and `twitter:image` in `SEO.tsx` and the prerender step, pointing at `public/images/og-default.jpg` at **1200×630**. If you cannot produce a genuine image, do **not** generate a synthetic or AI-illustrated one: leave `TODO(owner): supply 1200×630 og-default.jpg` and note it. An existing real photo cropped to 1200×630 is acceptable and preferable to a placeholder. |
+| **Move 1 item 1** — optional metrics | Real numbers for `projects.ts:84`, `:120` | **Do not add numbers.** Leave both sentences exactly as they are, or replace the comparative phrasing with a non-comparative factual description of what was built. Never write a percentage, a dataset name, or a baseline that is not already in the repo. |
+| **Move 2 item 5** — photo captions | Michael's words for the 10 candid photos | Build the caption slot in `HomeGallery.tsx` and `data/photos.ts` and leave `TODO(owner)` per photo. Do **not** write captions from the alt text — alt text describes; captions carry voice, and only the owner has it. |
+| **Move 2 item 6** — homepage sequence | — | The target order is specified. If you believe a different order is better, implement the specified one and raise the alternative in your summary rather than substituting it. |
+
+## Editorial decisions that are the owner's, not yours
+
+Implement what is written; if you disagree, note it in your summary instead of deviating:
+splitting content between Home's Profile section and the About page; which of the three
+inconsistent role triads survives (see Appendix A9); whether the *Computers & Graphics* citation
+appears anywhere on the homepage; and any change to the wording of a factual credential.
 
 ---
 
@@ -323,7 +369,9 @@ Everything in Moves 3, 4 and 5 is audience-independent and fully in scope as wri
    nav — the fourth copy of site navigation on one page — occupying the closing slot. Add
    `contact: { email, github, linkedin, scholar, cvHref }` to `src/data/site.ts` and render one
    line, three links, one CV PDF. Add a contact column to `Footer.tsx:9-21` and the email to
-   About's body.
+   About's body. **The values are `TODO(owner)` — see the Inputs section. Build the complete
+   structure with placeholder strings; do not invent an address and do not conditionally hide the
+   section while it is unpopulated.**
 4. **Fix the Home spread's dead space.** `home.css:61-63` — `align-items: start` with a 4/5
    portrait in a `0.82fr` column leaves roughly 640px of void beside the notes and awards at
    900–1200px. `about.css:15-17` already solves this with `position: sticky`; use the same
@@ -522,7 +570,13 @@ own underline (`home.css:351-353`) leaving a 4px arrow nudge as the sole feedbac
    repo-wide while `SEO.tsx:23` sets `twitter:card=summary_large_image`. And because
    `scripts/build-pages.mjs` only copies `index.html` → `404.html` with no prerendering, every
    route ships the same static `<title>Michael Hua</title>` and one generic description —
-   `SEO.tsx` runs client-side only.
+   `SEO.tsx` runs client-side only. *Fix:* wire `og:image`/`twitter:image` in `SEO.tsx` at
+   `public/images/og-default.jpg` (**1200×630**), and extend `scripts/build-pages.mjs` — currently
+   6 lines that only `copyFile` `index.html` → `404.html` — to emit per-route `<title>`,
+   description, and `og:*` tags at build time for `/`, `/portfolio`, `/publications`, `/about`, and
+   each `/portfolio/:slug`. The per-route metadata already exists in `SEO.tsx` and the data files;
+   it just never reaches the static HTML. **The image asset itself is a `TODO(owner)` — see the
+   Inputs section. Do not generate a synthetic one.**
 4. **Touch targets.** `.nav__toggle` is 36px tall (`nav.css:88-95`) and is the only mobile
    navigation control; `.footer__nav a` is ~21px with zero padding (`footer.css:32-38`);
    `.home-work__all` is ~20px (`home.css:338-348`) and is the "All projects →" CTA;
@@ -546,6 +600,133 @@ own underline (`home.css:351-353`) leaving a 4px arrow nudge as the sole feedbac
    store on every event, including mobile URL-bar show/hide. And `@keyframes scanSweep`
    (`global.css:308-314`) animates `left: 0 → 100%`, forcing layout every frame across up to 9
    instances — use `transform: translateX()`.
+
+---
+
+---
+
+# Appendix A — Additional verified findings
+
+These were verified during the review but appear above only inside a score-table cell or a prose
+paragraph, so a reader working from the six moves would miss them. **All are in scope.** Fold them
+into whichever move they belong to (noted per item).
+
+**A1. The hero is misaligned with the rest of the page by 4px. — Move 3**
+`--gutter: clamp(20px, 4.5vw, 56px)` (`global.css:69`), but `hero.css:81` uses
+`clamp(22px, 5vw, 56px)`, and so do `--wayfind-gutter` (`hero.css:152`) and the mobile menu
+(`nav.css:117`). At an 800px viewport the container gutter computes to 36px and the hero's to 40px,
+so **the hero title's left edge and the nav brand's left edge sit 4px apart across roughly the
+entire 440–1244px range**, and on mobile the menu links are indented 4px past the brand directly
+above them. *Fix:* delete the three bespoke clamps and use `var(--gutter)` everywhere.
+
+**A2. The project-detail gallery has a hardcoded per-index layout against a variable array. — Move 5**
+`projectdetail.css:128-137` defines `.project__gallery-photo--1` through `--4` on a 12-column grid,
+but `isef2026Photos` (`photos.ts:6-19`) has **3** items. `--3` gets `grid-column: 1 / span 5`, so
+columns 6–12 of row 2 are empty — a 7-column hole. Adding a 5th photo yields no rule at all and it
+falls to `auto`, breaking the composition. *Fix:* replace the per-index rules with a layout that
+works for any count (an `auto-fit` grid, or `:nth-child` patterns that cycle).
+
+**A3. Vestigial selectors from prior iterations. — Move 3**
+Dead code that is a strong "iteratively machine-edited" fingerprint. Delete all of it:
+`home.css:319-331` — a `.pcard:nth-child(1)` "first card is bigger" override whose declarations are
+**identical to the base rule beside it**; `projectdetail.css:165-166` — the second selector is a
+strict subset of the first; `hero.css:71` — `.hero__hud--tl`, the only modifier of a set whose
+`--tr`/`--br` siblings never existed (removed anyway by Move 1); `hero.css:162` +
+`hero.css:305` — `opacity: 1` plus an `animation: none` reset on an element with no animation;
+`hero.css:128-131` — `.hero__word--accent` sets `#f6f9fc` against the parent's `#f5f8fb` (visually
+identical) and `-0.045em` against `-0.035em`, so **the two words of the name have different
+tracking**; `publications.css:19` — `.pub:focus-visible` on an `<article>` that can never receive
+focus.
+
+**A4. Seven bespoke grid ratios and four vertical rhythms, no shared scale. — Move 3**
+Grids: `minmax(280px,0.82fr) minmax(0,1.18fr)` (`home.css:61`),
+`minmax(170px,0.6fr) minmax(0,1.4fr)` (`:186`), `minmax(116px,0.36fr) minmax(0,1fr)` (`:158`),
+`minmax(230px,0.7fr) minmax(0,1.3fr)` (`:295`),
+`minmax(140px,0.5fr) minmax(0,1.4fr) auto auto` (`:388`),
+`64px minmax(0,1fr) minmax(220px,0.48fr)` (`publications.css:9`),
+`minmax(0,1fr) minmax(240px,0.7fr)` (`projectdetail.css:87`). Rhythms: `.section`
+`clamp(72,10vw,132)` / `.section--tight` `clamp(48,6vw,84)` (`global.css:152-153`), `.pageheader`
+`clamp(72,11vw,148)` (`pageheader.css:3-4`), `.project__inner` `clamp(60,8vw,112)`
+(`projectdetail.css:12-13`), `.notfound` `clamp(88,16vw,184)` (`notfound.css:1`). *Fix:* one
+spacing scale in `:root`; reduce the grid ratios to a small reusable set. Credit where due: every
+grid correctly uses `minmax(0, …)` on the flexible track, which prevents the classic blowout —
+preserve that.
+
+**A5. Interior pages open centered while Home is left-flush, and the "one system" is overridden three ways. — Move 2**
+`pageheader.css:6-11` sets `align-items: center; text-align: center`, so Portfolio, Publications
+and About all open on a different axis from Home. `SectionHead` — whose own comment at
+`global.css:180` claims "one deliberate system, reused everywhere" — is overridden by
+`home.css:366-372` (flex column, centered), `homegallery.css:10-14` (flex, `space-between`, plus
+`transform-origin: center` on the rule under a left-flush title), and carries **three different
+title sizes**: 3.4rem (`home.css:56`), 3.5rem (`:277`), 3.7rem italic (`homegallery.css:16-19`).
+Also `home.css:436` — `.dir__desc { text-align: center }` centers the middle cell of a left-flush
+four-cell row, which is an outright error. *Fix:* pick one axis per page type, one title ramp, and
+delete the overrides.
+
+**A6. Six `measure` values; the token is used three times. — Move 3**
+`--measure: 68ch` (`global.css:67`) is honored at `pageheader.css:35`, `richblocks.css:1`,
+`publications.css:52`. Everything else invents its own: `48ch` (`homegallery.css:26`), `52ch`
+(`hero.css:135`), `58ch` (`about.css:89`), `60ch` (`home.css:140`), `62ch` (`portfolio.css:6`),
+`28ch` (`home.css:321`). At the wide end `.rb-p` is `1.14rem / 1.78 / 68ch` ≈ **76 characters per
+line**, above the 45–75 comfort band. *Fix:* two tokens — a prose measure (~66ch) and a lede
+measure (~52ch) — and use them.
+
+**A7. Three type families, and one of them may be redundant. — Move 3, owner's call**
+Fraunces (display serif) + Newsreader (reading serif) + JetBrains Mono. The mono is fully justified
+by the concept. **Fraunces + Newsreader is the weak seam:** their roles overlap, and `.rb-cite`
+(body serif italic, `richblocks.css:47-49`) and `.pub__title` (display serif) read as the same
+voice at different sizes. Fraunces already loads an `opsz 9..144` range and could carry body copy at
+`opsz ~18`, removing a family and collapsing the ambiguity. Also: **Fraunces 400 and 700 are
+requested in the font URL and never used** — the highest display weight in the codebase is 650
+(`hero.css:264`). *Action:* drop the unused weights from the URL regardless (that part is
+unambiguous); raise dropping Newsreader as a proposal rather than doing it unilaterally.
+
+**A8. No empty states anywhere. — Move 5**
+`Home.tsx:47` `projects.slice(0,3)` with an empty array renders `.home-work__grid` as a lone
+`border-top` hairline (`home.css:284`) with a live "All projects →" link to an empty page.
+`Publications.tsx:24` renders nothing. `HomeGallery.tsx:20` renders the section head and intro with
+`note="0 frames"` — a header describing nothing. `ProjectDetail.tsx:68` is the one place that
+guards correctly (`project.gallery && length > 0`) — copy that pattern.
+
+**A9. Three mutually inconsistent role triads, and mixed grammatical person. — Move 2 item 5**
+The triads: `"Student researcher · Software developer · Documentary filmmaker"` (`site.ts:3`),
+`"Researcher · Developer · Storyteller"` (`Home.tsx:78`), and a third implied by `profileNotes`
+(`Home.tsx:12-16`). **Pick one — this is the owner's call** (note that *"Storyteller"* is the
+softest and most cliché word on the site). Voice: the site is first person in `Hero.tsx:410` and in
+every project body, and third person in `site.ts:11-12`, `Home.tsx:80-82`, and `Home.tsx:88-91`.
+*Fix:* first person throughout; the 4.5rem third-person aphorism is deleted by Move 2 item 1
+anyway.
+
+**A10. About is strictly poorer than the Home section that links to it. — Move 2**
+About renders `PageHeader` + one h2 + `bio[0..1]` + `about-portrait.jpg` with the **same alt string**
+as Home (`About.tsx:34` vs `Home.tsx:69`). Home's Profile already contains `bio[0]`, a second
+paragraph, a 3-row `<dl>`, and the awards — so `"More about Michael →"` (`Home.tsx:104`) **demotes
+the visitor**, and the site's only photo of its subject appears twice with identical alt text.
+*Fix:* give About the material Home does not carry (fencing / ACA TVC / service, a dated timeline,
+the contact block), reduce Home's Profile to one paragraph, and either crop About's portrait
+differently or drop the duplicate. **The content split is the owner's call — see Inputs.**
+
+---
+
+# Appendix B — How to verify
+
+1. **`npm run build`** (`tsc -b && vite build && node scripts/build-pages.mjs`) and **`npm run
+   lint`** (oxlint) must both stay at **zero errors and zero warnings** — that is the current state,
+   so any new output is a regression you introduced.
+2. **This review contains no rendered-pixel evidence.** No browser automation was available, so
+   every layout claim was computed from CSS. Before and after changing them, **look at the page**
+   at 390px, 768px, 1024px, and 1440px. The claims most worth confirming visually: the ~640px of
+   dead space beside the Home portrait at 900–1200px (Move 2 item 4), the `.hero__way-desc`
+   truncation across 720–1200px (Move 5 area), the 4px hero/nav gutter offset (A1), and the
+   7-column hole in the project gallery (A2).
+3. **Check the states, not just the happy path:** keyboard-only tab through each page with visible
+   focus; `prefers-reduced-motion: reduce` enabled (content must stay visible — it currently does,
+   in all four motion subsystems; do not regress this); a slow-network throttle to watch image
+   loading; and `/portfolio/does-not-exist` for the 404 path.
+4. **Do not regress the things listed under *What's Working*.** In particular: the WebGL lifecycle
+   gating and teardown, the YouTube facade, the reveal-once-and-disconnect behavior, listener
+   cleanup, and `aria-hidden` discipline on decorative elements. All were verified clean.
+5. **Report every `TODO(owner)` you leave**, and every item you chose not to do, with the reason.
 
 ---
 
