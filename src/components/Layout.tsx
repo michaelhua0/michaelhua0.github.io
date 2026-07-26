@@ -40,7 +40,7 @@ export default function Layout() {
     };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const save = () => saveScrollPosition(key);
     window.addEventListener("pagehide", save);
     return () => {

@@ -306,7 +306,7 @@ img { max-width: 100%; display: block; }
   overflow: hidden;
   min-height: 44px;
   transition:
-    border-color var(--dur-1) var(--ease-snap),
+    border-color var(--dur-2) var(--ease-snap),
     color var(--dur-1) var(--ease-snap) var(--dur-1);
   text-decoration: none;
 }
@@ -323,7 +323,7 @@ img { max-width: 100%; display: block; }
   background: var(--accent-bright);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform var(--dur-3) var(--ease-snap);
+  transition: transform var(--dur-2) var(--ease-snap);
   z-index: 0;
 }
 .btn:hover { border-color: var(--accent-bright); color: var(--on-accent); text-decoration: none; }
@@ -347,7 +347,7 @@ img { max-width: 100%; display: block; }
 .home-work__all:active,
 a.contact-list__item:active {
   transform: translateY(1px);
-  transition-duration: 60ms;
+  transition-duration: calc(var(--dur-1) / 2);
   transition-timing-function: var(--ease-snap);
 }
 .btn:active {
