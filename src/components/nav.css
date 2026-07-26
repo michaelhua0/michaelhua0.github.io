@@ -2,8 +2,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  transition: background 0.35s var(--ease), border-color 0.35s var(--ease),
-              backdrop-filter 0.35s var(--ease);
+  transition: background 0.35s var(--ease), border-color 0.35s var(--ease);
 }
 
 .nav__inner {
@@ -95,6 +94,12 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+.nav__toggle:hover {
+  background: color-mix(in srgb, var(--surface-3) 50%, transparent);
+}
+.nav--transparent .nav__toggle:hover {
+  background: rgba(255, 255, 255, 0.06);
 }
 .nav__burger { display: block; width: 24px; height: 16px; position: relative; }
 .nav__burger i {

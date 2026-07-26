@@ -174,7 +174,6 @@ const DESTS = [
   },
   { to: "/about", n: "03", label: "About", desc: "Research interests and background" },
 ];
-const CYCLE_MS = 3400;
 
 function compile(gl: WebGLRenderingContext, type: number, src: string) {
   const sh = gl.createShader(type);
@@ -367,18 +366,6 @@ export default function Hero() {
     };
   }, [reducedMotion]);
 
-  // Auto-cycling destination band — draws the eye toward the site's sections.
-  const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
-  useEffect(() => {
-    if (reducedMotion) return;
-    if (paused) return;
-    const id = window.setInterval(() => {
-      setActive((a) => (a + 1) % DESTS.length);
-    }, CYCLE_MS);
-    return () => window.clearInterval(id);
-  }, [paused, active, reducedMotion]);
-
   const [w1, w2] = site.name.split(" ");
   const roleParts = site.role.split("·").map((s) => s.trim());
 
@@ -404,12 +391,8 @@ export default function Hero() {
         </p>
 
         <h1 className="hero__title">
-          <span className="hero__word" style={{ animationDelay: "0.05s" }}>
-            {w1}
-          </span>{" "}
-          <span className="hero__word hero__word--accent" style={{ animationDelay: "0.18s" }}>
-            {w2}
-          </span>
+          <span className="hero__word">{w1}</span>{" "}
+          <span className="hero__word">{w2}</span>
         </h1>
 
         <p className="hero__lede">
@@ -418,22 +401,12 @@ export default function Hero() {
         </p>
       </div>
 
-      {/* Auto-cycling destination band — animated wayfinding into the site. */}
-      <nav
-        className="hero__wayfind"
-        aria-label="Explore the site"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-        onFocusCapture={() => setPaused(true)}
-        onBlurCapture={() => setPaused(false)}
-      >
-        {DESTS.map((d, i) => (
+      <nav className="hero__wayfind" aria-label="Explore the site">
+          {DESTS.map((d) => (
           <Link
             key={d.to}
             to={d.to}
-            className={`hero__way ${i === active ? "is-active" : ""}`}
-            onMouseEnter={() => setActive(i)}
-            onFocus={() => setActive(i)}
+            className="hero__way"
           >
             <span className="hero__way-n" aria-hidden="true">
               {d.n}
