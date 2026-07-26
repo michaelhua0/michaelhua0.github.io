@@ -1,10 +1,28 @@
-.portfolio__note {
-  font-family: var(--font-body);
-  font-size: 1.1rem;
-  line-height: 1.62;
-  color: var(--text-soft);
-  max-width: 62ch;
+.portfolio__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
   margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.portfolio__legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--text-soft);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.portfolio__legend-mark {
+  width: 18px;
+  height: 2px;
+  background: var(--research-bright);
+}
+.portfolio__legend-mark--history {
+  background: var(--history-bright);
 }
 .portfolio__grid {
   display: grid;

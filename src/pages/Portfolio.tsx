@@ -11,11 +11,16 @@ export default function Portfolio() {
     <>
       <SEO {...pageMetadata.portfolio} />
       <PageHeader eyebrow="Selected Work" title="Research and Creative Portfolio">
-        <p className="portfolio__note">
-          Explore work in artificial intelligence, hyperspectral imaging, software development,
-          and documentary history. Select a project to review its methods, results, and supporting
-          materials.
-        </p>
+        <ul className="portfolio__legend" aria-label="Project categories">
+          <li>
+            <span className="portfolio__legend-mark portfolio__legend-mark--research" />
+            Research and software
+          </li>
+          <li>
+            <span className="portfolio__legend-mark portfolio__legend-mark--history" />
+            History and documentary
+          </li>
+        </ul>
       </PageHeader>
 
       <section className="section--tight">
@@ -24,7 +29,7 @@ export default function Portfolio() {
             <div className="portfolio__grid">
               {projects.map((p, i) => (
                 <Reveal key={p.slug} delay={(i % 2) * 80}>
-                  <ProjectCard project={p} index={i} titleAs="h2" />
+                  <ProjectCard project={p} priority={i === 0} titleAs="h2" />
                 </Reveal>
               ))}
             </div>

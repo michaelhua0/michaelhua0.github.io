@@ -43,7 +43,6 @@ export default function ProjectDetail() {
           <h1 className="project__title long-title">{project.detailTitle}</h1>
           <SpectralSignature
             domain={project.domain}
-            seed={project.slug}
             showLabel
             className="spectral-sig--lg project__sig"
           />

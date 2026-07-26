@@ -391,12 +391,6 @@ export default function Hero() {
       <canvas ref={canvasRef} className="hero__canvas" aria-hidden="true" />
       <div className="hero__scrim" aria-hidden="true" />
 
-      {/* corner data readout — tech texture */}
-      <div className="hero__hud hero__hud--tl" aria-hidden="true">
-        <span>SPECTRAL&nbsp;FIELD</span>
-        <span>λ 400–700 nm</span>
-      </div>
-
       <div className="hero__content">
         <p className="hero__eyebrow">
           <span className="hero__eyebrow-text">
