@@ -256,7 +256,7 @@
 }
 .hero__way-label {
   font-family: var(--font-display);
-  font-weight: 650;
+  font-weight: 700;
   font-size: clamp(1.12rem, 2.1vw, 1.4rem);
   line-height: 1.1;
   color: var(--hero-link-title);
