@@ -42,7 +42,7 @@ export interface Project {
   detailTitle: string;
   /** One-line teaser for the card. */
   teaser: string;
-  /** Local image file (dropped into /public/images). Falls back to generated art. */
+  /** Local image file inside /public/images. */
   image: string;
   /** Describes the image itself without repeating the adjacent project title. */
   imageAlt: string;
@@ -56,8 +56,6 @@ export interface Project {
   imageRatio?: string;
   /** Optional backdrop used when a contained image does not fill its frame. */
   imageBackground?: string;
-  /** Motif used for the generated fallback art. */
-  motif: "spectral" | "vessel" | "point-cloud" | "app" | "documentary" | "channel";
   /** Optional photographs shown on the dedicated project page. */
   gallery?: GalleryPhoto[];
   body: Block[];
@@ -78,7 +76,6 @@ export const projects: Project[] = [
     imageFit: "contain",
     imageRatio: "928 / 826",
     scanReveal: true,
-    motif: "spectral",
     gallery: isef2026Photos,
     body: [
       p(
@@ -118,7 +115,6 @@ export const projects: Project[] = [
       "Diagram of a multiscale convolutional transformer with 3D brain-vessel visualizations",
     imageFit: "contain",
     scanReveal: true,
-    motif: "vessel",
     body: [
       p(
         "I developed a Multi-Scale Knowledge Transfer Convolutional Transformer for automated segmentation of cerebral vasculature in 3D in vivo MRI. The model integrates convolutional feature extraction and transformer encoders within a U-Net architecture. A knowledge-transfer mechanism shares structural information across image scales and improves performance on lower-resolution volumes. Comparative experiments showed higher segmentation accuracy than existing methods, with applications in vascular visualization and quantitative analysis.",
@@ -168,7 +164,6 @@ export const projects: Project[] = [
     ],
     imageFit: "contain",
     scanReveal: true,
-    motif: "spectral",
     body: [
       p(
         "I designed a multimodal spatial-spectral-temporal transformer that combines hyperspectral imagery, environmental light conditions, and longitudinal measurements. The architecture models spatial-spectral relationships within each observation and temporal changes across observations. It predicts biomass and quantifies how early plant growth responds to environmental conditions, with applications in precision-controlled agriculture and vertical farming.",
@@ -201,7 +196,6 @@ export const projects: Project[] = [
       { src: "aigro.webp", width: 732 },
     ],
     imageFit: "contain",
-    motif: "app",
     body: [
       { kind: "video", id: "CRbAQMoCaJg", title: "AIGRO" },
       {
@@ -236,7 +230,6 @@ export const projects: Project[] = [
     imageAlt:
       "Two archival photographs of a man, including one beside laboratory equipment",
     imageRatio: "16 / 9",
-    motif: "documentary",
     body: [
       {
         kind: "video",
@@ -266,7 +259,6 @@ export const projects: Project[] = [
     imageAlt: "Red and black collage of layered newspaper clippings",
     imageFit: "contain",
     imageRatio: "16 / 9",
-    motif: "channel",
     body: [
       {
         kind: "links",

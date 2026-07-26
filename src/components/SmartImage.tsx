@@ -1,18 +1,14 @@
 import { useState } from "react";
-import GeneratedArt from "./GeneratedArt";
 import {
   imageSrcSet,
   imageUrl,
   type ResponsiveImageSource,
 } from "../lib/images";
 
-type Motif = "spectral" | "vessel" | "point-cloud" | "app" | "documentary" | "channel";
-
 interface Props {
   /** File name inside /public/images, e.g. "aigro.webp" */
   src: string;
   alt: string;
-  motif: Motif;
   className?: string;
   /** aspect ratio, e.g. "16 / 10" */
   ratio?: string;
@@ -27,14 +23,11 @@ interface Props {
 }
 
 /**
- * Renders the real photo/screenshot once you place it in /public/images.
- * Until then (or if it fails to load) it shows a themed scientific graphic —
- * never stock photos or AI-generated people.
+ * Renders a real photo/screenshot, with an honest unavailable state if loading fails.
  */
 export default function SmartImage({
   src,
   alt,
-  motif,
   className,
   ratio = "16 / 10",
   fit = "cover",
@@ -62,7 +55,13 @@ export default function SmartImage({
       }}
     >
       {failed ? (
-        <GeneratedArt motif={motif} seed={src} alt={alt} />
+        <div
+          className="media-unavailable readout readout--quiet"
+          role="img"
+          aria-label={`Image unavailable. Intended image description: ${alt}`}
+        >
+          Image unavailable
+        </div>
       ) : (
         <img
           src={url}
