@@ -1,12 +1,15 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
 import Hero from "../components/Hero";
 import SectionHead from "../components/SectionHead";
 import ProjectCard from "../components/ProjectCard";
 import HomeGallery from "../components/HomeGallery";
-import { bio, site } from "../data/site";
+import { bio } from "../data/site";
 import { projects } from "../data/projects";
 import { publications } from "../data/publications";
+import { pageMetadata } from "../data/routeMetadata.js";
+import { imageSrcSet, imageUrl } from "../lib/images";
 import "./home.css";
 
 const profileNotes: [string, string][] = [
@@ -45,10 +48,11 @@ const directory = [
 
 export default function Home() {
   const peek = projects.slice(0, 3);
+  const [portraitMissing, setPortraitMissing] = useState(false);
 
   return (
     <>
-      <SEO title={site.name} path="/" />
+      <SEO {...pageMetadata.home} />
       <Hero />
 
       <div className="home-body">
@@ -63,14 +67,30 @@ export default function Home() {
             <div className="home-profile__spread">
               <figure className="home-profile__portrait">
                 <div className="home-profile__portrait-frame">
-                  <img
-                    src={`${import.meta.env.BASE_URL}images/about-portrait.jpg`}
-                    alt="Michael Hua wearing a light blue suit against a red background"
-                    width="932"
-                    height="1200"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  {portraitMissing ? (
+                    <div
+                      className="home-profile__portrait-placeholder"
+                      role="img"
+                      aria-label="Portrait unavailable"
+                    >
+                      <span aria-hidden="true">MH</span>
+                    </div>
+                  ) : (
+                    <img
+                      src={imageUrl("about-portrait.webp")}
+                      srcSet={imageSrcSet([
+                        { src: "about-portrait-466.webp", width: 466 },
+                        { src: "about-portrait.webp", width: 932 },
+                      ])}
+                      sizes="(max-width: 860px) 82vw, 38vw"
+                      alt="Michael Hua wearing a light blue suit against a red background"
+                      width="932"
+                      height="1200"
+                      loading="lazy"
+                      decoding="async"
+                      onError={() => setPortraitMissing(true)}
+                    />
+                  )}
                 </div>
               </figure>
 

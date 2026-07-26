@@ -2,19 +2,17 @@ import { useState } from "react";
 import SEO from "../components/SEO";
 import PageHeader from "../components/PageHeader";
 import { bio } from "../data/site";
+import { pageMetadata } from "../data/routeMetadata.js";
+import { imageSrcSet, imageUrl } from "../lib/images";
 import "./about.css";
 
 export default function About() {
   const [portraitMissing, setPortraitMissing] = useState(false);
-  const portraitUrl = `${import.meta.env.BASE_URL}images/about-portrait.jpg`;
+  const portraitUrl = imageUrl("about-portrait.webp");
 
   return (
     <>
-      <SEO
-        title="About"
-        path="/about"
-        description="Michael Hua is a student researcher, software developer, documentary filmmaker, saber fencer, and ACA TVC co-president."
-      />
+      <SEO {...pageMetadata.about} />
       <PageHeader eyebrow="Profile" title="About me" />
 
       <section className="section about">
@@ -31,8 +29,15 @@ export default function About() {
             ) : (
               <img
                 src={portraitUrl}
+                srcSet={imageSrcSet([
+                  { src: "about-portrait-466.webp", width: 466 },
+                  { src: "about-portrait.webp", width: 932 },
+                ])}
+                sizes="(max-width: 720px) 100vw, 42vw"
                 alt="Michael Hua wearing a light blue suit against a red background"
                 onError={() => setPortraitMissing(true)}
+                loading="eager"
+                fetchPriority="high"
                 decoding="async"
               />
             )}

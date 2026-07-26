@@ -30,6 +30,9 @@
 .footer__mark { width: 38px; height: 38px; }
 .footer__nav { display: flex; flex-wrap: wrap; gap: 22px; }
 .footer__nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-family: var(--font-mono);
   font-size: 0.78rem;
   letter-spacing: 0.03em;

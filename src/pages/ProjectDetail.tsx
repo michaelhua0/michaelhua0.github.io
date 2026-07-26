@@ -4,6 +4,7 @@ import RichBlocks from "../components/RichBlocks";
 import SmartImage from "../components/SmartImage";
 import SpectralSignature from "../components/SpectralSignature";
 import { getProject, projects } from "../data/projects";
+import { imageSrcSet, imageUrl } from "../lib/images";
 import NotFound from "./NotFound";
 import "./projectdetail.css";
 
@@ -57,6 +58,8 @@ export default function ProjectDetail() {
               ratio={project.imageRatio ?? "16 / 9"}
               fit={project.imageFit}
               imageBackground={project.imageBackground}
+              sources={project.imageSources}
+              priority
             />
           </div>
         )}
@@ -78,7 +81,9 @@ export default function ProjectDetail() {
               {project.gallery.map((photo, photoIndex) => (
                 <figure key={photo.src} className={`project__gallery-photo project__gallery-photo--${photoIndex + 1}`}>
                   <img
-                    src={`${import.meta.env.BASE_URL}images/${photo.src}`}
+                    src={imageUrl(photo.src)}
+                    srcSet={imageSrcSet(photo.sources)}
+                    sizes="(max-width: 640px) 100vw, 600px"
                     alt={photo.alt}
                     loading="lazy"
                     decoding="async"

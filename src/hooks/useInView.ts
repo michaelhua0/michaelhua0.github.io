@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 
 /* Fires once when the element scrolls into view. Content is visible by
    default (opacity handled in CSS), so a failed observer never hides it. */
@@ -7,11 +8,12 @@ export function useInView<T extends HTMLElement = HTMLDivElement>(
 ) {
   const ref = useRef<T>(null);
   const [inView, setInView] = useState(false);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (reducedMotion) {
       setInView(true);
       return;
     }
@@ -26,7 +28,7 @@ export function useInView<T extends HTMLElement = HTMLDivElement>(
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [rootMargin]);
+  }, [reducedMotion, rootMargin]);
 
   return { ref, inView };
 }

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { site } from "../data/site";
+import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import "./hero.css";
 
 /* ============================================================
@@ -191,13 +192,12 @@ export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const [failed, setFailed] = useState(false);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const hero = heroRef.current;
     if (!canvas || !hero) return;
-
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const gl = (canvas.getContext("webgl", { antialias: false, alpha: false }) ||
       canvas.getContext("experimental-webgl", { antialias: false, alpha: false })) as
@@ -239,15 +239,16 @@ export default function Hero() {
 
     let W = 0;
     let H = 0;
+    let heroRect = hero.getBoundingClientRect();
     const resize = () => {
-      const rect = hero.getBoundingClientRect();
+      heroRect = hero.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 1.75);
-      W = Math.max(1, Math.round(rect.width * dpr));
-      H = Math.max(1, Math.round(rect.height * dpr));
+      W = Math.max(1, Math.round(heroRect.width * dpr));
+      H = Math.max(1, Math.round(heroRect.height * dpr));
       canvas.width = W;
       canvas.height = H;
-      canvas.style.width = rect.width + "px";
-      canvas.style.height = rect.height + "px";
+      canvas.style.width = heroRect.width + "px";
+      canvas.style.height = heroRect.height + "px";
       gl.viewport(0, 0, W, H);
       gl.uniform2f(uRes, W, H);
     };
@@ -257,18 +258,22 @@ export default function Hero() {
     const mouse = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5, a: 0, ta: 0 };
     const start = performance.now();
     const onMove = (e: PointerEvent) => {
-      const rect = hero.getBoundingClientRect();
-      mouse.tx = (e.clientX - rect.left) / rect.width;
-      mouse.ty = 1 - (e.clientY - rect.top) / rect.height;
+      mouse.tx = (e.clientX - heroRect.left) / heroRect.width;
+      mouse.ty = 1 - (e.clientY - heroRect.top) / heroRect.height;
       mouse.ta = 1;
+    };
+    const onEnter = () => {
+      heroRect = hero.getBoundingClientRect();
     };
     const onLeave = () => {
       mouse.ta = 0;
     };
-    if (!reduced) {
-      hero.addEventListener("pointermove", onMove);
-      hero.addEventListener("pointerleave", onLeave);
-      hero.addEventListener("pointerdown", onMove);
+    const passive = { passive: true };
+    if (!reducedMotion) {
+      hero.addEventListener("pointerenter", onEnter, passive);
+      hero.addEventListener("pointermove", onMove, passive);
+      hero.addEventListener("pointerleave", onLeave, passive);
+      hero.addEventListener("pointerdown", onMove, passive);
     }
 
     let raf = 0;
@@ -297,7 +302,7 @@ export default function Hero() {
       cancelAnimationFrame(raf);
     };
 
-    if (reduced) {
+    if (reducedMotion) {
       // one composed static frame
       gl.uniform1f(uTime, 12.0);
       gl.uniform2f(uMouse, 0.5, 0.5);
@@ -305,28 +310,35 @@ export default function Hero() {
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
 
+    let resizeRaf = 0;
     const onResize = () => {
-      resize();
-      if (reduced) {
-        gl.uniform1f(uTime, 12.0);
-        gl.drawArrays(gl.TRIANGLES, 0, 3);
-      }
+      if (resizeRaf) return;
+      resizeRaf = requestAnimationFrame(() => {
+        resizeRaf = 0;
+        resize();
+        if (reducedMotion) {
+          gl.uniform1f(uTime, 12.0);
+          gl.drawArrays(gl.TRIANGLES, 0, 3);
+        }
+      });
     };
     window.addEventListener("resize", onResize);
 
+    let heroVisible = false;
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (reduced) return;
-        if (entry.isIntersecting && !document.hidden) startLoop();
+        heroVisible = entry.isIntersecting;
+        if (reducedMotion) return;
+        if (heroVisible && !document.hidden) startLoop();
         else stopLoop();
       },
       { threshold: 0.02 },
     );
     io.observe(hero);
     const onVis = () => {
-      if (reduced) return;
+      if (reducedMotion) return;
       if (document.hidden) stopLoop();
-      else startLoop();
+      else if (heroVisible) startLoop();
     };
     document.addEventListener("visibilitychange", onVis);
 
@@ -337,14 +349,14 @@ export default function Hero() {
     };
     canvas.addEventListener("webglcontextlost", onLost);
 
-    if (!reduced) startLoop();
-
     return () => {
       stopLoop();
+      cancelAnimationFrame(resizeRaf);
       io.disconnect();
       window.removeEventListener("resize", onResize);
       document.removeEventListener("visibilitychange", onVis);
       canvas.removeEventListener("webglcontextlost", onLost);
+      hero.removeEventListener("pointerenter", onEnter);
       hero.removeEventListener("pointermove", onMove);
       hero.removeEventListener("pointerleave", onLeave);
       hero.removeEventListener("pointerdown", onMove);
@@ -353,19 +365,19 @@ export default function Hero() {
       gl.deleteShader(fs);
       gl.deleteBuffer(buf);
     };
-  }, []);
+  }, [reducedMotion]);
 
   // Auto-cycling destination band — draws the eye toward the site's sections.
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (reducedMotion) return;
     if (paused) return;
     const id = window.setInterval(() => {
       setActive((a) => (a + 1) % DESTS.length);
     }, CYCLE_MS);
     return () => window.clearInterval(id);
-  }, [paused, active]);
+  }, [paused, active, reducedMotion]);
 
   const [w1, w2] = site.name.split(" ");
   const roleParts = site.role.split("·").map((s) => s.trim());

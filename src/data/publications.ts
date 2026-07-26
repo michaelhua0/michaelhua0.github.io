@@ -1,3 +1,5 @@
+import type { ResponsiveImageSource } from "../lib/images";
+
 export interface Publication {
   id: string;
   index: number;
@@ -5,6 +7,7 @@ export interface Publication {
   category: "research" | "history";
   journal?: string;
   image: string;
+  imageSources?: ResponsiveImageSource[];
   imageAlt: string;
   links: { label: string; href: string }[];
   copy: string[];
@@ -18,7 +21,11 @@ export const publications: Publication[] = [
     title:
       "Multi-scale Knowledge Transfer Vision Transformer for 3D Vessel Shape Segmentation",
     journal: "Computers & Graphics, Volume 122, August 2024",
-    image: "publication-vessel-transformer.png",
+    image: "publication-vessel-transformer.webp",
+    imageSources: [
+      { src: "publication-vessel-transformer-464.webp", width: 464 },
+      { src: "publication-vessel-transformer.webp", width: 928 },
+    ],
     imageAlt: "First page of the vessel shape segmentation paper in Computers and Graphics",
     links: [
       {

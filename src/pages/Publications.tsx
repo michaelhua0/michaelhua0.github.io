@@ -1,17 +1,46 @@
+import { useState } from "react";
 import SEO from "../components/SEO";
 import PageHeader from "../components/PageHeader";
 import Reveal from "../components/Reveal";
 import { publications } from "../data/publications";
+import { pageMetadata } from "../data/routeMetadata.js";
+import { imageSrcSet, imageUrl } from "../lib/images";
 import "./publications.css";
+
+function PublicationFigure({
+  image,
+  imageSources,
+  imageAlt,
+  priority,
+}: {
+  image: string;
+  imageSources?: { src: string; width: number }[];
+  imageAlt: string;
+  priority: boolean;
+}) {
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <figure className="pub__figure">
+      <img
+        className={loaded ? "is-loaded" : ""}
+        src={imageUrl(image)}
+        srcSet={imageSrcSet(imageSources)}
+        sizes="(max-width: 620px) 100vw, (max-width: 900px) 190px, 260px"
+        alt={imageAlt}
+        loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : "auto"}
+        decoding="async"
+        onLoad={() => setLoaded(true)}
+      />
+    </figure>
+  );
+}
 
 export default function Publications() {
   return (
     <>
-      <SEO
-        title="Publications"
-        path="/publications"
-        description="Peer-reviewed research and competition papers by Michael Hua in computer vision, hyperspectral imaging, and history."
-      />
+      <SEO {...pageMetadata.publications} />
       <PageHeader eyebrow="Research Papers" title="Publications and Competition Papers">
         <p>
           Peer-reviewed research, technical manuscripts, and historical scholarship with links to
@@ -55,14 +84,12 @@ export default function Publications() {
                     ))}
                   </div>
                 </div>
-                <figure className="pub__figure">
-                  <img
-                    src={`${import.meta.env.BASE_URL}images/${pub.image}`}
-                    alt={pub.imageAlt}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </figure>
+                <PublicationFigure
+                  image={pub.image}
+                  imageSources={pub.imageSources}
+                  imageAlt={pub.imageAlt}
+                  priority={i === 0}
+                />
               </article>
             </Reveal>
           ))}

@@ -1,6 +1,8 @@
 /* Portfolio content is stored as structured data so pages stay data-driven. */
+import type { ResponsiveImageSource } from "../lib/images";
 import type { GalleryPhoto } from "./photos";
 import { isef2026Photos } from "./photos";
+import { projectMetadata } from "./routeMetadata.js";
 import type { Domain } from "./spectrum";
 
 export type Category = "research" | "history";
@@ -42,6 +44,8 @@ export interface Project {
   teaser: string;
   /** Local image file (dropped into /public/images). Falls back to generated art. */
   image: string;
+  /** Optional responsive variants of the same real image. */
+  imageSources?: ResponsiveImageSource[];
   /** Use contain for diagrams, logos, and document pages that should remain uncropped. */
   imageFit?: "cover" | "contain";
   /** Preserve a source image's native proportions when a standard landscape frame would add bars. */
@@ -60,14 +64,10 @@ const p = (text: string): Block => ({ kind: "paragraph", segments: [{ text }] })
 
 export const projects: Project[] = [
   {
-    slug: "decoding-light",
+    ...projectMetadata.decodingLight,
     category: "research",
     domain: "hyperspectral",
     tag: "Hyperspectral imaging · Physics-aware AI",
-    cardTitle: "Decoding Light With Physics-Aware AI",
-    detailTitle: "Decoding Light With Physics-Aware AI",
-    teaser:
-      "A low-cost imaging spectrometer and physics-aware transformer for high-fidelity hyperspectral reconstruction.",
     image: "decoding-light.jpg",
     imageFit: "contain",
     imageRatio: "928 / 826",
@@ -102,16 +102,10 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "brain-vessel-segmentation",
+    ...projectMetadata.brainVesselSegmentation,
     category: "research",
     domain: "medical",
     tag: "Computer vision · Medical imaging",
-    cardTitle:
-      "Novel Multi-Scale Knowledge Transfer Convolutional Transformer for 3D Brain Vessel Segmentation",
-    detailTitle:
-      "Novel Multi-Scale Knowledge Transfer Transformer for 3D Brain Vessel Segmentation",
-    teaser:
-      "A hybrid convolutional transformer for segmenting cerebral vasculature in 3D in vivo MRI.",
     image: "brain-vessel.png",
     imageFit: "contain",
     motif: "vessel",
@@ -151,16 +145,15 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "msst-transformer",
+    ...projectMetadata.msstTransformer,
     category: "research",
     domain: "hyperspectral",
     tag: "Hyperspectral imaging · Transformers",
-    cardTitle:
-      "Novel Multimodal Spatial-Spectral-Temporal Transformer for Hyperspectral Imaging in Plant Growth Modeling",
-    detailTitle: "Novel MSST Transformer for Hyperspectral Imaging in Plant Growth Modeling",
-    teaser:
-      "A multimodal transformer that estimates plant growth from hyperspectral imagery, environmental measurements, and temporal data.",
-    image: "msst.png",
+    image: "msst.webp",
+    imageSources: [
+      { src: "msst-560.webp", width: 560 },
+      { src: "msst.webp", width: 1126 },
+    ],
     imageFit: "contain",
     motif: "spectral",
     body: [
@@ -183,15 +176,15 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "aigro",
+    ...projectMetadata.aigro,
     category: "research",
     domain: "physical-ai",
     tag: "Mobile application · Physical AI",
-    cardTitle: "AIGRO: AI-Assisted Cultivation",
-    detailTitle: "AIGRO",
-    teaser:
-      "A mobile cultivation platform that connects environmental sensors, predictive growth models, and automated controls.",
-    image: "aigro.png",
+    image: "aigro.webp",
+    imageSources: [
+      { src: "aigro-366.webp", width: 366 },
+      { src: "aigro.webp", width: 732 },
+    ],
     imageFit: "contain",
     motif: "app",
     body: [
@@ -220,14 +213,10 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "national-history-day",
+    ...projectMetadata.nationalHistoryDay,
     category: "history",
     domain: "history",
     tag: "2025 National History Day · Documentary",
-    cardTitle: "From Poison to Protection: The 1906 Food and Drug Act",
-    detailTitle: "From Poison to Protection: The 1906 Food and Drug Act",
-    teaser:
-      "A documentary and historical study of the reform movement that produced the 1906 Food and Drug Act.",
     image: "nhd.jpg",
     imageRatio: "16 / 9",
     motif: "documentary",
@@ -252,14 +241,10 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "historys-trigger",
+    ...projectMetadata.historysTrigger,
     category: "history",
     domain: "history",
     tag: "Historical research · Documentary filmmaking",
-    cardTitle: "History's Trigger",
-    detailTitle: "History's Trigger: Documentary History",
-    teaser:
-      "An independent documentary series about political assassinations and their historical consequences.",
     image: "historys-trigger.jpg",
     imageFit: "contain",
     imageRatio: "16 / 9",
