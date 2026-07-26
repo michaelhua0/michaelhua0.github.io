@@ -23,8 +23,12 @@ dist-ssr
 *.sln
 *.sw?
 
-# Local design tooling (not part of the deployed site)
-.claude/skills/
+# Local agent / design tooling (not part of the deployed site)
+.claude/
+CLAUDE.md
+.impeccable/
+.codex/
+AGENTS.md
 PRODUCT.md
 
 # Full-resolution local photo sources; optimized copies live in public/images.
