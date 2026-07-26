@@ -14,10 +14,78 @@ them in the listed order matters), then the plan. The scores and issue list are 
 **Priority key:** P0 blocking · P1 major, fix before shipping · P2 minor · P3 polish.
 
 **One-line summary of the diagnosis:** the site ships its signature *gestures* — spectral glyphs,
-scan sweeps, HUD telemetry, corner ticks — before the *data* those gestures would bind to, and
-that inversion is what makes an otherwise well-engineered site read as machine-generated. The fix
-for "looks AI-generated" and the fix for "a research mentor cannot verify any claim" are the
-same edit: put real measurements where the simulated ones are.
+scan sweeps, HUD telemetry, corner ticks, invented `λ`/`FIG`/`REF`/`BAND` coordinate systems —
+without the data or the key those gestures would need to mean anything. To a general reader that
+reads as decoration pretending to be instrumentation, which is the specific texture people
+recognize as machine-generated. The fix is to delete the simulation, not to add more of it.
+
+---
+
+# AUDIENCE — read this before changing anything
+
+This section overrides any inference you would otherwise draw from the codebase, from
+`PRODUCT.md`, or from the density of technical content in `src/data/projects.ts`.
+
+**Primary audience: the general public.** Friends, family, community contacts, people who
+followed a shared link from a text message or social post, and non-specialist visitors who want
+to know who Michael is and what he's made. Assume a phone, a cellular connection, no domain
+knowledge, and a short attention span. Optimize the homepage, the shared-link preview, the
+mobile experience, and the photo/personal material for this reader.
+
+**Secondary audience: academic and professional evaluators** — a research mentor, a professor, a
+science-fair judge, an admissions reader, a recruiter. **Rare but real, and high-stakes when they
+do arrive.** They must be able to find rigorous material and follow it all the way down.
+
+## The rule this implies
+
+**Design the front door for the general reader. Keep the technical depth intact behind it.**
+
+The homepage and first scroll should be legible to someone with no background. The deep
+material — Publications, project detail pages, papers, methods, citations — stays complete,
+accurate, and reachable. Reduce *jargon on the surface*, never *substance underneath*.
+
+## Hard guardrails — do NOT do these
+
+These are the failure modes most likely to result from a well-meaning "make it general-audience"
+pass. Every one of them would make the site worse:
+
+1. **Do not delete, merge, shorten, or simplify `src/pages/Publications.tsx` or
+   `src/data/publications.ts`.** Publications is the single best-executed page on the site (see
+   *What's Working*). It is the secondary audience's destination. Leave its structure alone.
+2. **Do not remove or soften factual credentials.** The Regeneron ISEF First Place Grand Award,
+   the *Computers & Graphics* paper, the JSHS recognition, venue names, dates, and the Google
+   Scholar link all stay. ISEF First Place is legible and impressive to a *general* reader too —
+   promote it, do not bury or hedge it.
+3. **Do not strip technical explanation from project detail pages.** `projects.ts:78-84`
+   explains CTIS, the underdetermined inverse problem, and forward consistency in plain sentences
+   a non-specialist can actually follow. That is the target register — keep it. Detail pages are
+   allowed to be technical; that is what they are for.
+4. **Do not dumb down the writing.** The problem is never that a word is technical; it is that a
+   *label* is a coordinate with no key (`λ470 · BAND 01`) or a number with no referent (`FIG.01`).
+   Remove unexplained notation. Keep real terminology, explained.
+5. **Do not remove the WebGL hero or the CTIS camera mark.** Neither requires any knowledge to
+   enjoy. They are the two elements no other site could use, and they work on every audience.
+6. **Do not add a spec sheet, datasheet rail, metrics table, or BibTeX block to the homepage.**
+   Earlier planning documents proposed a "datasheet spec-rail"; for this audience mix that
+   belongs on detail pages at most, and is optional even there.
+
+## What this re-ranks
+
+Relative to a review that assumed an academic-first audience:
+
+- **Downgraded:** unquantified research claims (`projects.ts:84, :120`) — a general reader will
+  not audit *"higher fidelity than existing methods."* Still worth one concrete number per
+  project for texture, but no longer blocking. Same for the buried *Computers & Graphics*
+  citation and the method name (`PASS Transformer`) being absent from cards.
+- **Upgraded:** the blank social-share card (`og:image` missing repo-wide) — this audience
+  *arrives through shared links*. Also everything mobile: image payload, touch targets, the
+  un-dimensioned gallery reflow, and the auto-cycling hero band that has no touch pause.
+- **Upgraded:** the personal/photo material ("Life between projects"), currently at ~75% scroll
+  depth. It is the only place the person appears rather than the résumé, and for this audience it
+  may be the most important section on the page.
+- **Unchanged:** every bug, and the entire type/token/motion cleanup. Mechanical inconsistency
+  and gratuitous motion read as machine-authored to *any* viewer regardless of background, so
+  Moves 3, 4 and 5 are not softened by the audience reframing at all.
 
 ---
 
@@ -56,7 +124,7 @@ Method: tri-agent (A: design review · B: deterministic detector/build · C: int
 
 Two elements could not be lifted into any other product. The hero is a spectrometer in GLSL: `BANDS = 6.0` (Hero.tsx:30), a domain-warped FBM field quantized into exactly those six bands (:91-93), a six-stop violet→ember ramp (:73-89), dark absorption seams carved at every band boundary (:132-136), and R/G/B sampled at radial offsets around the pointer so the cursor performs literal chromatic dispersion (:111-121). The CTIS mark puts three offset diffraction-order squares inside the lens (CTISCameraMark.tsx:38-42) — the zero-order/first-order/diagonal pattern described in projects.ts:78, as a monogram.
 
-Everything else asserts instrumentation without carrying any. The "measurement grid" (global.css:104-115) is vertical lines only, at a spacing tied to no column count, no `--page-max`, no `--gutter`, computing to 1.049:1 against `--bg` and 1.006:1 under `.home-body` — the system's signature texture is mathematically below the visibility threshold. The corner HUD reads `SPECTRAL FIELD / λ 400–700 nm` with the code comment saying it out loud: "tech texture" (Hero.tsx:382). Each project card carries 5-7 "emission lines" whose wavelengths come from a PRNG seeded on the URL slug (SpectralSignature.tsx:63-68), drawn on a real 400-700nm axis with real 50nm ticks, for an audience that reads spectra professionally. Corner crop ticks appear on figures, again on project leads at 11px instead of 9px, and glowing teal hairlines appear on publication figures and the portrait frame — seven separate ornaments, none encoding anything.
+Everything else asserts instrumentation without carrying any. The "measurement grid" (global.css:104-115) is vertical lines only, at a spacing tied to no column count, no `--page-max`, no `--gutter`, computing to 1.049:1 against `--bg` and 1.006:1 under `.home-body` — the system's signature texture is mathematically below the visibility threshold. The corner HUD reads `SPECTRAL FIELD / λ 400–700 nm` with the code comment saying it out loud: "tech texture" (Hero.tsx:382). Each project card carries 5-7 "emission lines" whose wavelengths come from a PRNG seeded on the URL slug (SpectralSignature.tsx:63-68), drawn on a real 400-700nm axis with real 50nm ticks. (Originally flagged as a credibility risk with expert readers; under the general-public brief the verdict is simpler and no softer — it is unreadable notation that costs every visitor something and pays none of them back, so it goes.) Corner crop ticks appear on figures, again on project leads at 11px instead of 9px, and glowing teal hairlines appear on publication figures and the portrait frame — seven separate ornaments, none encoding anything.
 
 Meanwhile projects.ts:84 claims "higher reconstruction fidelity than existing methods" and :120 "higher segmentation accuracy than existing methods" with **no number, no baseline, no dataset, no metric anywhere on the site**. The space where the measurement belongs is occupied by randomly generated emission lines.
 
@@ -77,10 +145,13 @@ This maps exactly onto the approved phased plan: Phase 2 (signature gestures —
 **[P0] No contact path exists anywhere on the site.** Grepping `src/` and `index.html` for `mailto|linkedin|github|resume|cv|contact|scholar` returns one hit: a Google Scholar *citations query* buried in projects.ts:142. Nav has 4 items, no contact (Nav.tsx:6-11). Footer has 5 links, none reachable-by (Footer.tsx:13-21). No email, no LinkedIn, no GitHub, no CV. PRODUCT.md:11 states visitors are "looking for background before a conversation, interview, or reference" — every path on the site terminates in a dead end. *Fix:* add `contact` to site.ts; make it the closing section of Home in place of "Keep exploring"; add to footer and About.
 *Suggested command:* /impeccable shape
 
-**[P0] Not one number substantiates any claim, while fabricated data decorates every card.** projects.ts:84 and :120 both claim to beat existing methods with no metric, baseline, or dataset. The peer-reviewed *Computers & Graphics* citation — the hardest credential on the site — appears exactly once, italic, at the bottom of one detail page. Against that, SpectralSignature.tsx:63-68 hashes the URL slug into 5-7 emission peaks on a real nanometre axis. *Fix:* add `metric`/`baseline`/`dataset`/`citation` to the project record (Phase 3 of the approved plan) and bind the glyph to real band centers, or delete `seededStream` and keep one labelled domain tick. Render `band.label` so `BAND 02` resolves to "Hyperspectral imaging".
+**[P0] Unexplained notation is the site's main jargon barrier, and some of it is fabricated.** Four invented labelling systems ship with no key anywhere: `λ470 · BAND 01` (SpectralSignature.tsx:133), `FIG.01` (ProjectCard.tsx:20, derived from array index — renaming a project renumbers every figure), `REF 01` (publications.css:32), `NOTE`/`ERR`. The readable key already exists in the data and is never rendered: spectrum.ts:47-52 stores `"Medical · Computer vision"`, `"Hyperspectral imaging"`, `"Physical AI · Software"`, `"History · Documentary"`. Separately, the emission lines drawn on each card's 400-700nm axis are **fabricated** — SpectralSignature.tsx:63-68 hashes the URL slug through a PRNG. *Fix for a general audience:* render `band.label` instead of `λ{nm} · BAND {n}` — words, not coordinates. Delete `seededStream` and the `lines` memo; keep the single domain-mapped marker. Drop `FIG.01` entirely. Keep `REF 01` on Publications, where it indexes real records. Also fix `"MJ"` as an award mark (Home.tsx:35), which is opaque to everyone, and `"Open figure →"` on all six cards (ProjectCard.tsx:57) including a YouTube channel and a phone app.
 *Suggested command:* /impeccable clarify
 
-**[P0] Evidence is buried under assertion on the homepage.** The largest type on Home is a third-person aphorism at up to 4.5rem ("Michael builds systems that reveal what conventional images leave hidden.", Home.tsx:80-82) on a site that is first-person everywhere else. The ISEF First Place Grand Award renders at up to 2.15rem inside an **unlabelled** `<aside>` (Home.tsx:109), flanked by two white sponsor logos whose 19.05:1 contrast makes them the first fixation in the row — the eye lands on Midjourney. *Fix:* delete the aphorism; promote recognition to a titled section directly below the hero with the award as the display line and the C&G citation beside it; demote the sponsor logos to `--text-faint` mono text.
+**[P0] Every shared link renders a blank preview card.** `og:image` and `twitter:image` are absent repo-wide while SEO.tsx:23 sets `twitter:card=summary_large_image`. Because `scripts/build-pages.mjs` only copies `index.html` → `404.html` with no prerendering, SEO.tsx runs client-side only, so every route also ships the same static `<title>Michael Hua</title>` and one generic description. *Why this is P0 for this audience specifically:* the primary audience arrives through links pasted into texts, group chats, and social posts. Every one of those currently previews as a blank rectangle with a generic title. *Fix:* author a real OG image (1200×630), wire `og:image`/`twitter:image` in SEO.tsx, and prerender per-route `<title>`/description/`og:*` at build time in `scripts/build-pages.mjs`.
+*Suggested command:* /impeccable harden
+
+**[P0] Evidence is buried under assertion on the homepage.** The largest type on Home is a third-person aphorism at up to 4.5rem ("Michael builds systems that reveal what conventional images leave hidden.", Home.tsx:80-82) on a site that is first-person everywhere else. The ISEF First Place Grand Award renders at up to 2.15rem inside an **unlabelled** `<aside>` (Home.tsx:109), flanked by two white sponsor logos whose 19.05:1 contrast makes them the first fixation in the row — the eye lands on Midjourney. *Fix:* delete the aphorism (it is corporate bio-speak in the third person, which reads as ghostwritten to a general reader); promote recognition to a titled section directly below the hero with **the award itself** as the display line, spelled out in plain words — "First Place Grand Award · Regeneron ISEF 2026" needs no domain knowledge to land. Demote the sponsor logos to `--text-faint` mono text or drop them. *Audience note:* the *Computers & Graphics* citation should be **reachable** from here but should not be the display line — set it as a quieter secondary reference, not the headline.
 *Suggested command:* /impeccable layout
 
 **[P0] The signature button interaction is invisible in 3 of 4 contexts, and turns its own label near-black.** `.btn::before { z-index: -1 }` (global.css:260) sits on a `.btn` that is `position:relative; z-index:auto` — not a stacking context, no `isolation`. The teal fill escapes to the root stacking context and paints beneath every section background. On `.btn--primary` its own opaque background covers it (100% invisible). On Home's only CTA, `.home-profile`'s opaque background covers it (100% invisible) — and `.btn:hover { color: #04140f }` still fires, so "More about Michael" turns near-black text on a dark surface on hover. On Publications the 55%-opaque `.pub:hover` background muddies it to a computed 3.31:1. Where it does work, the label darkens over 0.3s while the fill sweeps over 0.4s, so the right half of every label is dark-on-dark at t≈150ms. The codebase already uses `isolation: isolate` correctly five times — including at hero.css:180 and home.css:397 — and missed the one component that needed it.
@@ -104,8 +175,11 @@ This maps exactly onto the approved phased plan: Phase 2 (signature gestures —
 **[P1] Route changes smooth-scroll through the newly rendered page.** `behavior: "auto"` (Layout.tsx:22) means "use the computed `scroll-behavior`" per CSSOM-View — not instant — and global.css:79 sets `smooth`. So navigation renders the new page at the old scroll offset, then animates upward through unfamiliar content, tripping every Reveal observer on the way. Because global.css:82 forces `auto` under reduced motion, the bug is invisible when testing with reduced motion on. Back/Forward also loses position entirely (Layout.tsx:10-23 forces top:0 on every pathname change).
 *Suggested command:* /impeccable optimize
 
-**[P1] 3.12MB of images on the homepage against 102kB gzip of code.** 4.56MB deployed total, 0 webp/avif, 0 srcset, no `fetchpriority` on the LCP image. Two gallery photos are 1800px wide for a column that is at most 240px. The 10 gallery images carry no `width`/`height` and `height:auto` inside a CSS-columns masonry, so each decode repacks all ten and shifts the following section — while the user is scrolling through it. Dimensions are known on disk (678×292 to 585×899, a 3.6× ratio spread).
+**[P0 for this audience] 3.12MB of images on the homepage against 102kB gzip of code.** 4.56MB deployed total, 0 webp/avif, 0 srcset, no `fetchpriority` on the LCP image. Two gallery photos are 1800px wide for a column that is at most 240px. The 10 gallery images carry no `width`/`height` and `height:auto` inside a CSS-columns masonry, so each decode repacks all ten and shifts the following section — while the user is scrolling through it. Dimensions are known on disk (678×292 to 585×899, a 3.6× ratio spread). *Raised from P1:* a general audience means phones on cellular, so payload and the reflow-under-the-thumb are front-line, not hygiene.
 *Suggested command:* /impeccable optimize
+
+**[P1] The personal material — the thing this audience came for — is at ~75% scroll depth.** "Life between projects" (HomeGallery.tsx) is 10 real candid photos in a true masonry that preserves aspect ratios, under the best heading on the site. It is the **only** place Michael appears as a person rather than as a résumé. It currently sits below the hero, the profile/bio spread, the awards aside, and Selected Work. *Fix:* move it up the homepage sequence for the primary audience — a defensible order is Hero → Recognition (P0 above) → Selected work → **Life between projects** → Profile/bio → Contact. Also give the photos captions: today they have no click handler, no `<a>`, no caption and no keyboard path, yet `homegallery.css:69-72` scales them on hover as if they were interactive.
+*Suggested command:* /impeccable layout
 
 **[P1] `font-weight: 560` is inert at 9 sites.** The Google Fonts URL requests discrete weights (`wght@0,9..144,400;500;600;700`), so the response returns static faces pinned to 400/500/600/700 — not a variable range. Every `560` resolves to 600, every `520` to 500, every `480` to 400. Fix is one character class: `wght@0,9..144,400..700`. Separately, during swap those weights snap to Georgia bold, so every heading on the site flashes noticeably bolder than final.
 *Suggested command:* /impeccable typeset
@@ -121,13 +195,42 @@ This maps exactly onto the approved phased plan: Phase 2 (signature gestures —
 
 ## Persona Red Flags
 
-**ISEF-caliber mentor / admissions reader, 90 seconds:** 0-10s a shader and a name, no affiliation, no field, no headline result. 10-30s the aphorism, then the first real specific ("Physics-aware AI for computational imaging") set at 0.7rem mono beside a 4.5rem slogan. 30-45s the awards aside — the moment — visually fourth in its own unlabelled section, next to a Midjourney logo. 45-70s real titles and precise teasers, but "Physics-Aware Spatial-Spectral (PASS) Transformer" appears only on the detail page; at 60 seconds this reader has still seen no method name, metric, or venue. 70-90s needs the paper; the only routes from Home are a directory row and the footer. **Disqualifier:** an unquantified comparative claim (projects.ts:84, :120) with generated emission lines where the number should be. **Fails the 90-second test.**
+Ordered by audience weight. The first three are the primary audience and carry the most weight;
+the fourth is the secondary audience and is included because its failures are real, not because
+it should drive design decisions.
+
+**PRIMARY — the shared-link visitor (a friend, a relative, a classmate's parent).** Receives a
+link in a text. **The preview is a blank card with the title "Michael Hua"** and a generic
+description — `og:image` is absent repo-wide. Taps through on a phone over cellular and downloads
+3.12MB of images. The hero fills the viewport with `min-height: calc(100svh - var(--nav-h))` plus
+the destination band, and there is **no scroll cue** that anything is below (hero.css:1-13). The
+band's three rows auto-cycle forever with **no touch pause** (Hero.tsx:361-368 — `paused` is
+driven only by mouse and focus events), so something blinks on a timer while they read. Scrolls
+to the bio and meets a 4.5rem third-person sentence about Michael. Reaches the awards row, which
+has no section head, so a First Place Grand Award reads as a footnote to a portrait — beside a
+Midjourney logo at 19.05:1, the brightest thing in the row. Reaches the photos — the part they
+actually wanted — at ~75% scroll depth, and they reflow under the thumb as each un-dimensioned
+lazy image decodes. Wants to reply "this is great, how do I reach him" — **no contact exists.**
 
 **Jordan (first-timer):** the destination band starts flipping states on a timer and Jordan waits to see whether something is loading. The section head reads "Profile" with the readout "Bloomfield Hills · MI" where a summary belongs. The 4.5rem third-person sentence on an otherwise first-person site reads as written by someone else. The awards row has no section head, so a First Place Grand Award reads as a footnote to the portrait. Jordan decides he likes this person and wants to email him — nothing exists.
 
 **Riley (stress tester):** hovers the brand and gets the best animation on the site; tabs to it and gets nothing (hover-only, no `:focus-visible`). Hovers a Publications button: 3.31:1. Visits `/portfolio/nope`: gets 404 content that declares itself canonical to the homepage. Resizes to 900px: ~700px of void beside the portrait. Blocks images: figures silently become invented abstract art indistinguishable from real results. Enables reduced motion: passes cleanly. Kills JS: content stays visible.
 
-**Casey (distracted mobile):** the hero band becomes three stacked full-width rows that still auto-cycle, with no hover to pause and no pause control. `min-height: calc(100svh - var(--nav-h))` plus the band leaves no scroll cue that anything is below. The menu toggle is 36px tall — the only mobile nav control. The gallery reflows under the thumb as each un-dimensioned lazy image decodes.
+**Casey (distracted mobile):** the hero band becomes three stacked full-width rows that still auto-cycle, with no hover to pause and no pause control. `min-height: calc(100svh - var(--nav-h))` plus the band leaves no scroll cue that anything is below. The menu toggle is 36px tall — the only mobile nav control. The gallery reflows under the thumb as each un-dimensioned lazy image decodes. **This persona now carries nearly as much weight as the primary above:** general audience means phones.
+
+**SECONDARY, low weight — ISEF-caliber mentor / admissions reader, 90 seconds.** Included for
+completeness; **do not let this persona drive homepage decisions.** 0-10s a shader and a name, no
+affiliation or field. 10-30s the aphorism, then the first real specific ("Physics-aware AI for
+computational imaging") at 0.7rem mono beside a 4.5rem slogan. 30-45s the awards aside — visually
+fourth in its own unlabelled section, next to a Midjourney logo. 45-70s real titles and precise
+teasers, but "Physics-Aware Spatial-Spectral (PASS) Transformer" appears only on the detail page.
+70-90s needs the paper; the only routes from Home are a directory row and the footer.
+**Historical disqualifier, now downgraded:** the unquantified comparative claims at projects.ts:84
+and :120 with generated emission lines where a number should be. *For this audience mix, the
+right response is narrow:* keep the deep pages complete and easy to reach from the homepage
+(Publications should be one obvious click, not a footer link), and add one real number per
+project **on the detail page only** if the data exists. Do not restructure the homepage for this
+reader, and do not add a metrics table anywhere.
 
 ## Minor Observations
 
@@ -135,33 +238,56 @@ This maps exactly onto the approved phased plan: Phase 2 (signature gestures —
 
 ---
 
-# The Plan — 6 moves, strictly ordered
+# The Plan — 6 moves
 
-Ordered by (credibility gained + vibecoded-tells killed) ÷ effort. Moves 1–3 are the ones that
-matter; 4–6 are hygiene. Each move is independently shippable. Verify each with `npm run build`
-(tsc + vite) and `npm run lint` before committing.
+Each move is independently shippable. Verify each with `npm run build` (tsc + vite) and
+`npm run lint` before committing.
 
-## Move 1 — Finish Phase 3 first: make the instrument carry real measurements, or delete it
+## Execution order (revised for a general-public primary audience)
 
-This single move fixes the credibility failure *and* the vibecoded verdict, because they have the
-same cause: signature gestures shipped before the data they bind to.
+**Do them in this order, not in the numbered order below.** The numbering is retained so the
+issue list above stays cross-referenceable, but the audience reframing changed the priority:
 
-1. **Add structured fields to the project record** in `src/data/projects.ts`: `year`, `metric`
-   (the actual number + baseline + dataset), `venue`, `citation`. Then replace the unquantified
-   claims at `projects.ts:84` ("higher reconstruction fidelity than existing methods") and
-   `projects.ts:120` ("higher segmentation accuracy than existing methods") with the real delta.
-   One real number per project retires the site's largest liability. Surface these as a spec rail
-   on Project Detail (the "datasheet" idea) — mono label + tabular value pairs, no ornament.
+| Do | Move | Why it moved |
+|---|---|---|
+| 1st | **Move 6** items 1–4 + **Move 5** | Share cards, image payload, mobile touch targets, and the six real bugs. This is what the primary audience actually hits: a blank preview, 3.12MB on cellular, a 36px tap target, and a CTA whose label goes near-black on hover. Highest impact, lowest risk, no design debate. |
+| 2nd | **Move 2** | Re-rank the homepage — with the audience-revised sequence in Move 2 item 6. |
+| 3rd | **Move 1**, reduced scope | **Delete the simulated instrumentation. Do not build the datasheet/metrics half.** See the scope note at the head of Move 1. |
+| 4th | **Move 4** | Cut ~60% of the motion, add `:active`. |
+| 5th | **Move 3** | Token consolidation. Invisible to visitors, but it is what stops the code reading as machine-authored — and it makes every later change cheaper. |
+
+Everything in Moves 3, 4 and 5 is audience-independent and fully in scope as written.
+
+## Move 1 — Delete the simulated instrumentation (reduced scope)
+
+> **SCOPE CHANGE — read before starting this move.** This move originally had two halves: delete
+> the fake instrumentation, *and* add real measurement data to fill the gap. **For a
+> general-public primary audience, only the first half is in scope.** Do items 2–7 below. Item 1
+> (structured `metric`/`baseline`/`dataset` fields and a spec rail) is **downgraded to optional,
+> detail-page-only**, and must not touch the homepage. A general reader will not audit a
+> reconstruction-fidelity claim; adding a metrics table to serve a rare visitor would cost the
+> common one. Deleting notation with no key helps *both* audiences, so that part stays.
+
+1. **OPTIONAL / DETAIL-PAGE ONLY — do this last, or not at all.** If real numbers exist, replace
+   the unquantified claims at `projects.ts:84` ("higher reconstruction fidelity than existing
+   methods") and `projects.ts:120` ("higher segmentation accuracy than existing methods") with the
+   actual delta, in the existing prose sentences. **Do not add `metric`/`baseline`/`dataset`
+   fields, a spec rail, a datasheet, or a metrics table**, and do not surface any of this on the
+   homepage — see the scope note above. A single number inside a sentence a general reader can
+   follow is the entire goal here.
 2. **Bind `SpectralSignature` to real data or delete its fabrication.**
    `src/components/SpectralSignature.tsx:62-69` generates 5–7 "emission lines" from a PRNG seeded
    on the URL slug and draws them on a real 400–700nm axis with real 50nm ticks. Either plot the
    actual CTIS band centers, or delete `seededStream` and the `lines` memo entirely and keep only
    the single domain-mapped marker.
-3. **Render `band.label`.** `src/data/spectrum.ts:47-52` already stores
+3. **Render `band.label` — words, not coordinates.** `src/data/spectrum.ts:47-52` already stores
    `"Medical · Computer vision"`, `"Hyperspectral imaging"`, `"Physical AI · Software"`,
    `"History · Documentary"`. `SpectralSignature.tsx:133` ships `λ{band.nm} · BAND {band.n}` and
    never renders `label` — an invented coordinate system with its key deliberately withheld.
-   Render the label (optionally alongside the wavelength).
+   **For a general audience, render the label and drop the wavelength entirely.** Same reasoning
+   applies to `FIG.01` (`ProjectCard.tsx:20`), which is derived from array index and means nothing
+   to anyone — delete it. Keep `REF 01` on Publications, where it indexes real records for the
+   secondary audience.
 4. **Delete the fake HUD.** `src/components/Hero.tsx:382-386` — hardcoded `SPECTRAL FIELD` /
    `λ 400–700 nm`, faded in last at t=1.8s. The code comment already calls it "tech texture".
    Also remove `.hero__hud*` from `src/components/hero.css:60-75, 315`.
@@ -209,6 +335,14 @@ same cause: signature gestures shipped before the data they bind to.
    note rendered to visitors at `About.tsx:26-29` ("Portrait reserved / Red backdrop · light blue
    suit"). Fix the alt text at `ProjectCard.tsx:38` and `ProjectDetail.tsx:55`, which repeat the
    adjacent visible heading verbatim.
+6. **Re-sequence the homepage for the primary audience.** Current order: Hero → Profile (bio +
+   awards buried inside it) → Selected work → Life between projects → Keep exploring. Target
+   order: **Hero → Recognition (titled, award as the display line) → Selected work → Life between
+   projects → Profile/bio → Contact.** The rationale: the general reader wants "who is this and
+   what has he made" before "here is a bio," the photos are what they came for and should not be
+   at 75% depth, and the site must end on a way to reach him rather than a duplicate of the nav.
+   Keep the *Publications* link prominent in the nav so the secondary audience still lands in one
+   click — it must not degrade to a footer-only route.
 
 ## Move 3 — Collapse the hand-typed layer into tokens
 
@@ -369,6 +503,11 @@ own underline (`home.css:351-353`) leaving a 4px arrow nudge as the sole feedbac
 
 ## Move 6 — Assets, sharing, and hardening
 
+> **DO THIS MOVE FIRST.** Items 1–4 were originally ranked as hygiene against an academic-first
+> audience. For a general-public audience they are the highest-impact work on the entire list:
+> a blank share-link preview, 3.12MB of images on cellular, a near-white flash on every card, and
+> sub-44px tap targets are exactly what the primary visitor experiences.
+
 1. **Images are ~97% of page weight.** 4.56MB deployed; 3.12MB on `/` alone against 102kB gzip of
    code. Zero webp/avif, zero `srcset`, no `fetchpriority` on the LCP image. Resize the two
    1800×1200 gallery photos (648KB, 476KB) to ~720px for a column that is at most 240px, and
@@ -417,10 +556,15 @@ own underline (`home.css:351-353`) leaving a 4px arrow nudge as the sole feedbac
 2. The strongest sentence available is "First Place Grand Award — Regeneron ISEF 2026, Robotics &
    Intelligent Machines." It is currently 2.15rem in an unlabelled aside next to a Midjourney
    logo. What does the homepage look like if that is the largest type and the shader is second?
-3. Every project claims to beat existing methods and not one shows a number. What is the one real
-   figure per project — a metric, a baseline delta, a reconstruction/ground-truth pair — that
-   would replace the seeded fake emission lines with actual data?
+3. The ten candid photos are the only place the person appears rather than the résumé, and they
+   are the last thing before the footer. For an audience of friends, family, and community, should
+   they be much earlier — and do they want captions?
 4. Four copies of the site's own navigation, zero ways to contact its subject. What is the next
-   action wanted from a mentor, a recruiter, and a family member — and where does each one take it?
+   action wanted from a family member, a classmate, and (occasionally) a recruiter — and where
+   does each one take it?
 5. What is at 100% scroll depth that a visitor would screenshot or forward? Right now: a duplicate
-   table of contents and a copyright line.
+   table of contents and a copyright line. This matters more than it looks: the primary audience
+   arrives through shared links, so the site's shareable moment is load-bearing.
+6. Every project claims to beat existing methods and not one shows a number (`projects.ts:84`,
+   `:120`). Downgraded under the general-public brief, but still open: is there one real figure per
+   project you'd want in the prose on the detail page?
