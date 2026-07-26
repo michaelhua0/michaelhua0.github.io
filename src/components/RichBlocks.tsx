@@ -20,7 +20,7 @@ function InlineSegment({ seg }: { seg: Segment }) {
 }
 
 function LinkButton({ item }: { item: LinkItem }) {
-  const cls = `btn ${item.primary ? "btn--primary" : ""}`;
+  const cls = `btn readout ${item.primary ? "btn--primary" : ""}`;
   const arrow = <span className="arrow" aria-hidden="true">→</span>;
   if (item.internal) {
     return (
@@ -62,7 +62,8 @@ export default function RichBlocks({ blocks }: { blocks: Block[] }) {
             );
           case "note":
             return (
-              <p key={i} className="rb-note">
+              <p key={i} className="rb-note mono-copy mono-copy--strong">
+                <span className="rb-note__label readout readout--quiet">Note</span>
                 {b.text}
               </p>
             );

@@ -1,20 +1,17 @@
 /* ============================================================
    The spectral system — one source of truth for the JS side.
 
-   These hexes mirror the CSS `--band-*` tokens in
-   src/styles/global.css; keep the two in sync. Anything that
-   needs spectral color in TypeScript (generated art, per-project
-   signatures, the wavelength spine) imports from here instead of
-   redefining its own palette.
+   Values point directly to the CSS `--band-*` tokens, so generated
+   art and project signatures share the document palette.
    ============================================================ */
 
 export const SPECTRUM = {
-  violet: "#8b7bff",
-  blue: "#4f8dff",
-  teal: "#2fd4bf",
-  green: "#46c86b",
-  amber: "#e6b23f",
-  red: "#ec6a63",
+  violet: "var(--band-violet)",
+  blue: "var(--band-blue)",
+  teal: "var(--band-teal)",
+  green: "var(--band-green)",
+  amber: "var(--band-amber)",
+  red: "var(--band-red)",
 } as const;
 
 /** Ordered low → high wavelength — use for ramps and generated art. */

@@ -11,10 +11,6 @@
   align-items: center;
   gap: 9px;
   color: var(--text-soft);
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
 }
 .portfolio__legend-mark {
   width: 18px;
@@ -28,7 +24,4 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 26px;
-}
-@media (max-width: 720px) {
-  .portfolio__grid { grid-template-columns: 1fr; }
 }

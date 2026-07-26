@@ -40,12 +40,7 @@
 }
 
 .spectral-sig__label {
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
   color: var(--text-faint);
-  font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
@@ -53,7 +48,4 @@
 .spectral-sig--lg .spectral-sig__svg {
   width: clamp(140px, 24vw, 220px);
   height: 32px;
-}
-.spectral-sig--lg .spectral-sig__label {
-  font-size: 0.68rem;
 }

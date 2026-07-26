@@ -1,10 +1,7 @@
-.notfound { padding-block: clamp(88px, 16vw, 184px); }
+.notfound { padding-block: var(--space-xl); }
 .notfound__inner { text-align: center; }
 .notfound__code {
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
   color: var(--text-faint);
-  letter-spacing: 0.34em;
   margin: 0;
 }
 .notfound__code::before { content: "ERR "; color: var(--band-red); }
@@ -15,5 +12,10 @@
   color: var(--text);
   letter-spacing: -0.02em;
 }
-.notfound__lead { color: var(--text-soft); margin: 0 auto 32px; max-width: 42ch; font-size: 1.1rem; }
+.notfound__lead {
+  color: var(--text-soft);
+  margin: 0 auto 32px;
+  max-width: var(--measure-lede);
+  font-size: 1.1rem;
+}
 .notfound__links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }

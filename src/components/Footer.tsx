@@ -12,19 +12,24 @@ export default function Footer() {
           <CTISCameraMark className="footer__mark" />
         </div>
         <nav className="footer__nav" aria-label="Footer">
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-          <Link to="/portfolio">Portfolio</Link>
-          <Link to="/publications">Publications</Link>
-          <a href="https://www.youtube.com/@HistorysTrigger" target="_blank" rel="noopener noreferrer">
+          <Link className="mono-copy" to="/">Home</Link>
+          <Link className="mono-copy" to="/about">About</Link>
+          <Link className="mono-copy" to="/portfolio">Portfolio</Link>
+          <Link className="mono-copy" to="/publications">Publications</Link>
+          <a
+            className="mono-copy"
+            href="https://www.youtube.com/@HistorysTrigger"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             History's Trigger
           </a>
         </nav>
         <div className="footer__contact">
-          <p className="footer__label">Contact</p>
+          <p className="footer__label readout readout--quiet">Contact</p>
           <ContactLinks className="footer__contacts" />
         </div>
-        <p className="footer__meta">© {year} Michael Hua</p>
+        <p className="footer__meta mono-copy">© {year} Michael Hua</p>
       </div>
     </footer>
   );

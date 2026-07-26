@@ -14,14 +14,14 @@
 }
 
 .ctis-camera-mark__flash-glow {
-  fill: #fff;
+  fill: var(--white);
   opacity: 0;
-  filter: drop-shadow(0 0 7px rgba(255, 255, 255, 0.95));
+  filter: drop-shadow(0 0 7px color-mix(in srgb, var(--white) 95%, transparent));
 }
 
 .ctis-camera-mark__flash-burst {
   fill: none;
-  stroke: #fff;
+  stroke: var(--white);
   stroke-width: 2;
   stroke-linecap: round;
   opacity: 0;
@@ -34,27 +34,29 @@
 }
 
 .ctis-camera-mark__flash-housing {
-  fill: var(--surface-2, #111826);
+  fill: var(--surface-2);
   stroke: currentColor;
   stroke-width: 1.4;
 }
 
 .ctis-camera-mark__flash-panel {
-  fill: #dfe8ef;
+  fill: var(--camera-flash);
   stroke: currentColor;
   stroke-width: 0.8;
-  transition: fill 180ms var(--ease), filter 180ms var(--ease);
+  transition:
+    fill var(--dur-1) var(--ease-snap),
+    filter var(--dur-1) var(--ease-snap);
 }
 
 .ctis-camera-mark__body-shell {
-  fill: var(--surface-2, #111826);
+  fill: var(--surface-2);
   stroke: currentColor;
   stroke-width: 1.5;
   stroke-linejoin: round;
 }
 
 .ctis-camera-mark__top-plane {
-  fill: color-mix(in srgb, currentColor 11%, var(--surface-2, #111826));
+  fill: color-mix(in srgb, currentColor 11%, var(--surface-2));
   stroke: currentColor;
   stroke-width: 1.25;
   stroke-linejoin: round;
@@ -62,15 +64,15 @@
 }
 
 .ctis-camera-mark__side-plane {
-  fill: color-mix(in srgb, var(--research-bright, #3fe0cc) 10%, var(--surface-2, #111826));
+  fill: color-mix(in srgb, var(--research-bright) 10%, var(--surface-2));
   stroke: currentColor;
   stroke-width: 1.25;
   stroke-linejoin: round;
 }
 
 .ctis-camera-mark__status-light {
-  fill: var(--research-bright, #3fe0cc);
-  filter: drop-shadow(0 0 2px rgba(63, 224, 204, 0.7));
+  fill: var(--research-bright);
+  filter: drop-shadow(0 0 2px color-mix(in srgb, var(--research-bright) 70%, transparent));
 }
 
 .ctis-camera-mark__control {
@@ -82,20 +84,20 @@
 }
 
 .ctis-camera-mark__lens-outer {
-  fill: var(--surface-1, #0d1119);
+  fill: var(--surface-1);
   stroke: currentColor;
   stroke-width: 1.7;
 }
 
 .ctis-camera-mark__lens-ring {
-  fill: rgba(9, 12, 18, 0.94);
-  stroke: var(--research-bright, #3fe0cc);
+  fill: color-mix(in srgb, var(--bg) 94%, transparent);
+  stroke: var(--research-bright);
   stroke-width: 1.4;
-  filter: drop-shadow(0 0 3px rgba(63, 224, 204, 0.3));
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--research-bright) 30%, transparent));
 }
 
 .ctis-camera-mark__aperture path {
-  fill: #171d29;
+  fill: var(--camera-aperture);
   stroke: currentColor;
   stroke-width: 0.85;
   stroke-linejoin: round;
@@ -103,56 +105,56 @@
 }
 
 .ctis-camera-mark__aperture circle {
-  fill: #05070b;
-  stroke: var(--text-soft, #aab6c6);
+  fill: var(--ink);
+  stroke: var(--text-soft);
   stroke-width: 0.8;
 }
 
 .ctis-camera-mark__order {
-  stroke: rgba(5, 7, 11, 0.85);
+  stroke: color-mix(in srgb, var(--ink) 85%, transparent);
   stroke-width: 0.6;
 }
 
 .ctis-camera-mark__order--violet {
-  fill: var(--band-violet, #8b7bff);
+  fill: var(--band-violet);
 }
 
 .ctis-camera-mark__order--teal {
-  fill: var(--research-bright, #3fe0cc);
+  fill: var(--research-bright);
 }
 
 .ctis-camera-mark__order--amber {
-  fill: var(--history-bright, #ecc164);
+  fill: var(--history-bright);
 }
 
 .ctis-camera-mark:hover .ctis-camera-mark__camera,
 .nav__brand:focus-visible .ctis-camera-mark__camera {
-  animation: ctis-camera-recoil 620ms var(--ease);
+  animation: ctis-camera-recoil var(--dur-4) var(--ease);
 }
 
 .ctis-camera-mark:hover .ctis-camera-mark__flash-glow,
 .nav__brand:focus-visible .ctis-camera-mark__flash-glow {
-  animation: ctis-camera-flash 680ms ease-out;
+  animation: ctis-camera-flash var(--dur-4) var(--ease);
 }
 
 .ctis-camera-mark:hover .ctis-camera-mark__flash-burst,
 .nav__brand:focus-visible .ctis-camera-mark__flash-burst {
-  animation: ctis-camera-burst 680ms ease-out;
+  animation: ctis-camera-burst var(--dur-4) var(--ease);
 }
 
 .ctis-camera-mark:hover .ctis-camera-mark__flash-panel,
 .nav__brand:focus-visible .ctis-camera-mark__flash-panel {
-  animation: ctis-camera-panel 680ms ease-out;
+  animation: ctis-camera-panel var(--dur-4) var(--ease);
 }
 
 .ctis-camera-mark:hover .ctis-camera-mark__aperture,
 .nav__brand:focus-visible .ctis-camera-mark__aperture {
-  animation: ctis-camera-aperture 620ms var(--ease);
+  animation: ctis-camera-aperture var(--dur-4) var(--ease);
 }
 
 .ctis-camera-mark:hover .ctis-camera-mark__diffraction,
 .nav__brand:focus-visible .ctis-camera-mark__diffraction {
-  animation: ctis-camera-spectrum 620ms var(--ease);
+  animation: ctis-camera-spectrum var(--dur-4) var(--ease);
 }
 
 @keyframes ctis-camera-flash {
@@ -171,8 +173,11 @@
 }
 
 @keyframes ctis-camera-panel {
-  0%, 12%, 45%, 100% { fill: #dfe8ef; filter: none; }
-  18%, 34% { fill: #fff; filter: drop-shadow(0 0 6px rgba(255, 255, 255, 1)); }
+  0%, 12%, 45%, 100% { fill: var(--camera-flash); filter: none; }
+  18%, 34% {
+    fill: var(--white);
+    filter: drop-shadow(0 0 6px var(--white));
+  }
 }
 
 @keyframes ctis-camera-recoil {

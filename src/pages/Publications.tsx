@@ -59,12 +59,17 @@ export default function Publications() {
                 className={`pub cat-${pub.category}`}
                 delay={i * 70}
               >
-                <div className="pub__index" aria-hidden="true">
+                <div className="pub__index readout readout--strong" aria-hidden="true">
+                  <span className="pub__index-label readout readout--quiet">Ref</span>
                   {String(pub.index).padStart(2, "0")}
                 </div>
                 <div className="pub__main">
                   <h2 className="pub__title long-title">{pub.title}</h2>
-                  {pub.journal && <p className="pub__journal">{pub.journal}</p>}
+                  {pub.journal && (
+                    <p className="pub__journal mono-copy mono-copy--strong">
+                      {pub.journal}
+                    </p>
+                  )}
 
                   <div className="pub__copy">
                     {pub.copy.map((para, i) => (
@@ -79,7 +84,7 @@ export default function Publications() {
                         href={l.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="btn"
+                        className="btn readout"
                       >
                         <span className="btn__label">
                           {l.label}

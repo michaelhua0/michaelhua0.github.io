@@ -6,7 +6,7 @@
   --accent: var(--research-bright);
   position: relative;
   display: grid;
-  grid-template-columns: 64px minmax(0, 1fr) minmax(220px, 0.48fr);
+  grid-template-columns: 64px minmax(0, 2fr) minmax(220px, 1fr);
   gap: clamp(18px, 4vw, 40px);
   padding: clamp(30px, 4vw, 44px) clamp(4px, 1.5vw, 18px);
   border-top: 1px solid var(--border-strong);
@@ -18,15 +18,11 @@
 .pub:target .pub__index { color: var(--accent); }
 
 .pub__index {
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
-  font-weight: 500;
   color: var(--text-faint);
   line-height: 1;
   padding-top: 10px;
-  letter-spacing: 0.02em;
 }
-.pub__index::before { content: "REF "; font-size: 0.6rem; letter-spacing: 0.16em; }
+.pub__index-label { margin-right: 0.35em; }
 
 .pub__main { min-width: 0; }
 
@@ -40,13 +36,10 @@
   letter-spacing: -0.02em;
 }
 .pub__journal {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.03em;
   color: var(--accent);
   margin: 0 0 20px;
 }
-.pub__copy { max-width: var(--measure); }
+.pub__copy { max-width: var(--measure-prose); }
 .pub__copy p { font-size: 1.06rem; line-height: 1.72; color: var(--text-soft); }
 .pub__copy p:first-of-type { color: var(--text); }
 .pub__links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
@@ -67,36 +60,11 @@
   display: block;
   object-fit: contain;
   object-position: top center;
-  background: #f4f3ef;
+  background: var(--figure-mat);
   opacity: 0;
-  transition: opacity 0.2s var(--ease);
+  transition: opacity var(--dur-1) var(--ease-out);
 }
 .pub__figure img.is-loaded { opacity: 1; }
-
-@media (max-width: 900px) {
-  .pub {
-    grid-template-columns: 52px minmax(0, 1fr) minmax(190px, 0.42fr);
-    gap: clamp(16px, 3vw, 28px);
-  }
-}
-
-@media (max-width: 760px) {
-  .pub { grid-template-columns: 48px minmax(0, 1fr); }
-  .pub__figure {
-    grid-column: 2;
-    width: min(100%, 360px);
-  }
-}
-
-@media (max-width: 620px) {
-  .pub { grid-template-columns: 1fr; gap: 10px; }
-  .pub__index { padding-top: 0; }
-  .pub__figure {
-    grid-column: 1;
-    width: min(100%, 360px);
-    margin-top: 16px;
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .pub__figure img { transition: none; }

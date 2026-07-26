@@ -1,7 +1,7 @@
 .pageheader {
   position: relative;
-  padding-top: clamp(72px, 11vw, 148px);
-  padding-bottom: clamp(30px, 4vw, 48px);
+  padding-top: var(--space-l);
+  padding-bottom: var(--space-s);
 }
 .pageheader .container {
   display: flex;
@@ -14,10 +14,8 @@
   align-items: center;
   margin-bottom: 24px;
 }
-.pageheader__eyebrow .eyebrow {
+.pageheader__eyebrow .readout {
   color: var(--text-soft);
-  font-size: 0.72rem;
-  letter-spacing: 0.2em;
 }
 .pageheader__title {
   font-size: clamp(2.2rem, 7vw, 4.4rem);
@@ -31,7 +29,7 @@
 }
 .pageheader__lead {
   margin: 24px 0 0;
-  max-width: var(--measure);
+  max-width: var(--measure-lede);
   color: var(--text-soft);
   font-size: 1.16rem;
   line-height: 1.62;
@@ -41,7 +39,7 @@
   content: "";
   display: block;
   height: 1px;
-  margin-top: clamp(30px, 4vw, 48px);
+  margin-top: var(--space-s);
   background: linear-gradient(
     90deg,
     var(--research-bright),

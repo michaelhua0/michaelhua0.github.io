@@ -16,8 +16,8 @@ export default function CTISCameraMark({ className = "" }: { className?: string 
       <g className="ctis-camera-mark__camera">
         <g className="ctis-camera-mark__flash-unit">
           <path className="ctis-camera-mark__flash-neck" d="M43 19v-3h8v3" />
-          <rect className="ctis-camera-mark__flash-housing" x="39" y="7" width="16" height="10" rx="2" />
-          <rect className="ctis-camera-mark__flash-panel" x="42" y="9.5" width="10" height="5" rx="1" />
+          <rect className="ctis-camera-mark__flash-housing" x="39" y="7" width="16" height="10" />
+          <rect className="ctis-camera-mark__flash-panel" x="42" y="9.5" width="10" height="5" />
         </g>
 
         <g className="ctis-camera-mark__body">
@@ -36,9 +36,9 @@ export default function CTISCameraMark({ className = "" }: { className?: string 
             <circle cx="32" cy="37" r="3.2" />
           </g>
           <g className="ctis-camera-mark__diffraction">
-            <rect className="ctis-camera-mark__order ctis-camera-mark__order--violet" x="27" y="31" width="3.5" height="3.5" rx="0.7" />
-            <rect className="ctis-camera-mark__order ctis-camera-mark__order--teal" x="30.25" y="35.25" width="3.5" height="3.5" rx="0.7" />
-            <rect className="ctis-camera-mark__order ctis-camera-mark__order--amber" x="34" y="39.5" width="3.5" height="3.5" rx="0.7" />
+            <rect className="ctis-camera-mark__order ctis-camera-mark__order--violet" x="27" y="31" width="3.5" height="3.5" />
+            <rect className="ctis-camera-mark__order ctis-camera-mark__order--teal" x="30.25" y="35.25" width="3.5" height="3.5" />
+            <rect className="ctis-camera-mark__order ctis-camera-mark__order--amber" x="34" y="39.5" width="3.5" height="3.5" />
           </g>
         </g>
       </g>

@@ -27,14 +27,16 @@ export default function HomeGallery() {
                   <img
                     src={imageUrl(photo.src)}
                     srcSet={imageSrcSet(photo.sources)}
-                    sizes="(max-width: 680px) 44vw, 240px"
+                    sizes="(max-width: 620px) 44vw, 240px"
                     alt={photo.alt}
                     width={photo.width}
                     height={photo.height}
                     loading="lazy"
                     decoding="async"
                   />
-                  <figcaption>{photo.caption}</figcaption>
+                  <figcaption className="mono-copy mono-copy--quiet">
+                    {photo.caption}
+                  </figcaption>
                 </figure>
               </li>
             );

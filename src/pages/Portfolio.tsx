@@ -12,11 +12,11 @@ export default function Portfolio() {
       <SEO {...pageMetadata.portfolio} />
       <PageHeader eyebrow="Selected Work" title="Research and Creative Portfolio">
         <ul className="portfolio__legend" aria-label="Project categories">
-          <li>
+          <li className="readout">
             <span className="portfolio__legend-mark portfolio__legend-mark--research" />
             Research and software
           </li>
-          <li>
+          <li className="readout">
             <span className="portfolio__legend-mark portfolio__legend-mark--history" />
             History and documentary
           </li>
