@@ -49,7 +49,6 @@ export default function GeneratedArt({
                   height={H / rows - 4}
                   fill={c}
                   opacity={0.14 + (i / rows) * 0.5}
-                  rx={2}
                 />
               );
             })}
@@ -123,8 +122,8 @@ export default function GeneratedArt({
         }));
         return (
           <g>
-            <rect x={W / 2 - 90} y={H / 2 - 150} width={180} height={300} rx={22} fill="none" stroke={bands[2]} strokeWidth={3} opacity={0.8} />
-            <rect x={W / 2 - 74} y={H / 2 - 126} width={148} height={230} rx={8} fill={bands[2]} opacity={0.12} />
+            <rect x={W / 2 - 90} y={H / 2 - 150} width={180} height={300} fill="none" stroke={bands[2]} strokeWidth={3} opacity={0.8} />
+            <rect x={W / 2 - 74} y={H / 2 - 126} width={148} height={230} fill={bands[2]} opacity={0.12} />
             {nodes.map((n, i) => (
               <g key={i}>
                 <line x1={W / 2} y1={H / 2} x2={n.x} y2={n.y} stroke={bands[3]} strokeWidth={1.5} opacity={0.4} />
@@ -149,7 +148,6 @@ export default function GeneratedArt({
                 y={H / 2 - 90}
                 width={fw - 16}
                 height={180}
-                rx={6}
                 fill="none"
                 stroke={bands[4]}
                 strokeWidth={2}
@@ -159,14 +157,14 @@ export default function GeneratedArt({
             {/* perforations */}
             {Array.from({ length: 20 }).map((_, i) => (
               <g key={"p" + i}>
-                <rect x={20 + i * (W / 20)} y={H / 2 - 122} width={14} height={10} rx={2} fill={bands[5]} opacity={0.5} />
-                <rect x={20 + i * (W / 20)} y={H / 2 + 112} width={14} height={10} rx={2} fill={bands[5]} opacity={0.5} />
+                <rect x={20 + i * (W / 20)} y={H / 2 - 122} width={14} height={10} fill={bands[5]} opacity={0.5} />
+                <rect x={20 + i * (W / 20)} y={H / 2 + 112} width={14} height={10} fill={bands[5]} opacity={0.5} />
               </g>
             ))}
             {motif === "channel" && (
               <g>
                 <circle cx={W / 2} cy={H / 2} r={46} fill={bands[5]} opacity={0.9} />
-                <path d={`M ${W / 2 - 14} ${H / 2 - 22} L ${W / 2 + 26} ${H / 2} L ${W / 2 - 14} ${H / 2 + 22} Z`} fill="#fff" />
+                <path d={`M ${W / 2 - 14} ${H / 2 - 22} L ${W / 2 + 26} ${H / 2} L ${W / 2 - 14} ${H / 2 + 22} Z`} fill="var(--white)" />
               </g>
             )}
           </g>

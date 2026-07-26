@@ -37,7 +37,7 @@ export default function ContactLinks({
           <li key={key}>
             {pending ? (
               <span className="contact-list__item contact-list__item--pending">
-                <span className="contact-list__label">{label}</span>
+                <span className="contact-list__label readout readout--quiet">{label}</span>
                 <span className="contact-list__value">{value}</span>
               </span>
             ) : (
@@ -47,7 +47,7 @@ export default function ContactLinks({
                 target={external ? "_blank" : undefined}
                 rel={external ? "noopener noreferrer" : undefined}
               >
-                <span className="contact-list__label">{label}</span>
+                <span className="contact-list__label readout readout--quiet">{label}</span>
                 <span className="contact-list__value">
                   {key === "email" ? value : label}
                 </span>

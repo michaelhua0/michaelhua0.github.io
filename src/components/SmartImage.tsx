@@ -9,7 +9,7 @@ import {
 type Motif = "spectral" | "vessel" | "point-cloud" | "app" | "documentary" | "channel";
 
 interface Props {
-  /** File name inside /public/images, e.g. "aigro.jpg" */
+  /** File name inside /public/images, e.g. "aigro.webp" */
   src: string;
   alt: string;
   motif: Motif;
@@ -48,7 +48,7 @@ export default function SmartImage({
   const loaded = loadedSrc === src;
   const url = imageUrl(src);
   const loadedBackground =
-    imageBackground ?? (fit === "contain" ? "#f4f3ef" : "var(--ink-2)");
+    imageBackground ?? (fit === "contain" ? "var(--figure-mat)" : "var(--ink-2)");
 
   return (
     <div
@@ -67,7 +67,7 @@ export default function SmartImage({
         <img
           src={url}
           srcSet={imageSrcSet(sources)}
-          sizes={sources ? "(max-width: 700px) 100vw, 50vw" : undefined}
+          sizes={sources ? "(max-width: 760px) 100vw, 50vw" : undefined}
           alt={alt}
           loading={priority ? "eager" : "lazy"}
           fetchPriority={priority ? "high" : "auto"}
@@ -81,7 +81,7 @@ export default function SmartImage({
             display: "block",
             background: loadedBackground,
             opacity: loaded ? 1 : 0,
-            transition: "opacity 200ms var(--ease)",
+            transition: "opacity var(--dur-1) var(--ease-out)",
           }}
         />
       )}

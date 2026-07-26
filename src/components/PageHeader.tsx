@@ -15,7 +15,7 @@ export default function PageHeader({
       <div className="container">
         {eyebrow && (
           <div className="pageheader__eyebrow">
-            <span className="eyebrow" style={{ margin: 0 }}>{eyebrow}</span>
+            <span className="readout readout--quiet">{eyebrow}</span>
           </div>
         )}
         <h1 className="pageheader__title long-title">{title}</h1>

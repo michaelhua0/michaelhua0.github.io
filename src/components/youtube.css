@@ -40,23 +40,27 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(0deg, rgba(6, 8, 13, 0.5), rgba(6, 8, 13, 0.1));
-  transition: background 0.25s var(--ease);
+  background:
+    linear-gradient(
+      0deg,
+      color-mix(in srgb, var(--ink) 50%, transparent),
+      color-mix(in srgb, var(--ink) 10%, transparent)
+    );
+  transition: background var(--dur-2) var(--ease-snap);
 }
-.yt__facade:hover::after { background: rgba(6, 8, 13, 0.2); }
+.yt__facade:hover::after {
+  background: color-mix(in srgb, var(--ink) 20%, transparent);
+}
 
 .yt__play {
   position: relative;
   z-index: 1;
-  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.5));
-  transition: transform 0.25s var(--ease-out);
+  filter: drop-shadow(0 6px 18px color-mix(in srgb, var(--black) 50%, transparent));
+  transition: transform var(--dur-2) var(--ease-snap);
 }
 .yt__facade:hover .yt__play { transform: scale(1.08); }
 
 .yt__caption {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.02em;
   color: var(--text-faint);
   margin-top: 0.7rem;
   line-height: 1.5;

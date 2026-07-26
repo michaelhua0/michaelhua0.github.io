@@ -29,14 +29,14 @@ export default function ProjectDetail() {
       />
 
       <div className="container project__inner">
-        <nav className="project__crumbs" aria-label="Breadcrumb">
+        <nav className="project__crumbs mono-copy" aria-label="Breadcrumb">
           <Link to="/portfolio">Portfolio</Link>
           <span aria-hidden="true">/</span>
           <span className="project__crumb-current">{project.detailTitle}</span>
         </nav>
 
         <header className="project__header">
-          <span className="project__tag">
+          <span className="project__tag readout">
             <span className="project__cat-dot" aria-hidden="true" />
             {project.tag}
           </span>
@@ -71,7 +71,9 @@ export default function ProjectDetail() {
           <section className="project__gallery" aria-labelledby="project-gallery-title">
             <header className="project__gallery-head">
               <div>
-                <span className="project__gallery-kicker">Photo journal</span>
+                <span className="project__gallery-kicker readout readout--quiet">
+                  Photo journal
+                </span>
                 <h2 id="project-gallery-title">Regeneron ISEF 2026</h2>
               </div>
               <p>Recognition, people, and a few moments beyond the project board.</p>
@@ -82,7 +84,7 @@ export default function ProjectDetail() {
                   <img
                     src={imageUrl(photo.src)}
                     srcSet={imageSrcSet(photo.sources)}
-                    sizes="(max-width: 640px) 100vw, 600px"
+                    sizes="(max-width: 620px) 100vw, 600px"
                     alt={photo.alt}
                     width={photo.width}
                     height={photo.height}
@@ -98,7 +100,7 @@ export default function ProjectDetail() {
         <nav className="project__pager" aria-label="More projects">
           {prev ? (
             <Link to={`/portfolio/${prev.slug}`} className="project__pager-link project__pager-prev">
-              <span className="project__pager-dir" aria-hidden="true">← Previous</span>
+              <span className="project__pager-dir readout" aria-hidden="true">← Previous</span>
               <span className="project__pager-name">{prev.cardTitle}</span>
             </Link>
           ) : (
@@ -106,7 +108,7 @@ export default function ProjectDetail() {
           )}
           {next ? (
             <Link to={`/portfolio/${next.slug}`} className="project__pager-link project__pager-next">
-              <span className="project__pager-dir" aria-hidden="true">Next →</span>
+              <span className="project__pager-dir readout" aria-hidden="true">Next →</span>
               <span className="project__pager-name">{next.cardTitle}</span>
             </Link>
           ) : (

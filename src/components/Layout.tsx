@@ -79,11 +79,11 @@ export default function Layout() {
 
   return (
     <>
-      <a href="#main" className="skip-link">
+      <a href="#main" className="skip-link readout readout--strong">
         Skip to content
       </a>
       <Nav />
-      <main id="main">
+      <main id="main" className="reading-surface">
         <Outlet />
       </main>
       <Footer />

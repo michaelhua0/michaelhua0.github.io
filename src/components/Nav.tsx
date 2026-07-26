@@ -51,7 +51,9 @@ export default function Nav() {
               key={l.to}
               to={l.to}
               end={l.end}
-              className={({ isActive }) => `nav__link ${isActive ? "is-active" : ""}`}
+              className={({ isActive }) =>
+                `nav__link mono-copy ${isActive ? "is-active" : ""}`
+              }
             >
               {l.label}
             </NavLink>
@@ -80,7 +82,9 @@ export default function Nav() {
               to={l.to}
               end={l.end}
               ref={i === 0 ? firstLinkRef : undefined}
-              className={({ isActive }) => `nav__mobile-link ${isActive ? "is-active" : ""}`}
+              className={({ isActive }) =>
+                `nav__mobile-link mono-copy mono-copy--strong ${isActive ? "is-active" : ""}`
+              }
             >
               {l.label}
             </NavLink>

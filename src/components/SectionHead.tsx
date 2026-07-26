@@ -21,7 +21,9 @@ export default function SectionHead({
         <h2 id={titleId} className="sec-head__title">
           {title}
         </h2>
-        {note !== undefined && <span className="sec-head__note">{note}</span>}
+        {note !== undefined && (
+          <span className="sec-head__note readout readout--quiet">{note}</span>
+        )}
       </div>
       <span className="sec-head__rule" aria-hidden="true" />
     </div>

@@ -30,7 +30,7 @@ export default function About() {
                   { src: "about-portrait-466.webp", width: 466 },
                   { src: "about-portrait.webp", width: 932 },
                 ])}
-                sizes="(max-width: 720px) 100vw, 42vw"
+                sizes="(max-width: 900px) 100vw, 42vw"
                 alt="Michael Hua wearing a light blue suit against a red background"
                 onError={() => setPortraitMissing(true)}
                 loading="eager"

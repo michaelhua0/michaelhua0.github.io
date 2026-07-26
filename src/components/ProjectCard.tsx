@@ -45,11 +45,11 @@ export default function ProjectCard({
         <div className="pcard__body">
           <span className="pcard__sig-row">
             <SpectralSignature domain={project.domain} className="pcard__sig" />
-            <span className="pcard__tag">{project.tag}</span>
+            <span className="pcard__tag readout readout--quiet">{project.tag}</span>
           </span>
           <Title className="pcard__title long-title">{project.cardTitle}</Title>
           <p className="pcard__teaser">{project.teaser}</p>
-          <span className="pcard__cta" aria-hidden="true">
+          <span className="pcard__cta readout" aria-hidden="true">
             View project <span className="arrow">→</span>
           </span>
         </div>

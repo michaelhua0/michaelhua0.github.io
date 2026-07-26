@@ -69,7 +69,7 @@ export default function SpectralSignature({
         <circle cx={markX} cy="6" r="2.4" className="spectral-sig__dot" />
       </svg>
       {showLabel && (
-        <span className="spectral-sig__label">{band.label}</span>
+        <span className="spectral-sig__label readout readout--quiet">{band.label}</span>
       )}
     </span>
   );

@@ -24,15 +24,15 @@ export default class SiteErrorBoundary extends Component<Props, State> {
     if (!this.state.failed) return this.props.children;
 
     return (
-      <main className="notfound">
+      <main className="notfound reading-surface">
         <div className="container notfound__inner">
-          <p className="notfound__code">SITE</p>
+          <p className="notfound__code readout readout--strong">SITE</p>
           <h1 className="notfound__title">Something went wrong</h1>
           <p className="notfound__lead">
             The page could not be displayed. Reload the site to try again.
           </p>
           <div className="notfound__links">
-            <a className="btn btn--primary" href={import.meta.env.BASE_URL}>
+            <a className="btn btn--primary readout" href={import.meta.env.BASE_URL}>
               <span className="btn__label">Reload home</span>
             </a>
           </div>

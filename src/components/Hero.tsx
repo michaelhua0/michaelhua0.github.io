@@ -380,7 +380,7 @@ export default function Hero() {
 
       <div className="hero__content">
         <p className="hero__eyebrow">
-          <span className="hero__eyebrow-text">
+          <span className="hero__eyebrow-text readout">
             {roleParts.map((r, i) => (
               <span key={r}>
                 {r}
@@ -402,18 +402,16 @@ export default function Hero() {
       </div>
 
       <nav className="hero__wayfind" aria-label="Explore the site">
-          {DESTS.map((d) => (
-          <Link
-            key={d.to}
-            to={d.to}
-            className="hero__way"
-          >
-            <span className="hero__way-n" aria-hidden="true">
+        {DESTS.map((d) => (
+          <Link key={d.to} to={d.to} className="hero__way">
+            <span className="hero__way-n readout readout--strong" aria-hidden="true">
               {d.n}
             </span>
             <span className="hero__way-text">
               <span className="hero__way-label">{d.label}</span>
-              <span className="hero__way-desc">{d.desc}</span>
+              <span className="hero__way-desc mono-copy mono-copy--quiet">
+                {d.desc}
+              </span>
             </span>
             <span className="hero__way-arrow" aria-hidden="true">
               →

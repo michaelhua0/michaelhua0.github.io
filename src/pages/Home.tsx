@@ -52,14 +52,16 @@ export default function Home() {
             />
             <div className="home-recognition__grid">
               <div className="home-recognition__feature">
-                <p>Regeneron ISEF 2026 · Robotics and Intelligent Machines</p>
+                <p className="readout">
+                  Regeneron ISEF 2026 · Robotics and Intelligent Machines
+                </p>
                 <h3>First Place Grand Award</h3>
               </div>
               <ul className="home-recognition__additional">
                 {additionalRecognition.map((award) => (
                   <li key={award.title}>
                     <span>{award.title}</span>
-                    <small>{award.note}</small>
+                    <small className="readout readout--quiet">{award.note}</small>
                   </li>
                 ))}
               </ul>
@@ -80,7 +82,7 @@ export default function Home() {
                   <ProjectCard key={p.slug} project={p} priority={i === 0} />
                 ))}
               </div>
-              <Link to="/portfolio" className="home-work__all">
+              <Link to="/portfolio" className="home-work__all readout">
                 All projects <span className="arrow" aria-hidden="true">→</span>
               </Link>
             </>
@@ -117,7 +119,7 @@ export default function Home() {
                         { src: "about-portrait-466.webp", width: 466 },
                         { src: "about-portrait.webp", width: 932 },
                       ])}
-                      sizes="(max-width: 860px) 82vw, 38vw"
+                      sizes="(max-width: 620px) 100vw, (max-width: 900px) 82vw, 38vw"
                       alt="Michael Hua wearing a light blue suit against a red background"
                       width="932"
                       height="1200"
@@ -143,13 +145,13 @@ export default function Home() {
                 <dl className="home-profile__notes">
                   {profileNotes.map(([label, value]) => (
                     <div className="home-profile__note" key={label}>
-                      <dt>{label}</dt>
+                      <dt className="readout">{label}</dt>
                       <dd>{value}</dd>
                     </div>
                   ))}
                 </dl>
 
-                <Link to="/about" className="btn home-profile__cta">
+                <Link to="/about" className="btn readout home-profile__cta">
                   <span className="btn__label">
                     More about Michael <span className="arrow" aria-hidden="true">→</span>
                   </span>
