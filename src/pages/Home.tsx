@@ -20,10 +20,16 @@ const profileNotes: [string, string][] = [
 
 const additionalRecognition = [
   {
+    logo: "logos/acm.jpg",
+    logoWidth: 900,
+    logoHeight: 900,
     title: "ACM Special Award",
     note: "Regeneron ISEF · Computing research",
   },
   {
+    logo: "logos/midjourney.svg",
+    logoWidth: 698,
+    logoHeight: 583,
     title: "Midjourney Special Award",
     note: "Regeneron ISEF",
   },
@@ -52,6 +58,16 @@ export default function Home() {
             />
             <div className="home-recognition__grid">
               <div className="home-recognition__feature">
+                <div className="home-recognition__feature-logo">
+                  <img
+                    src={imageUrl("logos/regeneron-isef.webp")}
+                    alt=""
+                    width="720"
+                    height="405"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
                 <p className="readout">
                   Regeneron ISEF 2026 · Robotics and Intelligent Machines
                 </p>
@@ -60,8 +76,20 @@ export default function Home() {
               <ul className="home-recognition__additional">
                 {additionalRecognition.map((award) => (
                   <li key={award.title}>
-                    <span>{award.title}</span>
-                    <small className="readout readout--quiet">{award.note}</small>
+                    <span className="home-recognition__logo" aria-hidden="true">
+                      <img
+                        src={imageUrl(award.logo)}
+                        alt=""
+                        width={award.logoWidth}
+                        height={award.logoHeight}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </span>
+                    <span className="home-recognition__award">
+                      <span className="home-recognition__award-title">{award.title}</span>
+                      <small className="readout readout--quiet">{award.note}</small>
+                    </span>
                   </li>
                 ))}
               </ul>

@@ -2,8 +2,7 @@
 
 Drop your original images from the Google Site into **this folder** using the
 exact filenames below. Until a file exists, the site shows an on-theme
-scientific graphic in its place (never stock photos or AI-generated people),
-so the site looks finished immediately and improves as you add real images.
+“Image unavailable” state rather than substituting generated artwork.
 
 ## Filenames the site looks for
 
@@ -35,6 +34,10 @@ About page photos:
 Gallery photos are stored in `public/images/gallery/`. The homepage includes two
 intentional placeholders, so future candid images can be added without changing
 the overall composition.
+
+Award logos are stored in `public/images/logos/`. `regeneron-isef.webp` is an
+optimized copy of the logo supplied in the official
+[Society for Science media kit](https://www.societyforscience.org/isef-2024-media-kit/).
 
 ## How to get the originals from Google Sites
 

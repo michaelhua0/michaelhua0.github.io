@@ -28,7 +28,7 @@
 
 .pub__title {
   font-family: var(--font-display);
-  font-weight: 560;
+  font-weight: 600;
   font-size: clamp(1.4rem, 3vw, 1.9rem);
   margin: 0 0 12px;
   line-height: 1.14;
