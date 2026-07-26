@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SEO from "../components/SEO";
 import PageHeader from "../components/PageHeader";
+import ContactLinks from "../components/ContactLinks";
 import { bio } from "../data/site";
 import { pageMetadata } from "../data/routeMetadata.js";
 import { imageSrcSet, imageUrl } from "../lib/images";
@@ -19,12 +20,8 @@ export default function About() {
         <div className="container about__grid">
           <figure className="about__portrait">
             {portraitMissing ? (
-              <div className="about__portrait-placeholder" role="img" aria-label="Future portrait of Michael Hua">
+              <div className="about__portrait-placeholder" role="img" aria-label="Portrait unavailable">
                 <span className="about__portrait-mark" aria-hidden="true">MH</span>
-                <div>
-                  <p>Portrait reserved</p>
-                  <span>Red backdrop · light blue suit</span>
-                </div>
               </div>
             ) : (
               <img
@@ -48,6 +45,7 @@ export default function About() {
             {bio.map((para, i) => (
               <p key={i}>{para}</p>
             ))}
+            <ContactLinks items={["email"]} className="about__contact" />
           </div>
         </div>
       </section>

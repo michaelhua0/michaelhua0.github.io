@@ -44,6 +44,8 @@ export interface Project {
   teaser: string;
   /** Local image file (dropped into /public/images). Falls back to generated art. */
   image: string;
+  /** Describes the image itself without repeating the adjacent project title. */
+  imageAlt: string;
   /** Optional responsive variants of the same real image. */
   imageSources?: ResponsiveImageSource[];
   /** Use contain for diagrams, logos, and document pages that should remain uncropped. */
@@ -69,6 +71,8 @@ export const projects: Project[] = [
     domain: "hyperspectral",
     tag: "Hyperspectral imaging · Physics-aware AI",
     image: "decoding-light.jpg",
+    imageAlt:
+      "A camera beside a laptop showing a spectral curve, with a multicolored cube in front",
     imageFit: "contain",
     imageRatio: "928 / 826",
     motif: "spectral",
@@ -107,6 +111,8 @@ export const projects: Project[] = [
     domain: "medical",
     tag: "Computer vision · Medical imaging",
     image: "brain-vessel.png",
+    imageAlt:
+      "Diagram of a multiscale convolutional transformer with 3D brain-vessel visualizations",
     imageFit: "contain",
     motif: "vessel",
     body: [
@@ -150,6 +156,8 @@ export const projects: Project[] = [
     domain: "hyperspectral",
     tag: "Hyperspectral imaging · Transformers",
     image: "msst.webp",
+    imageAlt:
+      "Diagram of the multimodal spatial-spectral-temporal transformer architecture",
     imageSources: [
       { src: "msst-560.webp", width: 560 },
       { src: "msst.webp", width: 1126 },
@@ -181,6 +189,8 @@ export const projects: Project[] = [
     domain: "physical-ai",
     tag: "Mobile application · Physical AI",
     image: "aigro.webp",
+    imageAlt:
+      "Green app icon with a plant, microchip, rainbow spectrum, and white wordmark",
     imageSources: [
       { src: "aigro-366.webp", width: 366 },
       { src: "aigro.webp", width: 732 },
@@ -218,6 +228,8 @@ export const projects: Project[] = [
     domain: "history",
     tag: "2025 National History Day · Documentary",
     image: "nhd.jpg",
+    imageAlt:
+      "Two archival photographs of a man, including one beside laboratory equipment",
     imageRatio: "16 / 9",
     motif: "documentary",
     body: [
@@ -246,6 +258,7 @@ export const projects: Project[] = [
     domain: "history",
     tag: "Historical research · Documentary filmmaking",
     image: "historys-trigger.jpg",
+    imageAlt: "Red and black collage of layered newspaper clippings",
     imageFit: "contain",
     imageRatio: "16 / 9",
     motif: "channel",
