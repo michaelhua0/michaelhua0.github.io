@@ -164,6 +164,10 @@
   padding-top: clamp(4px, 2vw, 24px);
 }
 
+.home-profile__kicker {
+  margin: 0 0 18px;
+}
+
 .home-profile__abstract p {
   max-width: var(--measure-prose);
   margin-bottom: 1.1em;

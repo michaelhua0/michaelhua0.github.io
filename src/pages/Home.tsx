@@ -132,6 +132,9 @@ export default function Home() {
               </figure>
 
               <div className="home-profile__content">
+                <p className="home-profile__kicker readout">
+                  Researcher · Developer · Storyteller
+                </p>
                 <div className="home-profile__abstract">
                   <p>{bio[0]}</p>
                   <p>
