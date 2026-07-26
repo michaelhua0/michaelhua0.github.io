@@ -32,6 +32,10 @@
   display: grid;
   place-items: center;
 }
+.yt__facade:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -4px;
+}
 .yt__facade::after {
   content: "";
   position: absolute;

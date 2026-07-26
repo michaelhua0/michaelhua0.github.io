@@ -3,6 +3,8 @@ import type { ResponsiveImageSource } from "../lib/images";
 export interface GalleryPhoto {
   src: string;
   alt: string;
+  width: number;
+  height: number;
   sources?: ResponsiveImageSource[];
 }
 
@@ -20,16 +22,22 @@ export const isef2026Photos: GalleryPhoto[] = [
   {
     src: "gallery/isef-acm-award-2026.webp",
     sources: gallerySources("isef-acm-award-2026", 1200),
+    width: 1200,
+    height: 800,
     alt: "Michael Hua and fellow ACM Special Award recipients onstage at Regeneron ISEF 2026",
   },
   {
     src: "gallery/isef-midjourney-award-2026.webp",
     sources: gallerySources("isef-midjourney-award-2026", 1200),
+    width: 1200,
+    height: 800,
     alt: "Michael Hua and fellow Midjourney Special Award recipients onstage at Regeneron ISEF 2026",
   },
   {
     src: "gallery/isef-midjourney-selfie-2026.webp",
     sources: gallerySources("isef-midjourney-selfie-2026", 1200),
+    width: 1200,
+    height: 900,
     alt: "Michael Hua taking a lighthearted selfie with a Midjourney representative at Regeneron ISEF 2026",
   },
 ];
@@ -40,36 +48,50 @@ export const momentsPhotos: GalleryPhoto[] = [
   {
     src: "gallery/moment-fencing.webp",
     sources: gallerySources("moment-fencing", 585),
+    width: 585,
+    height: 899,
     alt: "Michael Hua in fencing gear holding a saber",
   },
   {
     src: "gallery/moment-isef-group.webp",
     sources: gallerySources("moment-isef-group", 605),
+    width: 605,
+    height: 465,
     alt: "Michael Hua with friends beneath the Regeneron ISEF welcome sign",
   },
   {
     src: "gallery/moment-brain-poster.webp",
     sources: gallerySources("moment-brain-poster", 676),
+    width: 676,
+    height: 505,
     alt: "Michael Hua presenting his brain vessel segmentation research poster",
   },
   {
     src: "gallery/moment-history-award.webp",
     sources: gallerySources("moment-history-award", 672),
+    width: 672,
+    height: 465,
     alt: "Michael Hua holding his Michigan History Day National Finalist award",
   },
   {
     src: "gallery/moment-research-talk.webp",
     sources: gallerySources("moment-research-talk", 678),
+    width: 678,
+    height: 292,
     alt: "Michael Hua presenting his research to an audience in a lecture hall",
   },
   {
     src: "gallery/moment-jshs-friends.webp",
     sources: gallerySources("moment-jshs-friends", 612),
+    width: 612,
+    height: 465,
     alt: "Michael Hua and two friends posing with playful props at JSHS",
   },
   {
     src: "gallery/moment-msst-poster.webp",
     sources: gallerySources("moment-msst-poster", 632),
+    width: 632,
+    height: 898,
     alt: "Michael Hua standing beside his hyperspectral imaging research poster",
   },
 ];

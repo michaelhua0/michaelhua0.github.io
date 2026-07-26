@@ -33,7 +33,7 @@ export default class SiteErrorBoundary extends Component<Props, State> {
           </p>
           <div className="notfound__links">
             <a className="btn btn--primary" href={import.meta.env.BASE_URL}>
-              Reload home
+              <span className="btn__label">Reload home</span>
             </a>
           </div>
         </div>

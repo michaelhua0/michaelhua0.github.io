@@ -25,14 +25,18 @@ function LinkButton({ item }: { item: LinkItem }) {
   if (item.internal) {
     return (
       <Link to={item.href} className={cls}>
-        {item.label} {arrow}
+        <span className="btn__label">
+          {item.label} {arrow}
+        </span>
       </Link>
     );
   }
   return (
     <a href={item.href} target="_blank" rel="noopener noreferrer" className={cls}>
-      {item.label}
-      <span className="arrow" aria-hidden="true">↗</span>
+      <span className="btn__label">
+        {item.label}
+        <span className="arrow" aria-hidden="true">↗</span>
+      </span>
     </a>
   );
 }

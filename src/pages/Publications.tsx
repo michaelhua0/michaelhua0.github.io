@@ -50,11 +50,14 @@ export default function Publications() {
 
       <section className="section--tight">
         <div className="container pubs">
-          {publications.map((pub, i) => (
-            <Reveal key={pub.id} delay={i * 70}>
-              <article
+          {publications.length > 0 ? (
+            publications.map((pub, i) => (
+              <Reveal
+                key={pub.id}
+                as="article"
                 id={pub.id}
                 className={`pub cat-${pub.category}`}
+                delay={i * 70}
               >
                 <div className="pub__index" aria-hidden="true">
                   {String(pub.index).padStart(2, "0")}
@@ -78,8 +81,10 @@ export default function Publications() {
                         rel="noopener noreferrer"
                         className="btn"
                       >
-                        {l.label}
-                        <span className="arrow" aria-hidden="true">↗</span>
+                        <span className="btn__label">
+                          {l.label}
+                          <span className="arrow" aria-hidden="true">↗</span>
+                        </span>
                       </a>
                     ))}
                   </div>
@@ -90,9 +95,11 @@ export default function Publications() {
                   imageAlt={pub.imageAlt}
                   priority={i === 0}
                 />
-              </article>
-            </Reveal>
-          ))}
+              </Reveal>
+            ))
+          ) : (
+            <p className="empty-state">No publications are available yet.</p>
+          )}
         </div>
       </section>
     </>

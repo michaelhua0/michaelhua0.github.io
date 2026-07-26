@@ -78,13 +78,15 @@ export default function ProjectDetail() {
               <p>Recognition, people, and a few moments beyond the project board.</p>
             </header>
             <div className="project__gallery-grid">
-              {project.gallery.map((photo, photoIndex) => (
-                <figure key={photo.src} className={`project__gallery-photo project__gallery-photo--${photoIndex + 1}`}>
+              {project.gallery.map((photo) => (
+                <figure key={photo.src} className="project__gallery-photo">
                   <img
                     src={imageUrl(photo.src)}
                     srcSet={imageSrcSet(photo.sources)}
                     sizes="(max-width: 640px) 100vw, 600px"
                     alt={photo.alt}
+                    width={photo.width}
+                    height={photo.height}
                     loading="lazy"
                     decoding="async"
                   />
