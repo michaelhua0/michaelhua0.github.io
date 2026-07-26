@@ -4,6 +4,8 @@ import { imageSrcSet, imageUrl } from "../lib/images";
 import "./homegallery.css";
 
 export default function HomeGallery() {
+  if (homeGalleryItems.length === 0) return null;
+
   return (
     <section className="section home-gallery" aria-labelledby="gallery-h">
       <div className="container">
@@ -26,6 +28,8 @@ export default function HomeGallery() {
                   srcSet={imageSrcSet(photo.sources)}
                   sizes="(max-width: 680px) 44vw, 240px"
                   alt={photo.alt}
+                  width={photo.width}
+                  height={photo.height}
                   loading="lazy"
                   decoding="async"
                 />

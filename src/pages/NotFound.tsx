@@ -13,8 +13,12 @@ export default function NotFound() {
           The address may be incorrect, or the page may have moved.
         </p>
         <div className="notfound__links">
-          <Link to="/" className="btn btn--primary">Return home</Link>
-          <Link to="/portfolio" className="btn">Browse projects</Link>
+          <Link to="/" className="btn btn--primary">
+            <span className="btn__label">Return home</span>
+          </Link>
+          <Link to="/portfolio" className="btn">
+            <span className="btn__label">Browse projects</span>
+          </Link>
         </div>
       </div>
     </div>

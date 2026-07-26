@@ -121,7 +121,9 @@ export default function Home() {
                 </dl>
 
                 <Link to="/about" className="btn home-profile__cta">
-                  More about Michael <span className="arrow" aria-hidden="true">→</span>
+                  <span className="btn__label">
+                    More about Michael <span className="arrow" aria-hidden="true">→</span>
+                  </span>
                 </Link>
               </div>
             </div>
@@ -163,14 +165,20 @@ export default function Home() {
             note={`${projects.length} total`}
             titleId="work-h"
           />
-          <div className="home-work__grid">
-            {peek.map((p, i) => (
-              <ProjectCard key={p.slug} project={p} index={i} />
-            ))}
-          </div>
-          <Link to="/portfolio" className="home-work__all">
-            All projects <span className="arrow" aria-hidden="true">→</span>
-          </Link>
+          {peek.length > 0 ? (
+            <>
+              <div className="home-work__grid">
+                {peek.map((p, i) => (
+                  <ProjectCard key={p.slug} project={p} index={i} />
+                ))}
+              </div>
+              <Link to="/portfolio" className="home-work__all">
+                All projects <span className="arrow" aria-hidden="true">→</span>
+              </Link>
+            </>
+          ) : (
+            <p className="empty-state">No projects are available yet.</p>
+          )}
         </section>
 
         <HomeGallery />

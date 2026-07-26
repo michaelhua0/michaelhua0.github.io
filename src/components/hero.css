@@ -203,7 +203,7 @@
     inset 0 12px 28px rgba(73, 225, 210, 0.04);
 }
 .hero__way:focus-visible {
-  outline: 2px solid #93e8dc;
+  outline: 2px solid var(--focus);
   outline-offset: -3px;
 }
 .hero__way::before {

@@ -76,10 +76,8 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
@@ -151,6 +149,13 @@ img { max-width: 100%; display: block; }
 }
 .section { padding-block: clamp(72px, 10vw, 132px); }
 .section--tight { padding-block: clamp(48px, 6vw, 84px); }
+.empty-state {
+  margin: 0;
+  padding: clamp(28px, 5vw, 48px);
+  border: 1px solid var(--border-strong);
+  color: var(--text-soft);
+  text-align: center;
+}
 
 /* ---- the instrument voice: mono readouts anchored to real data ---- */
 .readout {
@@ -237,6 +242,7 @@ img { max-width: 100%; display: block; }
 /* ---- buttons: sharp instrument controls with a scan fill ---- */
 .btn {
   position: relative;
+  isolation: isolate;
   display: inline-flex; align-items: center; gap: 0.6em;
   font-family: var(--font-mono);
   font-size: 0.74rem; font-weight: 500; letter-spacing: 0.1em;
@@ -248,8 +254,17 @@ img { max-width: 100%; display: block; }
   cursor: pointer;
   overflow: hidden;
   min-height: 44px;
-  transition: border-color 0.3s var(--ease), color 0.3s var(--ease);
+  transition:
+    border-color var(--dur-2, 200ms) var(--ease),
+    color 160ms var(--ease) 100ms;
   text-decoration: none;
+}
+.btn__label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
 }
 .btn::before {
   content: "";
@@ -257,8 +272,8 @@ img { max-width: 100%; display: block; }
   background: var(--accent-bright);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.4s var(--ease-out);
-  z-index: -1;
+  transition: transform 220ms var(--ease-out);
+  z-index: 0;
 }
 .btn:hover { border-color: var(--accent-bright); color: #04140f; text-decoration: none; }
 .btn:hover::before { transform: scaleX(1); }

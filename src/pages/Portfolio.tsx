@@ -20,13 +20,17 @@ export default function Portfolio() {
 
       <section className="section--tight">
         <div className="container">
-          <div className="portfolio__grid">
-            {projects.map((p, i) => (
-              <Reveal key={p.slug} delay={(i % 2) * 80}>
-                <ProjectCard project={p} index={i} titleAs="h2" />
-              </Reveal>
-            ))}
-          </div>
+          {projects.length > 0 ? (
+            <div className="portfolio__grid">
+              {projects.map((p, i) => (
+                <Reveal key={p.slug} delay={(i % 2) * 80}>
+                  <ProjectCard project={p} index={i} titleAs="h2" />
+                </Reveal>
+              ))}
+            </div>
+          ) : (
+            <p className="empty-state">No projects are available yet.</p>
+          )}
         </div>
       </section>
     </>
