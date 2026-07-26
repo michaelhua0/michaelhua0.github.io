@@ -32,8 +32,6 @@ export type Domain = "medical" | "hyperspectral" | "physical-ai" | "history";
 
 export interface Band {
   id: Domain;
-  /** Ordinal used as the instrument "BAND 0x" readout. */
-  n: string;
   /** Representative wavelength in nm (the spine coordinate). */
   nm: number;
   /** Human-readable domain label. */
@@ -45,10 +43,10 @@ export interface Band {
 /* The canonical domain → wavelength map. Ascending nm so the list is
    already in spine order (blue medical → red history). */
 export const BANDS: Band[] = [
-  { id: "medical", n: "01", nm: 470, label: "Medical · Computer vision", color: SPECTRUM.blue },
-  { id: "hyperspectral", n: "02", nm: 520, label: "Hyperspectral imaging", color: SPECTRUM.teal },
-  { id: "physical-ai", n: "03", nm: 600, label: "Physical AI · Software", color: SPECTRUM.amber },
-  { id: "history", n: "04", nm: 660, label: "History · Documentary", color: SPECTRUM.red },
+  { id: "medical", nm: 470, label: "Medical · Computer vision", color: SPECTRUM.blue },
+  { id: "hyperspectral", nm: 520, label: "Hyperspectral imaging", color: SPECTRUM.teal },
+  { id: "physical-ai", nm: 600, label: "Physical AI · Software", color: SPECTRUM.amber },
+  { id: "history", nm: 660, label: "History · Documentary", color: SPECTRUM.red },
 ];
 
 export const bandOf = (id: Domain): Band =>

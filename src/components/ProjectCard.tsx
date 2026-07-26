@@ -8,26 +8,26 @@ import "./projectcard.css";
 
 export default function ProjectCard({
   project,
-  index,
+  priority = false,
   titleAs = "h3",
 }: {
   project: Project;
-  index: number;
+  priority?: boolean;
   titleAs?: "h2" | "h3";
 }) {
   const Title = titleAs;
   const { ref, inView } = useInView<HTMLAnchorElement>();
-  const fig = `FIG.${String(index + 1).padStart(2, "0")}`;
   const reducedMotion = usePrefersReducedMotion();
+  const scanEnabled = project.scanReveal === true;
 
   return (
     <article className={`pcard cat-${project.category}`}>
       <Link ref={ref} to={`/portfolio/${project.slug}`} className="pcard__link">
         <div
-          className={`pcard__media figure figure__ticks scan ${reducedMotion ? "" : "is-armed"} ${inView ? "is-shown" : ""}`}
+          className={`pcard__media figure ${scanEnabled ? "scan" : ""} ${scanEnabled && !reducedMotion ? "is-armed" : ""} ${scanEnabled && inView ? "is-shown" : ""}`}
           style={{ aspectRatio: project.imageRatio ?? "16 / 10" }}
         >
-          <div className="scan__media">
+          <div className={scanEnabled ? "scan__media" : "pcard__media-inner"}>
             <SmartImage
               src={project.image}
               alt={project.imageAlt}
@@ -36,16 +36,15 @@ export default function ProjectCard({
               fit={project.imageFit}
               imageBackground={project.imageBackground}
               sources={project.imageSources}
-              priority={index === 0}
+              priority={priority}
             />
           </div>
-          <span className="scan__line" aria-hidden="true" />
-          <span className="pcard__fig" aria-hidden="true">{fig}</span>
+          {scanEnabled && <span className="scan__line" aria-hidden="true" />}
         </div>
 
         <div className="pcard__body">
           <span className="pcard__sig-row">
-            <SpectralSignature domain={project.domain} seed={project.slug} className="pcard__sig" />
+            <SpectralSignature domain={project.domain} className="pcard__sig" />
             <span className="pcard__tag">{project.tag}</span>
           </span>
           <Title className="pcard__title long-title">{project.cardTitle}</Title>

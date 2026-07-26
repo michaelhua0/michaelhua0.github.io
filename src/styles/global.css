@@ -18,7 +18,6 @@
   --surface-3:    #151c28;   /* hover / elevated */
   --border:       #1c2431;   /* hairline */
   --border-strong:#2a3444;   /* stronger divider */
-  --grid-line:    rgba(180, 200, 225, 0.035); /* measurement grid */
 
   /* legacy aliases so older component CSS keeps resolving */
   --ink: #05070c;  --ink-2: var(--surface-2);
@@ -98,7 +97,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Faint fixed measurement grid — the instrument's baseline field. */
+/* Ambient fixed light field behind the page surfaces. */
 body::before {
   content: "";
   position: fixed;
@@ -106,10 +105,9 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background-image:
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
     radial-gradient(70% 50% at 84% -6%, rgba(69, 226, 206, 0.05), transparent 60%),
     radial-gradient(60% 45% at 4% 6%, rgba(238, 196, 105, 0.035), transparent 60%);
-  background-size: clamp(80px, 12vw, 160px) 100%, 100% 100%, 100% 100%;
+  background-size: 100% 100%, 100% 100%;
 }
 
 h1, h2, h3, h4 {
@@ -288,25 +286,13 @@ img { max-width: 100%; display: block; }
   font-weight: 560; letter-spacing: -0.025em; line-height: 1.02;
 }
 
-/* ---- figure frame: images presented as instrument captures ---- */
+/* ---- figure frame ---- */
 .figure {
   position: relative;
   border: 1px solid var(--border);
   background: var(--surface-2);
   overflow: hidden;
 }
-.figure__ticks::before,
-.figure__ticks::after {
-  content: "";
-  position: absolute;
-  width: 9px; height: 9px;
-  border: 1px solid var(--research-bright);
-  opacity: 0.7;
-  pointer-events: none;
-  z-index: 2;
-}
-.figure__ticks::before { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
-.figure__ticks::after { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
 
 /* ---- scan reveal: the authored "acquire" motion for figures ----
    Content is visible by default; JS adds .is-armed to enable the wipe,
@@ -318,9 +304,12 @@ img { max-width: 100%; display: block; }
 .scan__line {
   position: absolute; inset: 0; width: 100%;
   background:
-    linear-gradient(180deg, transparent, var(--research-bright), transparent)
+    linear-gradient(180deg, transparent, var(--cat, var(--accent)), transparent)
     right / 2px 100% no-repeat;
-  filter: drop-shadow(0 0 9px color-mix(in srgb, var(--research-bright) 60%, transparent));
+  filter:
+    drop-shadow(
+      0 0 9px color-mix(in srgb, var(--cat, var(--accent)) 60%, transparent)
+    );
   transform: translateX(-100%);
   opacity: 0; z-index: 3; pointer-events: none;
 }

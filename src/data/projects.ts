@@ -48,6 +48,8 @@ export interface Project {
   imageAlt: string;
   /** Optional responsive variants of the same real image. */
   imageSources?: ResponsiveImageSource[];
+  /** Use the scan reveal only for images that show technical evidence resolving. */
+  scanReveal?: boolean;
   /** Use contain for diagrams, logos, and document pages that should remain uncropped. */
   imageFit?: "cover" | "contain";
   /** Preserve a source image's native proportions when a standard landscape frame would add bars. */
@@ -75,6 +77,7 @@ export const projects: Project[] = [
       "A camera beside a laptop showing a spectral curve, with a multicolored cube in front",
     imageFit: "contain",
     imageRatio: "928 / 826",
+    scanReveal: true,
     motif: "spectral",
     gallery: isef2026Photos,
     body: [
@@ -114,6 +117,7 @@ export const projects: Project[] = [
     imageAlt:
       "Diagram of a multiscale convolutional transformer with 3D brain-vessel visualizations",
     imageFit: "contain",
+    scanReveal: true,
     motif: "vessel",
     body: [
       p(
@@ -163,6 +167,7 @@ export const projects: Project[] = [
       { src: "msst.webp", width: 1126 },
     ],
     imageFit: "contain",
+    scanReveal: true,
     motif: "spectral",
     body: [
       p(

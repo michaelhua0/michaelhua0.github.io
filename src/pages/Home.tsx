@@ -77,7 +77,7 @@ export default function Home() {
             <>
               <div className="home-work__grid">
                 {peek.map((p, i) => (
-                  <ProjectCard key={p.slug} project={p} index={i} />
+                  <ProjectCard key={p.slug} project={p} priority={i === 0} />
                 ))}
               </div>
               <Link to="/portfolio" className="home-work__all">
