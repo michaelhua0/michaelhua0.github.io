@@ -4,7 +4,7 @@ export const siteIdentity = {
   // TODO(owner): supply 1200×630 public/images/og-default.jpg
   shareImagePath: "/images/og-default.jpg",
   description:
-    "Michael Hua is a student researcher and software developer whose work spans artificial intelligence, hyperspectral imaging, medical computer vision, and documentary history.",
+    "I am a student researcher and software developer whose work spans artificial intelligence, hyperspectral imaging, medical computer vision, and documentary history.",
 };
 
 export const pageMetadata = {
@@ -17,18 +17,18 @@ export const pageMetadata = {
     title: "About",
     path: "/about",
     description:
-      "Michael Hua is a student researcher, software developer, documentary filmmaker, saber fencer, and ACA TVC co-president.",
+      "I am a student researcher, software developer, documentary filmmaker, saber fencer, and ACA TVC co-president.",
   },
   portfolio: {
     title: "Portfolio",
     path: "/portfolio",
-    description: "Selected research, software, and documentary projects by Michael Hua.",
+    description: "Explore my selected research, software, and documentary projects.",
   },
   publications: {
     title: "Publications",
     path: "/publications",
     description:
-      "Peer-reviewed research and competition papers by Michael Hua in computer vision, hyperspectral imaging, and history.",
+      "Explore my peer-reviewed research and competition papers in computer vision, hyperspectral imaging, and history.",
   },
 };
 
