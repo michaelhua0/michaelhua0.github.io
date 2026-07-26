@@ -43,7 +43,6 @@
   height: auto;
   display: block;
   filter: saturate(0.94) contrast(1.02);
-  transition: transform 600ms var(--ease-out), filter 400ms var(--ease);
 }
 
 .home-gallery__photo::after {
@@ -52,11 +51,6 @@
   inset: 0;
   pointer-events: none;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-}
-
-.home-gallery__photo:hover img {
-  transform: scale(1.025);
-  filter: saturate(1.04) contrast(1.02);
 }
 
 .home-gallery__photo figcaption {
@@ -75,8 +69,4 @@
   .home-gallery__grid {
     column-width: clamp(140px, 44vw, 180px);
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .home-gallery__photo img { transition: none; }
 }

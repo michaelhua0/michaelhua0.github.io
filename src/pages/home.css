@@ -302,10 +302,6 @@
   color: var(--accent-bright);
 }
 
-.home-work__all:hover {
-  text-decoration: none;
-}
-
 .home-work__all .arrow {
   display: inline-block;
   transition: transform 0.25s var(--ease);

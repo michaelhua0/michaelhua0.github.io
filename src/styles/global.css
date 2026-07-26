@@ -213,7 +213,7 @@ img { max-width: 100%; display: block; }
   background: var(--border-strong);
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 0.85s var(--ease-out);
+  transition: transform var(--dur-4, 520ms) var(--ease-out);
 }
 .sec-head.is-in .sec-head__rule { transform: scaleX(1); }
 @media (prefers-reduced-motion: reduce) {
@@ -280,6 +280,27 @@ img { max-width: 100%; display: block; }
 .btn--primary { background: var(--accent-bright); border-color: var(--accent-bright); color: #04140f; font-weight: 600; }
 .btn--primary::before { background: var(--text); }
 .btn--primary:hover { color: var(--bg); border-color: var(--text); }
+
+:where(
+  .btn,
+  .pcard__link,
+  .hero__way,
+  .project__pager-link,
+  .nav__brand,
+  .nav__link,
+  .nav__mobile-link,
+  .nav__toggle,
+  .footer__nav a,
+  .yt__facade,
+  .home-work__all,
+  .contact-list__item
+):active {
+  transform: translateY(1px);
+  transition-duration: 60ms;
+}
+.btn:active {
+  filter: brightness(0.92);
+}
 
 .long-title {
   font-family: var(--font-display);

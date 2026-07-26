@@ -32,8 +32,6 @@
 .pcard__media > .pcard__media-inner { width: 100%; height: 100%; }
 .pcard__media > .scan__media > div,
 .pcard__media > .pcard__media-inner > div { height: 100%; }
-.pcard__link:hover .scan__media { filter: saturate(1.05) brightness(1.04); }
-.scan__media { transition: filter 0.4s var(--ease); }
 
 .pcard__body {
   display: flex;
