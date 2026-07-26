@@ -53,7 +53,6 @@ export default function ProjectDetail() {
             <SmartImage
               src={project.image}
               alt={project.imageAlt}
-              motif={project.motif}
               ratio={project.imageRatio ?? "16 / 9"}
               fit={project.imageFit}
               imageBackground={project.imageBackground}

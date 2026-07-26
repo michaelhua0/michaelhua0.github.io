@@ -178,6 +178,17 @@ strong, b { font-weight: 600; }
 em { font-style: italic; }
 img { max-width: 100%; display: block; }
 
+.media-unavailable {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  padding: var(--space-s);
+  background: var(--surface-2);
+  color: var(--text-faint);
+  text-align: center;
+}
+
 ::selection { background: color-mix(in srgb, var(--accent-bright) 30%, transparent); color: var(--white); }
 
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
