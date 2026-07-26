@@ -30,7 +30,7 @@ export default function ProjectCard({
           <div className="scan__media">
             <SmartImage
               src={project.image}
-              alt={project.cardTitle}
+              alt={project.imageAlt}
               motif={project.motif}
               ratio={project.imageRatio ?? "16 / 10"}
               fit={project.imageFit}
@@ -51,7 +51,7 @@ export default function ProjectCard({
           <Title className="pcard__title long-title">{project.cardTitle}</Title>
           <p className="pcard__teaser">{project.teaser}</p>
           <span className="pcard__cta" aria-hidden="true">
-            Open figure <span className="arrow">→</span>
+            View project <span className="arrow">→</span>
           </span>
         </div>
       </Link>

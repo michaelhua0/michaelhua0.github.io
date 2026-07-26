@@ -22,17 +22,20 @@ export default function HomeGallery() {
         <ul className="home-gallery__grid">
           {homeGalleryItems.map((photo) => {
             return (
-              <li key={photo.src} className="home-gallery__photo">
-                <img
-                  src={imageUrl(photo.src)}
-                  srcSet={imageSrcSet(photo.sources)}
-                  sizes="(max-width: 680px) 44vw, 240px"
-                  alt={photo.alt}
-                  width={photo.width}
-                  height={photo.height}
-                  loading="lazy"
-                  decoding="async"
-                />
+              <li key={photo.src} className="home-gallery__item">
+                <figure className="home-gallery__photo">
+                  <img
+                    src={imageUrl(photo.src)}
+                    srcSet={imageSrcSet(photo.sources)}
+                    sizes="(max-width: 680px) 44vw, 240px"
+                    alt={photo.alt}
+                    width={photo.width}
+                    height={photo.height}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption>{photo.caption}</figcaption>
+                </figure>
               </li>
             );
           })}

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import CTISCameraMark from "./CTISCameraMark";
+import ContactLinks from "./ContactLinks";
 import "./footer.css";
 
 export default function Footer() {
@@ -19,6 +20,10 @@ export default function Footer() {
             History's Trigger
           </a>
         </nav>
+        <div className="footer__contact">
+          <p className="footer__label">Contact</p>
+          <ContactLinks className="footer__contacts" />
+        </div>
         <p className="footer__meta">© {year} Michael Hua</p>
       </div>
     </footer>

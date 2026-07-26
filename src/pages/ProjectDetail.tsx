@@ -53,7 +53,7 @@ export default function ProjectDetail() {
           <div className="project__lead">
             <SmartImage
               src={project.image}
-              alt={project.detailTitle}
+              alt={project.imageAlt}
               motif={project.motif}
               ratio={project.imageRatio ?? "16 / 9"}
               fit={project.imageFit}
