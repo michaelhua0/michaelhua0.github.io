@@ -247,6 +247,7 @@ img { max-width: 100%; display: block; }
   color: var(--text);
   cursor: pointer;
   overflow: hidden;
+  min-height: 44px;
   transition: border-color 0.3s var(--ease), color 0.3s var(--ease);
   text-decoration: none;
 }
@@ -300,17 +301,20 @@ img { max-width: 100%; display: block; }
 .scan.is-armed .scan__media { clip-path: inset(0 100% 0 0); }
 .scan.is-armed.is-shown .scan__media { clip-path: inset(0 0 0 0); }
 .scan__line {
-  position: absolute; top: 0; bottom: 0; left: 0; width: 2px;
-  background: linear-gradient(180deg, transparent, var(--research-bright), transparent);
-  box-shadow: 0 0 18px 2px color-mix(in srgb, var(--research-bright) 60%, transparent);
+  position: absolute; inset: 0; width: 100%;
+  background:
+    linear-gradient(180deg, transparent, var(--research-bright), transparent)
+    right / 2px 100% no-repeat;
+  filter: drop-shadow(0 0 9px color-mix(in srgb, var(--research-bright) 60%, transparent));
+  transform: translateX(-100%);
   opacity: 0; z-index: 3; pointer-events: none;
 }
 .scan.is-armed.is-shown .scan__line { animation: scanSweep 0.9s var(--ease-out) forwards; }
 @keyframes scanSweep {
-  0%   { left: 0; opacity: 0; }
+  0%   { transform: translateX(-100%); opacity: 0; }
   12%  { opacity: 1; }
   88%  { opacity: 1; }
-  100% { left: 100%; opacity: 0; }
+  100% { transform: translateX(0); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .scan__media { clip-path: none; }

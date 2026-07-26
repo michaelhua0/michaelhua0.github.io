@@ -3,16 +3,13 @@ import PageHeader from "../components/PageHeader";
 import ProjectCard from "../components/ProjectCard";
 import Reveal from "../components/Reveal";
 import { projects } from "../data/projects";
+import { pageMetadata } from "../data/routeMetadata.js";
 import "./portfolio.css";
 
 export default function Portfolio() {
   return (
     <>
-      <SEO
-        title="Portfolio"
-        path="/portfolio"
-        description="Selected research, software, and documentary projects by Michael Hua."
-      />
+      <SEO {...pageMetadata.portfolio} />
       <PageHeader eyebrow="Selected Work" title="Research and Creative Portfolio">
         <p className="portfolio__note">
           Explore work in artificial intelligence, hyperspectral imaging, software development,

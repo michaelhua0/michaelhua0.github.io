@@ -1,9 +1,8 @@
+import { siteIdentity } from "./routeMetadata.js";
+
 export const site = {
-  name: "Michael Hua",
+  ...siteIdentity,
   role: "Student researcher · Software developer · Documentary filmmaker",
-  url: "https://michaelhua0.github.io",
-  description:
-    "Michael Hua is a student researcher and software developer whose work spans artificial intelligence, hyperspectral imaging, medical computer vision, and documentary history.",
 };
 
 /** The two biographical paragraphs shared by Home and About. */

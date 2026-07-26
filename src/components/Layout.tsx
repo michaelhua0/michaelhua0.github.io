@@ -9,14 +9,18 @@ export default function Layout() {
   // Scroll to top on navigation, or focus a hash target if present.
   useEffect(() => {
     if (hash) {
-      const el = document.querySelector(hash);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-        if (el instanceof HTMLElement) {
-          el.setAttribute("tabindex", "-1");
-          el.focus({ preventScroll: true });
+      try {
+        const el = document.querySelector(hash);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          if (el instanceof HTMLElement) {
+            el.setAttribute("tabindex", "-1");
+            el.focus({ preventScroll: true });
+          }
+          return;
         }
-        return;
+      } catch {
+        // Invalid fragments (including a bare "#") fall back to the page top.
       }
     }
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });

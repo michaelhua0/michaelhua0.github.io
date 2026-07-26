@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { Project } from "../data/projects";
 import SmartImage from "./SmartImage";
 import SpectralSignature from "./SpectralSignature";
 import { useInView } from "../hooks/useInView";
+import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import "./projectcard.css";
 
 export default function ProjectCard({
@@ -18,18 +18,13 @@ export default function ProjectCard({
   const Title = titleAs;
   const { ref, inView } = useInView<HTMLAnchorElement>();
   const fig = `FIG.${String(index + 1).padStart(2, "0")}`;
-
-  // Arm the wipe only once JS runs and motion is allowed.
-  const [armed, setArmed] = useState(false);
-  useEffect(() => {
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) setArmed(true);
-  }, []);
+  const reducedMotion = usePrefersReducedMotion();
 
   return (
     <article className={`pcard cat-${project.category}`}>
       <Link ref={ref} to={`/portfolio/${project.slug}`} className="pcard__link">
         <div
-          className={`pcard__media figure figure__ticks scan ${armed ? "is-armed" : ""} ${inView ? "is-shown" : ""}`}
+          className={`pcard__media figure figure__ticks scan ${reducedMotion ? "" : "is-armed"} ${inView ? "is-shown" : ""}`}
           style={{ aspectRatio: project.imageRatio ?? "16 / 10" }}
         >
           <div className="scan__media">
@@ -40,6 +35,8 @@ export default function ProjectCard({
               ratio={project.imageRatio ?? "16 / 10"}
               fit={project.imageFit}
               imageBackground={project.imageBackground}
+              sources={project.imageSources}
+              priority={index === 0}
             />
           </div>
           <span className="scan__line" aria-hidden="true" />

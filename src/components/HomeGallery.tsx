@@ -1,5 +1,6 @@
 import SectionHead from "./SectionHead";
 import { homeGalleryItems } from "../data/photos";
+import { imageSrcSet, imageUrl } from "../lib/images";
 import "./homegallery.css";
 
 export default function HomeGallery() {
@@ -18,10 +19,16 @@ export default function HomeGallery() {
 
         <ul className="home-gallery__grid">
           {homeGalleryItems.map((photo) => {
-            const photoUrl = `${import.meta.env.BASE_URL}images/${photo.src}`;
             return (
               <li key={photo.src} className="home-gallery__photo">
-                <img src={photoUrl} alt={photo.alt} loading="lazy" decoding="async" />
+                <img
+                  src={imageUrl(photo.src)}
+                  srcSet={imageSrcSet(photo.sources)}
+                  sizes="(max-width: 680px) 44vw, 240px"
+                  alt={photo.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
               </li>
             );
           })}

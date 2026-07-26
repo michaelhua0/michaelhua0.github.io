@@ -13,7 +13,7 @@ Project cards / detail pages:
 | --- | --- |
 | `decoding-light.jpg` | Decoding Light |
 | `brain-vessel.png` | Novel Multi-Scale Knowledge Transfer Transformer (3D Brain Vessel Segmentation) |
-| `msst.png` | Novel MSST Transformer (Hyperspectral Imaging in Plant Growth Modeling) |
+| `msst.webp` | Novel MSST Transformer (Hyperspectral Imaging in Plant Growth Modeling) |
 | `nhd.jpg` | 2025 National History Day |
 | `historys-trigger.jpg` | History's Trigger |
 
@@ -21,7 +21,7 @@ Publication and competition paper previews:
 
 | File | Used for |
 | --- | --- |
-| `publication-vessel-transformer.png` | Computers & Graphics vessel-segmentation paper |
+| `publication-vessel-transformer.webp` | Computers & Graphics vessel-segmentation paper |
 | `publication-msst.png` | MSST competition paper |
 | `nhd-paper.png` | National History Day process paper |
 
@@ -29,7 +29,7 @@ About page photos:
 
 | File | Used for |
 | --- | --- |
-| `about-portrait.jpg` | About — red-background portrait in the light blue suit (vertical, ~3:4) |
+| `about-portrait.webp` | About — red-background portrait in the light blue suit (vertical, ~3:4) |
 
 Gallery photos are stored in `public/images/gallery/`. The homepage includes two
 intentional placeholders, so future candid images can be added without changing
@@ -44,3 +44,8 @@ the overall composition.
 `.jpg`, `.png`, and `.webp` all work — just keep the base name (e.g. `retired-project.png`
 is fine if you update the extension in `src/data/projects.ts`, otherwise rename
 to `retired-project.jpg`). `.webp` is recommended for smaller files.
+
+## Social sharing
+
+TODO(owner): supply a genuine `og-default.jpg` image at 1200×630. The metadata
+is already wired to `public/images/og-default.jpg`; do not substitute generated art.

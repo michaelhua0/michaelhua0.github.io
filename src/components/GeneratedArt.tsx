@@ -19,9 +19,11 @@ const bands = SPECTRUM_RAMP;
 export default function GeneratedArt({
   motif,
   seed = "seed",
+  alt,
 }: {
   motif: Motif;
   seed?: string;
+  alt: string;
 }) {
   const rng = useMemo(() => makeRng(hash(seed) || 1), [seed]);
   const W = 800;
@@ -180,7 +182,7 @@ export default function GeneratedArt({
       width="100%"
       height="100%"
       role="img"
-      aria-hidden="true"
+      aria-label={alt}
       style={{ display: "block", background: "var(--ink-2)" }}
     >
       {content}

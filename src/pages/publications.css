@@ -62,7 +62,7 @@
   aspect-ratio: 4 / 5;
   overflow: hidden;
   border: 1px solid var(--border-strong);
-  background: #f4f3ef;
+  background: var(--surface-2);
 }
 .pub__figure::before {
   content: "";
@@ -82,8 +82,11 @@
   display: block;
   object-fit: contain;
   object-position: top center;
-  transition: transform 0.55s var(--ease-out);
+  background: #f4f3ef;
+  opacity: 0;
+  transition: opacity 0.2s var(--ease), transform 0.55s var(--ease-out);
 }
+.pub__figure img.is-loaded { opacity: 1; }
 .pub:hover .pub__figure img { transform: scale(1.015); }
 
 @media (max-width: 900px) {

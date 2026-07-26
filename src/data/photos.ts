@@ -1,19 +1,35 @@
+import type { ResponsiveImageSource } from "../lib/images";
+
 export interface GalleryPhoto {
   src: string;
   alt: string;
+  sources?: ResponsiveImageSource[];
 }
+
+const gallerySources = (name: string, fullWidth: number): ResponsiveImageSource[] => {
+  const widths = [360, 720, fullWidth].filter(
+    (width, index, values) => width <= fullWidth && values.indexOf(width) === index,
+  );
+  return widths.map((width) => ({
+    src: `gallery/${name}${width === fullWidth ? "" : `-${width}`}.webp`,
+    width,
+  }));
+};
 
 export const isef2026Photos: GalleryPhoto[] = [
   {
-    src: "gallery/isef-acm-award-2026.jpg",
+    src: "gallery/isef-acm-award-2026.webp",
+    sources: gallerySources("isef-acm-award-2026", 1200),
     alt: "Michael Hua and fellow ACM Special Award recipients onstage at Regeneron ISEF 2026",
   },
   {
-    src: "gallery/isef-midjourney-award-2026.jpg",
+    src: "gallery/isef-midjourney-award-2026.webp",
+    sources: gallerySources("isef-midjourney-award-2026", 1200),
     alt: "Michael Hua and fellow Midjourney Special Award recipients onstage at Regeneron ISEF 2026",
   },
   {
-    src: "gallery/isef-midjourney-selfie-2026.jpg",
+    src: "gallery/isef-midjourney-selfie-2026.webp",
+    sources: gallerySources("isef-midjourney-selfie-2026", 1200),
     alt: "Michael Hua taking a lighthearted selfie with a Midjourney representative at Regeneron ISEF 2026",
   },
 ];
@@ -22,31 +38,38 @@ export const isef2026Photos: GalleryPhoto[] = [
    stays clean and new photos can simply be appended. */
 export const momentsPhotos: GalleryPhoto[] = [
   {
-    src: "gallery/moment-fencing.jpg",
+    src: "gallery/moment-fencing.webp",
+    sources: gallerySources("moment-fencing", 585),
     alt: "Michael Hua in fencing gear holding a saber",
   },
   {
-    src: "gallery/moment-isef-group.jpg",
+    src: "gallery/moment-isef-group.webp",
+    sources: gallerySources("moment-isef-group", 605),
     alt: "Michael Hua with friends beneath the Regeneron ISEF welcome sign",
   },
   {
-    src: "gallery/moment-brain-poster.jpg",
+    src: "gallery/moment-brain-poster.webp",
+    sources: gallerySources("moment-brain-poster", 676),
     alt: "Michael Hua presenting his brain vessel segmentation research poster",
   },
   {
-    src: "gallery/moment-history-award.jpg",
+    src: "gallery/moment-history-award.webp",
+    sources: gallerySources("moment-history-award", 672),
     alt: "Michael Hua holding his Michigan History Day National Finalist award",
   },
   {
-    src: "gallery/moment-research-talk.jpg",
+    src: "gallery/moment-research-talk.webp",
+    sources: gallerySources("moment-research-talk", 678),
     alt: "Michael Hua presenting his research to an audience in a lecture hall",
   },
   {
-    src: "gallery/moment-jshs-friends.jpg",
+    src: "gallery/moment-jshs-friends.webp",
+    sources: gallerySources("moment-jshs-friends", 612),
     alt: "Michael Hua and two friends posing with playful props at JSHS",
   },
   {
-    src: "gallery/moment-msst-poster.jpg",
+    src: "gallery/moment-msst-poster.webp",
+    sources: gallerySources("moment-msst-poster", 632),
     alt: "Michael Hua standing beside his hyperspectral imaging research poster",
   },
 ];

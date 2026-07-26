@@ -90,6 +90,10 @@
   background: none;
   border: 0;
   padding: 10px;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
 }
 .nav__burger { display: block; width: 24px; height: 16px; position: relative; }

@@ -1,5 +1,10 @@
 import { useState } from "react";
 import GeneratedArt from "./GeneratedArt";
+import {
+  imageSrcSet,
+  imageUrl,
+  type ResponsiveImageSource,
+} from "../lib/images";
 
 type Motif = "spectral" | "vessel" | "point-cloud" | "app" | "documentary" | "channel";
 
@@ -15,6 +20,10 @@ interface Props {
   fit?: "cover" | "contain";
   /** Background shown around a contained image. */
   imageBackground?: string;
+  /** Optional responsive variants of the same real image. */
+  sources?: ResponsiveImageSource[];
+  /** Load eagerly when the image is a likely LCP candidate. */
+  priority?: boolean;
 }
 
 /**
@@ -30,10 +39,15 @@ export default function SmartImage({
   ratio = "16 / 10",
   fit = "cover",
   imageBackground,
+  sources,
+  priority = false,
 }: Props) {
-  const [failed, setFailed] = useState(false);
-  const url = `${import.meta.env.BASE_URL}images/${src}`;
-  const frameBackground =
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const [loadedSrc, setLoadedSrc] = useState<string | null>(null);
+  const failed = failedSrc === src;
+  const loaded = loadedSrc === src;
+  const url = imageUrl(src);
+  const loadedBackground =
     imageBackground ?? (fit === "contain" ? "#f4f3ef" : "var(--ink-2)");
 
   return (
@@ -43,25 +57,31 @@ export default function SmartImage({
         position: "relative",
         aspectRatio: ratio,
         overflow: "hidden",
-        background: frameBackground,
+        background: "var(--surface-2)",
         borderRadius: "inherit",
       }}
     >
       {failed ? (
-        <GeneratedArt motif={motif} seed={src} />
+        <GeneratedArt motif={motif} seed={src} alt={alt} />
       ) : (
         <img
           src={url}
+          srcSet={imageSrcSet(sources)}
+          sizes={sources ? "(max-width: 700px) 100vw, 50vw" : undefined}
           alt={alt}
-          loading="lazy"
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
           decoding="async"
-          onError={() => setFailed(true)}
+          onLoad={() => setLoadedSrc(src)}
+          onError={() => setFailedSrc(src)}
           style={{
             width: "100%",
             height: "100%",
             objectFit: fit,
             display: "block",
-            background: frameBackground,
+            background: loadedBackground,
+            opacity: loaded ? 1 : 0,
+            transition: "opacity 200ms var(--ease)",
           }}
         />
       )}
