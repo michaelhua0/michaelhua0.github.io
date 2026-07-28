@@ -36,8 +36,3 @@ a.contact-list__item:hover {
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
-
-.contact-list__item--pending {
-  color: var(--text-soft);
-  border-style: dashed;
-}

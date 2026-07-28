@@ -143,7 +143,6 @@
     column-width: clamp(140px, 44vw, 180px);
   }
 
-  .project__gallery-head,
   .project__gallery-grid,
   .project__pager {
     grid-template-columns: 1fr;

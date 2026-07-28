@@ -4,11 +4,7 @@ export const site = {
   ...siteIdentity,
   role: "Student researcher · Software developer · Documentary filmmaker",
   contact: {
-    email: "TODO(owner): email address",
-    github: "TODO(owner): GitHub URL",
-    linkedin: "TODO(owner): LinkedIn URL",
-    scholar: "TODO(owner): Google Scholar profile URL",
-    cvHref: "TODO(owner): CV PDF path or URL",
+    email: "michaelhua2009@gmail.com",
   },
 };
 

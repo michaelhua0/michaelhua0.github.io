@@ -1,4 +1,3 @@
-import SectionHead from "./SectionHead";
 import { homeGalleryItems } from "../data/photos";
 import { imageSrcSet, imageUrl } from "../lib/images";
 import "./homegallery.css";
@@ -7,18 +6,8 @@ export default function HomeGallery() {
   if (homeGalleryItems.length === 0) return null;
 
   return (
-    <section className="section home-gallery" aria-labelledby="gallery-h">
+    <section className="section home-gallery" aria-label="Photo gallery">
       <div className="container">
-        <SectionHead
-          title="Life between projects"
-          note={`${homeGalleryItems.length} frames`}
-          titleId="gallery-h"
-        />
-        <p className="home-gallery__intro">
-          Research shapes the work. Friends, travel, competitions, and the occasional chaotic
-          photo shape everything around it.
-        </p>
-
         <ul className="home-gallery__grid">
           {homeGalleryItems.map((photo) => {
             return (
@@ -34,9 +23,6 @@ export default function HomeGallery() {
                     loading="lazy"
                     decoding="async"
                   />
-                  <figcaption className="mono-copy mono-copy--quiet">
-                    {photo.caption}
-                  </figcaption>
                 </figure>
               </li>
             );

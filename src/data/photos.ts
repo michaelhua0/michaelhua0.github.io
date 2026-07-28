@@ -3,7 +3,6 @@ import type { ResponsiveImageSource } from "../lib/images";
 export interface GalleryPhoto {
   src: string;
   alt: string;
-  caption: string;
   width: number;
   height: number;
   sources?: ResponsiveImageSource[];
@@ -26,7 +25,6 @@ export const isef2026Photos: GalleryPhoto[] = [
     width: 1200,
     height: 800,
     alt: "Michael Hua and fellow ACM Special Award recipients onstage at Regeneron ISEF 2026",
-    caption: "TODO(owner): caption for ACM award photo",
   },
   {
     src: "gallery/isef-midjourney-award-2026.webp",
@@ -34,7 +32,6 @@ export const isef2026Photos: GalleryPhoto[] = [
     width: 1200,
     height: 800,
     alt: "Michael Hua and fellow Midjourney Special Award recipients onstage at Regeneron ISEF 2026",
-    caption: "TODO(owner): caption for Midjourney award photo",
   },
   {
     src: "gallery/isef-midjourney-selfie-2026.webp",
@@ -42,7 +39,6 @@ export const isef2026Photos: GalleryPhoto[] = [
     width: 1200,
     height: 900,
     alt: "Michael Hua taking a lighthearted selfie with a Midjourney representative at Regeneron ISEF 2026",
-    caption: "TODO(owner): caption for Midjourney selfie",
   },
 ];
 
@@ -55,7 +51,6 @@ export const momentsPhotos: GalleryPhoto[] = [
     width: 585,
     height: 899,
     alt: "Michael Hua in fencing gear holding a saber",
-    caption: "TODO(owner): caption for fencing photo",
   },
   {
     src: "gallery/moment-isef-group.webp",
@@ -63,7 +58,6 @@ export const momentsPhotos: GalleryPhoto[] = [
     width: 605,
     height: 465,
     alt: "Michael Hua with friends beneath the Regeneron ISEF welcome sign",
-    caption: "TODO(owner): caption for ISEF group photo",
   },
   {
     src: "gallery/moment-brain-poster.webp",
@@ -71,7 +65,6 @@ export const momentsPhotos: GalleryPhoto[] = [
     width: 676,
     height: 505,
     alt: "Michael Hua presenting his brain vessel segmentation research poster",
-    caption: "TODO(owner): caption for brain-vessel poster photo",
   },
   {
     src: "gallery/moment-history-award.webp",
@@ -79,7 +72,6 @@ export const momentsPhotos: GalleryPhoto[] = [
     width: 672,
     height: 465,
     alt: "Michael Hua holding his Michigan History Day National Finalist award",
-    caption: "TODO(owner): caption for history award photo",
   },
   {
     src: "gallery/moment-research-talk.webp",
@@ -87,7 +79,6 @@ export const momentsPhotos: GalleryPhoto[] = [
     width: 678,
     height: 292,
     alt: "Michael Hua presenting his research to an audience in a lecture hall",
-    caption: "TODO(owner): caption for research talk photo",
   },
   {
     src: "gallery/moment-jshs-friends.webp",
@@ -95,7 +86,6 @@ export const momentsPhotos: GalleryPhoto[] = [
     width: 612,
     height: 465,
     alt: "Michael Hua and two friends posing with playful props at JSHS",
-    caption: "TODO(owner): caption for JSHS friends photo",
   },
   {
     src: "gallery/moment-msst-poster.webp",
@@ -103,7 +93,6 @@ export const momentsPhotos: GalleryPhoto[] = [
     width: 632,
     height: 898,
     alt: "Michael Hua standing beside his hyperspectral imaging research poster",
-    caption: "TODO(owner): caption for MSST poster photo",
   },
 ];
 
