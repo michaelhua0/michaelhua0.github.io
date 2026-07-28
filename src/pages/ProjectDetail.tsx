@@ -67,16 +67,7 @@ export default function ProjectDetail() {
         </div>
 
         {project.gallery && project.gallery.length > 0 && (
-          <section className="project__gallery" aria-labelledby="project-gallery-title">
-            <header className="project__gallery-head">
-              <div>
-                <span className="project__gallery-kicker readout readout--quiet">
-                  Photo journal
-                </span>
-                <h2 id="project-gallery-title">Regeneron ISEF 2026</h2>
-              </div>
-              <p>Recognition, people, and a few moments beyond the project board.</p>
-            </header>
+          <section className="project__gallery" aria-label="Project photos">
             <div className="project__gallery-grid">
               {project.gallery.map((photo) => (
                 <figure key={photo.src} className="project__gallery-photo">

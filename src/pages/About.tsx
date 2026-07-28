@@ -45,7 +45,7 @@ export default function About() {
             {bio.map((para, i) => (
               <p key={i}>{para}</p>
             ))}
-            <ContactLinks items={["email"]} className="about__contact" />
+            <ContactLinks className="about__contact" />
           </div>
         </div>
       </section>
