@@ -246,7 +246,10 @@ a { color: var(--accent-bright); text-decoration: none; }
 a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 strong, b { font-weight: 600; }
 em { font-style: italic; }
-img { max-width: 100%; display: block; }
+/* height:auto is load-bearing: the width/height attributes we set for CLS
+   become presentational hints, and without this reset a `width:100%` image
+   keeps its attribute height and stretches. */
+img { max-width: 100%; height: auto; display: block; }
 
 .media-unavailable {
   display: grid;

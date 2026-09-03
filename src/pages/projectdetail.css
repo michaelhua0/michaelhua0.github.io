@@ -70,9 +70,7 @@
 
 .project__gallery-photo img {
   width: 100%;
-  aspect-ratio: 3 / 2;
   display: block;
-  object-fit: cover;
   border: 1px solid var(--border);
   filter: saturate(0.94);
 }
