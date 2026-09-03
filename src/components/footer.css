@@ -54,10 +54,13 @@
   min-height: 44px;
   padding: 5px 0;
   border: 0;
+  /* reads as the footer's other links, which are mono */
+  font-family: var(--font-mono);
+  font-size: var(--mono-s);
+  color: var(--on-ink-soft);
 }
-.footer__contacts .contact-list__value {
-  max-width: 28ch;
-  font-size: 0.78rem;
+.footer__contacts .contact-list__item:hover {
+  color: var(--research-bright);
 }
 .footer__meta {
   color: var(--text-faint);
