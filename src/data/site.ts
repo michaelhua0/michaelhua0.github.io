@@ -2,7 +2,6 @@ import { siteIdentity } from "./routeMetadata.js";
 
 export const site = {
   ...siteIdentity,
-  role: "Student researcher · Software developer · Documentary filmmaker",
   contact: {
     email: "michaelhua2009@gmail.com",
     linkedin: "https://www.linkedin.com/in/michael-hua-392731364/",

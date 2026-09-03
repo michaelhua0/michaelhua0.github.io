@@ -18,8 +18,7 @@
     gap: clamp(16px, 3vw, 28px);
   }
 
-  .home-recognition__grid,
-  .home-contact__body {
+  .home-recognition__grid {
     grid-template-columns: 1fr;
   }
 
