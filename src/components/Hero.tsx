@@ -165,14 +165,13 @@ void main(){
 `;
 
 const DESTS = [
-  { to: "/portfolio", n: "01", label: "Portfolio", desc: "Research, software, and film" },
+  { to: "/portfolio", label: "Portfolio", desc: "Research, software, and film" },
   {
     to: "/publications",
-    n: "02",
     label: "Publications",
     desc: "Peer-reviewed and competition papers",
   },
-  { to: "/about", n: "03", label: "About", desc: "Research interests and background" },
+  { to: "/about", label: "About", desc: "Research interests and background" },
 ];
 
 function compile(gl: WebGLRenderingContext, type: number, src: string) {
@@ -392,9 +391,6 @@ export default function Hero() {
       <nav className="hero__wayfind" aria-label="Explore the site">
         {DESTS.map((d) => (
           <Link key={d.to} to={d.to} className="hero__way">
-            <span className="hero__way-n readout readout--strong" aria-hidden="true">
-              {d.n}
-            </span>
             <span className="hero__way-text">
               <span className="hero__way-label">{d.label}</span>
               <span className="hero__way-desc mono-copy mono-copy--quiet">

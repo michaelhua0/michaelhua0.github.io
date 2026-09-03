@@ -40,10 +40,10 @@ export interface Band {
 /* The canonical domain → wavelength map. Ascending nm so the list is
    already in spine order (blue medical → red history). */
 export const BANDS: Band[] = [
-  { id: "medical", nm: 470, label: "Medical · Computer vision", color: SPECTRUM.blue },
+  { id: "medical", nm: 470, label: "Medical computer vision", color: SPECTRUM.blue },
   { id: "hyperspectral", nm: 520, label: "Hyperspectral imaging", color: SPECTRUM.teal },
-  { id: "physical-ai", nm: 600, label: "Physical AI · Software", color: SPECTRUM.amber },
-  { id: "history", nm: 660, label: "History · Documentary", color: SPECTRUM.red },
+  { id: "physical-ai", nm: 600, label: "Physical AI and software", color: SPECTRUM.amber },
+  { id: "history", nm: 660, label: "Documentary history", color: SPECTRUM.red },
 ];
 
 export const bandOf = (id: Domain): Band =>

@@ -18,6 +18,13 @@
   src: url("/fonts/newsreader-latin-wght-normal.woff2") format("woff2-variations");
 }
 @font-face {
+  font-family: "Newsreader";
+  font-style: italic;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("/fonts/newsreader-latin-wght-italic.woff2") format("woff2-variations");
+}
+@font-face {
   font-family: "IBM Plex Mono";
   font-style: normal;
   font-weight: 400;
@@ -52,6 +59,15 @@
   size-adjust: 99.01%;
   ascent-override: 74.23%;
   descent-override: 26.76%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Newsreader Fallback";
+  font-style: italic;
+  src: local("Georgia Italic");
+  size-adjust: 93.14%;
+  ascent-override: 78.92%;
+  descent-override: 28.45%;
   line-gap-override: 0%;
 }
 @font-face {
@@ -165,7 +181,6 @@
   --hero-link-title: #f3f6f8;
   --hero-link-copy: #cbd7e0;
   --hero-link-arrow: #dbe8ed;
-  --hero-marker: #80dfd1;
   --hero-spectrum-start: #a9eee4;
   --hero-spectrum-end: #77b9d5;
 

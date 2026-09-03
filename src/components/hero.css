@@ -222,12 +222,6 @@
 .hero__way:hover::after,
 .hero__way:focus-visible::after { transform: scaleX(1); }
 
-.hero__way-n {
-  position: relative;
-  z-index: 1;
-  color: var(--hero-marker);
-  text-shadow: 0 0 9px color-mix(in srgb, var(--research-bright) 28%, transparent);
-}
 .hero__way-text {
   position: relative;
   z-index: 1;
