@@ -14,7 +14,7 @@ export default function About() {
   return (
     <>
       <SEO {...pageMetadata.about} />
-      <PageHeader eyebrow="Profile" title="About me" />
+      <PageHeader eyebrow="Profile" title="About Me" />
 
       <section className="section about">
         <div className="container about__grid">
