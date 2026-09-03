@@ -114,9 +114,6 @@
   line-height: 1.2;
 }
 
-.home-recognition__additional small {
-  color: var(--text-faint);
-}
 
 /* ---- Profile: portrait-led editorial spread ---- */
 .home-profile {
@@ -201,10 +198,6 @@
 
 .home-profile__content {
   padding-top: clamp(4px, 2vw, 24px);
-}
-
-.home-profile__kicker {
-  margin: 0 0 18px;
 }
 
 .home-profile__abstract p {

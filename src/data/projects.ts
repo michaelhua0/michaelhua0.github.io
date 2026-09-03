@@ -69,7 +69,7 @@ export const projects: Project[] = [
     ...projectMetadata.decodingLight,
     category: "research",
     domain: "hyperspectral",
-    tag: "Hyperspectral imaging · Physics-aware AI",
+    tag: "Hyperspectral imaging",
     image: "decoding-light.jpg",
     imageAlt:
       "A camera beside a laptop showing a spectral curve, with a multicolored cube in front",
@@ -91,7 +91,7 @@ export const projects: Project[] = [
       {
         kind: "note",
         text:
-          "First Place Grand Award in Robotics and Intelligent Machines · ACM Special Award · Midjourney Special Award",
+          "First Place Grand Award in Robotics and Intelligent Machines, with the ACM Special Award and the Midjourney Special Award.",
       },
       {
         kind: "links",
@@ -109,7 +109,7 @@ export const projects: Project[] = [
     ...projectMetadata.brainVesselSegmentation,
     category: "research",
     domain: "medical",
-    tag: "Computer vision · Medical imaging",
+    tag: "Medical computer vision",
     image: "brain-vessel.png",
     imageAlt:
       "Diagram of a multiscale convolutional transformer with 3D brain-vessel visualizations",
@@ -154,7 +154,7 @@ export const projects: Project[] = [
     ...projectMetadata.msstTransformer,
     category: "research",
     domain: "hyperspectral",
-    tag: "Hyperspectral imaging · Transformers",
+    tag: "Transformer architecture",
     image: "msst.webp",
     imageAlt:
       "Diagram of the multimodal spatial-spectral-temporal transformer architecture",
@@ -187,7 +187,7 @@ export const projects: Project[] = [
     ...projectMetadata.aigro,
     category: "research",
     domain: "physical-ai",
-    tag: "Mobile application · Physical AI",
+    tag: "Physical AI",
     image: "aigro.webp",
     imageAlt:
       "Green app icon with a plant, microchip, rainbow spectrum, and white wordmark",
@@ -225,7 +225,7 @@ export const projects: Project[] = [
     ...projectMetadata.nationalHistoryDay,
     category: "history",
     domain: "history",
-    tag: "2025 National History Day · Documentary",
+    tag: "National History Day",
     image: "nhd.jpg",
     imageAlt:
       "Two archival photographs of a man, including one beside laboratory equipment",
@@ -254,7 +254,7 @@ export const projects: Project[] = [
     ...projectMetadata.historysTrigger,
     category: "history",
     domain: "history",
-    tag: "Historical research · Documentary filmmaking",
+    tag: "Documentary filmmaking",
     image: "historys-trigger.jpg",
     imageAlt: "Red and black collage of layered newspaper clippings",
     imageFit: "contain",
