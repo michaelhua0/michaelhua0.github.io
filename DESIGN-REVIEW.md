@@ -22,6 +22,9 @@ evidence for the plan, not separate work items.
 
 **Priority key:** P0 blocking · P1 major, fix before shipping · P2 minor · P3 polish.
 
+**Resolved findings** keep their original text for the record and are prefixed
+`**[RESOLVED — <date>]**` with a one-line note on what shipped. Do not re-open them.
+
 **One-line summary of the diagnosis:** the site ships its signature *gestures* — spectral glyphs,
 scan sweeps, HUD telemetry, corner ticks, invented `λ`/`FIG`/`REF`/`BAND` coordinate systems —
 without the data or the key those gestures would need to mean anything. To a general reader that
@@ -227,7 +230,10 @@ This maps exactly onto the approved phased plan: Phase 2 (signature gestures —
 **[P1] The personal material — the thing this audience came for — is at ~75% scroll depth.** "Life between projects" (HomeGallery.tsx) is 10 real candid photos in a true masonry that preserves aspect ratios, under the best heading on the site. It is the **only** place Michael appears as a person rather than as a résumé. It currently sits below the hero, the profile/bio spread, the awards aside, and Selected Work. *Fix:* move it up the homepage sequence for the primary audience — a defensible order is Hero → Recognition (P0 above) → Selected work → **Life between projects** → Profile/bio → Contact. Also give the photos captions: today they have no click handler, no `<a>`, no caption and no keyboard path, yet `homegallery.css:69-72` scales them on hover as if they were interactive.
 *Suggested command:* /impeccable layout
 
-**[P1] `font-weight: 560` is inert at 9 sites.** The Google Fonts URL requests discrete weights (`wght@0,9..144,400;500;600;700`), so the response returns static faces pinned to 400/500/600/700 — not a variable range. Every `560` resolves to 600, every `520` to 500, every `480` to 400. Fix is one character class: `wght@0,9..144,400..700`. Separately, during swap those weights snap to Georgia bold, so every heading on the site flashes noticeably bolder than final.
+**[RESOLVED — 2026-09-03]** Google Fonts is gone; Newsreader ships self-hosted as a
+variable face (`wght 200 800`, `global.css:11-18`) and no `560`/`520`/`480` weight remains in the
+codebase — only 400/500/600/700, all inside the axis. The swap-to-Georgia-bold flash is closed by
+the metric-matched fallback at `global.css:41-64`. Original finding: **[P1] `font-weight: 560` is inert at 9 sites.** The Google Fonts URL requests discrete weights (`wght@0,9..144,400;500;600;700`), so the response returns static faces pinned to 400/500/600/700 — not a variable range. Every `560` resolves to 600, every `520` to 500, every `480` to 400. Fix is one character class: `wght@0,9..144,400..700`. Separately, during swap those weights snap to Georgia bold, so every heading on the site flashes noticeably bolder than final.
 *Suggested command:* /impeccable typeset
 
 **[P2] The Reveal wrapper produces a double hairline between every publication.** Each `.pub` is the only child of its own `.reveal` div, so `.pub:last-child` (publications.css:16) matches every publication — its `border-bottom` lands directly above the next row's `border-top` with no margin collapse. A 2px double rule between all rows, on a design system whose stated identity is "depth from hairlines and light, not shadow". The same wrapper also makes `/publications#msst-paper` land 20px off target, because the scroll position is computed from the `translateY(20px)` box.
@@ -533,7 +539,10 @@ own underline (`home.css:351-353`) leaving a 4px arrow nudge as the sole feedbac
    masonry, so each decode repacks all ten items and shifts the following section while the user
    is scrolling through it. Aspect ratios span 3.6× (678×292 to 585×899). Add `w`/`h` to
    `GalleryPhoto` in `src/data/photos.ts` and emit them.
-5. **`wght@0,9..144,400..700`** in the `index.html:13` Google Fonts URL. The current
+5. **[RESOLVED — 2026-09-03]** No Google Fonts URL remains; Newsreader is a self-hosted
+   variable face, Fraunces and JetBrains Mono are gone, and both stacks now carry
+   metric-matched `size-adjust` fallbacks (`global.css:41-64`), so swap no longer reflows.
+   *Original finding:* **`wght@0,9..144,400..700`** in the `index.html:13` Google Fonts URL. The current
    semicolon-separated discrete weights return static faces pinned to 400/500/600/700, so
    `font-weight: 560` is **inert at 9 sites** (`global.css:120, 191, 272`, `projectcard.css:71`,
    `richblocks.css:15`, `home.css:128, 229, 418`, `publications.css:38`), resolving to 600;
@@ -671,7 +680,12 @@ delete the overrides.
 line**, above the 45–75 comfort band. *Fix:* two tokens — a prose measure (~66ch) and a lede
 measure (~52ch) — and use them.
 
-**A7. Three type families, and one of them may be redundant. — Move 3, owner's call**
+**A7. [RESOLVED — 2026-09-03] Three type families, and one of them may be redundant.**
+Settled the way this finding pointed: Fraunces was dropped and Newsreader now carries both display
+and prose (`--font-display` and `--font-body` are the same stack, `global.css:115-116`), with IBM
+Plex Mono replacing JetBrains Mono as the instrument voice. Two families, no unused weights.
+*Residual, needs a binary:* the italic is **not** loaded, so `.hero__lede em`, `.rb-cite`, and
+`.about__portrait-mark` (7rem) render a synthesized oblique. *Original finding:*
 Fraunces (display serif) + Newsreader (reading serif) + JetBrains Mono. The mono is fully justified
 by the concept. **Fraunces + Newsreader is the weak seam:** their roles overlap, and `.rb-cite`
 (body serif italic, `richblocks.css:47-49`) and `.pub__title` (display serif) read as the same
