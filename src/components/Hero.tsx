@@ -367,7 +367,6 @@ export default function Hero() {
   }, [reducedMotion]);
 
   const [w1, w2] = site.name.split(" ");
-  const roleParts = site.role.split("·").map((s) => s.trim());
 
   return (
     <section
@@ -379,17 +378,6 @@ export default function Hero() {
       <div className="hero__scrim" aria-hidden="true" />
 
       <div className="hero__content">
-        <p className="hero__eyebrow">
-          <span className="hero__eyebrow-text readout">
-            {roleParts.map((r, i) => (
-              <span key={r}>
-                {r}
-                {i < roleParts.length - 1 && <b aria-hidden="true">·</b>}
-              </span>
-            ))}
-          </span>
-        </p>
-
         <h1 className="hero__title">
           <span className="hero__word">{w1}</span>{" "}
           <span className="hero__word">{w2}</span>

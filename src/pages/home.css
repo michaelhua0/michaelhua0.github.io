@@ -329,27 +329,3 @@
   transform: translateX(4px);
 }
 
-/* ---- Contact: the closing action, not another directory ---- */
-.home-contact {
-  border-top: 1px solid var(--border);
-  background:
-    radial-gradient(circle at 92% 18%, color-mix(in srgb, var(--research-bright) 8%, transparent), transparent 30%),
-    var(--surface-1);
-}
-
-.home-contact__body {
-  display: grid;
-  grid-template-columns: var(--grid-sidebar-content);
-  align-items: start;
-  gap: clamp(36px, 7vw, 88px);
-}
-
-.home-contact__body > p {
-  max-width: 24ch;
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(1.55rem, 3vw, 2.25rem);
-  line-height: 1.12;
-  color: var(--text);
-}

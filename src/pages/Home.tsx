@@ -5,7 +5,6 @@ import Hero from "../components/Hero";
 import SectionHead from "../components/SectionHead";
 import ProjectCard from "../components/ProjectCard";
 import HomeGallery from "../components/HomeGallery";
-import ContactLinks from "../components/ContactLinks";
 import { bio } from "../data/site";
 import { projects } from "../data/projects";
 import { pageMetadata } from "../data/routeMetadata.js";
@@ -188,16 +187,6 @@ export default function Home() {
                   </span>
                 </Link>
               </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section home-contact" aria-labelledby="contact-h">
-          <div className="container">
-            <SectionHead title="Contact" note="Get in touch" titleId="contact-h" />
-            <div className="home-contact__body">
-              <p>Reach out about the work, school, community projects, or anything else here.</p>
-              <ContactLinks />
             </div>
           </div>
         </section>

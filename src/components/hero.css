@@ -85,24 +85,6 @@
   text-align: center;
 }
 
-.hero__eyebrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 0 clamp(20px, 3vh, 32px);
-}
-.hero__eyebrow-text {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  color: var(--on-ink-soft);
-}
-.hero__eyebrow-text b {
-  color: var(--research-bright);
-  margin: 0 0.55em;
-  font-weight: 500;
-}
-
 .hero__title {
   font-family: var(--font-display);
   font-weight: 600;
