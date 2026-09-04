@@ -6,6 +6,9 @@ export interface GalleryPhoto {
   width: number;
   height: number;
   sources?: ResponsiveImageSource[];
+  /** Cap the rendered width, in px, for a photo whose source is too small to
+      fill a full column sharply. Only set it where the pixels demand it. */
+  displayMax?: number;
 }
 
 const gallerySources = (name: string, fullWidth: number): ResponsiveImageSource[] => {
@@ -63,7 +66,7 @@ export const momentsPhotos: GalleryPhoto[] = [
     src: "gallery/moment-brain-poster.webp",
     sources: gallerySources("moment-brain-poster", 553),
     width: 553,
-    height: 457,
+    height: 429,
     alt: "Michael Hua presenting his brain vessel segmentation research poster",
   },
   {
@@ -71,6 +74,8 @@ export const momentsPhotos: GalleryPhoto[] = [
     sources: gallerySources("moment-history-award", 420),
     width: 420,
     height: 465,
+    // 420px of real detail: shown smaller so it stays crisp on a 3x phone.
+    displayMax: 156,
     alt: "Michael Hua holding his Michigan History Day National Finalist award",
   },
   {

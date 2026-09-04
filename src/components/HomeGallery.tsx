@@ -12,11 +12,14 @@ export default function HomeGallery() {
           {homeGalleryItems.map((photo) => {
             return (
               <li key={photo.src} className="home-gallery__item">
-                <figure className="home-gallery__photo">
+                <figure
+                  className="home-gallery__photo"
+                  style={photo.displayMax ? { maxWidth: `${photo.displayMax}px` } : undefined}
+                >
                   <img
                     src={imageUrl(photo.src)}
                     srcSet={imageSrcSet(photo.sources)}
-                    sizes="(max-width: 620px) 42vw, 204px"
+                    sizes={photo.displayMax ? `${photo.displayMax}px` : "(max-width: 620px) 42vw, 204px"}
                     alt={photo.alt}
                     width={photo.width}
                     height={photo.height}
