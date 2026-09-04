@@ -11,7 +11,7 @@
    pack into balanced columns, so the gallery looks composed at any count.
    Add photos of any shape and they slot in without breaking the layout. */
 .home-gallery__grid {
-  column-width: clamp(168px, 23vw, 240px);
+  column-width: clamp(152px, 17vw, 204px);
   column-gap: clamp(8px, 1.1vw, 13px);
   margin: 0;
   padding: 0;
