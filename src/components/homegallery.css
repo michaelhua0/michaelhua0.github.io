@@ -7,25 +7,35 @@
     var(--surface-1);
 }
 
-/* Masonry columns: images keep their true aspect ratio (never cropped) and
-   pack into balanced columns, so the gallery looks composed at any count.
-   Add photos of any shape and they slot in without breaking the layout. */
+/* Justified rows: every frame is scaled from its own aspect ratio, so each
+   row shares a single height and fills the full measure edge to edge. Nothing
+   is cropped and no column is left hanging, which is what the CSS-columns
+   masonry could not do -- it ordered photos down the columns and left the
+   short column stranded. */
 .home-gallery__grid {
-  column-width: clamp(152px, 17vw, 204px);
-  column-gap: clamp(8px, 1.1vw, 13px);
+  --row-h: clamp(128px, 11.7vw, 152px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(8px, 1.1vw, 13px);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .home-gallery__item {
-  margin: 0 0 clamp(8px, 1.1vw, 13px);
-  break-inside: avoid;
+  /* grow and basis both track the ratio, so widths stay proportional to it
+     when the row distributes its slack and the heights come out equal. */
+  flex: var(--r) 1 calc(var(--r) * var(--row-h));
+  /* keeps a short final row from inflating to fill the width on its own */
+  max-width: calc(var(--r) * var(--row-h) * 1.5);
+  margin: 0;
 }
 
 .home-gallery__photo {
   position: relative;
   margin: 0;
+  height: 100%;
+  aspect-ratio: var(--r);
   overflow: hidden;
   border: 1px solid color-mix(in srgb, var(--border-strong) 82%, transparent);
   background: var(--bg);
@@ -33,7 +43,8 @@
 
 .home-gallery__photo img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
   filter: saturate(0.94) contrast(1.02);
 }
