@@ -139,7 +139,19 @@
   }
 
   .home-gallery__grid {
-    column-width: clamp(132px, 42vw, 168px);
+    display: block;
+    columns: 2;
+    column-gap: 8px;
+  }
+
+  .home-gallery__item {
+    max-width: none;
+    margin: 0 0 8px;
+    break-inside: avoid;
+  }
+
+  .home-gallery__photo {
+    height: auto;
   }
 
   .project__gallery-grid,
