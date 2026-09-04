@@ -139,7 +139,7 @@
   }
 
   .home-gallery__grid {
-    column-width: clamp(140px, 44vw, 180px);
+    column-width: clamp(132px, 42vw, 168px);
   }
 
   .project__gallery-grid,
