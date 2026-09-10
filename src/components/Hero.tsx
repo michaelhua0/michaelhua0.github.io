@@ -250,7 +250,7 @@ export default function Hero() {
 
         <figure ref={figureRef} id="camera-view" className={`camera-story__figure ${ready ? "is-ready" : ""}`} aria-busy={!ready && !failed}>
           {failed && <div className="camera-story__unavailable"><p>The camera view couldn’t load.</p><Link to="/portfolio/decoding-light">Read About the Camera ↗</Link></div>}
-          <canvas ref={canvasRef} className="camera-story__canvas" role="img" aria-hidden={!ready} aria-label="3D illustration of my homemade hyperspectral camera. Scrolling reveals a cutaway of the rectangular tube, then separates the fitted optics along their axis to show the lenses, diffraction grating, sensor, and Raspberry Pi connected by a ribbon cable." />
+          <canvas ref={canvasRef} className="camera-story__canvas" role="img" aria-hidden={!ready} aria-label="3D illustration of my homemade hyperspectral camera. Scrolling fades the whole rectangular housing to reveal the fitted optics, then separates them along their axis to show the lenses, diffraction grating, sensor, and Raspberry Pi connected by a ribbon cable." />
           <figcaption className="sr-only">My homemade hyperspectral camera</figcaption>
         </figure>
 
