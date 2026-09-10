@@ -48,7 +48,7 @@ export default function Home() {
           aria-labelledby="profile-h"
         >
           <div className="container">
-            <SectionHead title="Who I am" titleId="profile-h" />
+            <SectionHead title="About Me" titleId="profile-h" />
 
             <div className="home-profile__spread">
               <figure className="home-profile__portrait">
@@ -158,7 +158,7 @@ export default function Home() {
 
         <section className="section container home-work" aria-labelledby="work-h">
           <SectionHead
-            title="Selected work"
+            title="Selected Work"
             note={`${projects.length} total`}
             titleId="work-h"
           />
@@ -170,7 +170,7 @@ export default function Home() {
                 ))}
               </div>
               <Link to="/portfolio" className="home-work__all readout">
-                All projects <span className="arrow" aria-hidden="true">→</span>
+                All Projects <span className="arrow" aria-hidden="true">→</span>
               </Link>
             </>
           ) : (

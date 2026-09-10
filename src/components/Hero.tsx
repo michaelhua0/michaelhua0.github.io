@@ -1,409 +1,284 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { site } from "../data/site";
+import { useCameraScrollPacing } from "../hooks/useCameraScrollPacing";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
+import type { CameraScene, CameraSceneBounds } from "./cameraScene";
+import { cameraChapters, cameraChapterAt, cameraFlowOffset, cameraPoseAt, cameraTimeline } from "../lib/cameraTimeline";
+import { cameraMotionAt } from "../lib/cameraMotion";
+import { imageUrl } from "../lib/images";
 import "./hero.css";
 
-/* ============================================================
-   Hero — an interactive spectral decomposition field.
-   A full-screen WebGL shader renders a dark, structured noise
-   field that the cursor acts on like a detector: it lenses the
-   field, splits it into discrete measurement bands (à la a
-   spectrometer decoding incoming light), and disperses those
-   bands into RGB fringing near the pointer — a literal reading
-   of "decoding light" rather than a generic flowing blob.
-   Falls back to a static gradient when WebGL is unavailable or
-   the visitor prefers reduced motion.
-   ============================================================ */
-
-const VERT = `
-attribute vec2 a_pos;
-void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
-`;
-
-const FRAG = `
-precision highp float;
-uniform vec2  u_res;
-uniform float u_time;
-uniform vec2  u_mouse;      // 0..1, y flipped to match uv
-uniform float u_active;     // 0..1 pointer influence
-
-const float BANDS = 6.0;
-
-float hash(vec2 p){
-  p = fract(p * vec2(123.34, 456.21));
-  p += dot(p, p + 45.32);
-  return fract(p.x * p.y);
-}
-
-float noise(vec2 p){
-  vec2 i = floor(p);
-  vec2 f = fract(p);
-  float a = hash(i);
-  float b = hash(i + vec2(1.0, 0.0));
-  float c = hash(i + vec2(0.0, 1.0));
-  float d = hash(i + vec2(1.0, 1.0));
-  vec2 u = f * f * (3.0 - 2.0 * f);
-  return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-}
-
-const mat2 M = mat2(1.62, 1.18, -1.18, 1.62);
-
-float fbm(vec2 p){
-  float v = 0.0;
-  float a = 0.5;
-  for (int i = 0; i < 5; i++){
-    v += a * noise(p);
-    p = M * p;
-    a *= 0.5;
-  }
-  return v;
-}
-
-// domain-warped scalar field (IQ-style) sampled at a given point
-float fieldAt(vec2 sp, float t){
-  vec2 q = vec2(fbm(sp + t), fbm(sp + vec2(4.2, 1.8) - t * 0.6));
-  vec2 r = vec2(
-    fbm(sp + 2.0 * q + vec2(1.2, 7.5) + t * 0.9),
-    fbm(sp + 2.0 * q + vec2(8.1, 3.0) - t * 0.7)
-  );
-  return fbm(sp + 3.0 * r);
-}
-
-// six-stop spectral ramp: violet -> blue -> teal -> green -> amber -> ember
-vec3 spectralRamp(float x){
-  vec3 violet = vec3(0.078, 0.043, 0.208);
-  vec3 blue   = vec3(0.071, 0.302, 0.647);
-  vec3 teal   = vec3(0.071, 0.710, 0.643);
-  vec3 green  = vec3(0.247, 0.749, 0.373);
-  vec3 amber  = vec3(0.878, 0.631, 0.000);
-  vec3 ember  = vec3(0.950, 0.300, 0.120);
-
-  float seg = clamp(x, 0.0, 1.0) * 5.0;
-  vec3 c = violet;
-  c = mix(c, blue,  clamp(seg - 0.0, 0.0, 1.0));
-  c = mix(c, teal,  clamp(seg - 1.0, 0.0, 1.0));
-  c = mix(c, green, clamp(seg - 2.0, 0.0, 1.0));
-  c = mix(c, amber, clamp(seg - 3.0, 0.0, 1.0));
-  c = mix(c, ember, clamp(seg - 4.0, 0.0, 1.0));
-  return c;
-}
-
-float quantize(float f){
-  return floor(clamp(f, 0.0, 0.999) * BANDS) / BANDS * (BANDS / (BANDS - 1.0));
-}
-
-void main(){
-  vec2 uv = gl_FragCoord.xy / u_res.xy;
-  float aspect = u_res.x / u_res.y;
-  vec2 p = (uv - 0.5) * vec2(aspect, 1.0);
-  float t = u_time * 0.045;
-
-  // ---- cursor as lens: bends sampled space toward the pointer ----
-  vec2 m = (u_mouse - 0.5) * vec2(aspect, 1.0);
-  vec2 toM = p - m;
-  float mDist = length(toM) + 1e-4;
-  vec2 mDir = toM / mDist;
-  float lens = u_active * 0.5 * exp(-mDist * 2.6);
-  vec2 pd = p + (m - p) * lens;
-
-  vec2 sp = pd * 1.7 + vec2(0.0, t * 0.5);
-
-  // ---- chromatic dispersion: sample R/G/B slightly apart, radial to the cursor ----
-  // (light literally splitting into its component bands near the "detector")
-  float dispAmt = u_active * 0.05 * exp(-mDist * 2.0);
-  float fR = fieldAt(sp + mDir * dispAmt, t);
-  float fG = fieldAt(sp, t);
-  float fB = fieldAt(sp - mDir * dispAmt, t);
-
-  vec3 colR = spectralRamp(quantize(fR));
-  vec3 colG = spectralRamp(quantize(fG));
-  vec3 colB = spectralRamp(quantize(fB));
-  vec3 spectral = vec3(colR.r, colG.g, colB.b);
-
-  // ---- dark instrument base, spectrum revealed where the field resolves ----
-  vec3 deep = vec3(0.020, 0.028, 0.052);
-  vec3 ink  = vec3(0.043, 0.055, 0.078);
-  vec3 base = mix(deep, ink, smoothstep(0.0, 0.6, fG));
-
-  float reveal = smoothstep(0.16, 0.85, fG);
-  reveal = max(reveal, u_active * exp(-mDist * 2.0) * 0.9);
-  vec3 col = mix(base, spectral, reveal * 0.85);
-
-  // ---- absorption lines: crisp dark seams at each discrete band boundary ----
-  float edge = fract(fG * BANDS);
-  float edgeDist = min(edge, 1.0 - edge);
-  float absorb = 1.0 - smoothstep(0.0, 0.05, edgeDist);
-  col *= (1.0 - absorb * 0.55);
-
-  vec3 bright = vec3(0.133, 0.827, 0.753); // --research-bright
-
-  // luminous filaments where the field folds sharply
-  float fil = pow(clamp(1.0 - abs(fG - 0.55) * 3.2, 0.0, 1.0), 2.0);
-  col += bright * fil * 0.22;
-
-  // pointer bloom
-  col += bright * u_active * exp(-mDist * 3.4) * 0.32;
-
-  // starfield — faint drifting motes
-  vec2 gp = uv * u_res.xy / 2.2;
-  float star = hash(floor(gp));
-  float tw = 0.5 + 0.5 * sin(u_time * 1.5 + star * 30.0);
-  float dot = step(0.9965, hash(floor(gp) + 3.1));
-  col += vec3(0.7, 0.85, 1.0) * dot * tw * 0.5;
-
-  // cinematic vignette
-  float vig = smoothstep(1.25, 0.35, length((uv - 0.5) * vec2(aspect, 1.0)));
-  col *= 0.55 + 0.45 * vig;
-
-  // subtle grain to kill banding
-  float g = hash(uv * u_res.xy + fract(u_time));
-  col += (g - 0.5) * 0.025;
-
-  gl_FragColor = vec4(col, 1.0);
-}
-`;
-
-const DESTS = [
-  { to: "/portfolio", label: "Portfolio", desc: "Research, software, and film" },
-  {
-    to: "/publications",
-    label: "Publications",
-    desc: "Peer-reviewed and competition papers",
-  },
-  { to: "/about", label: "About", desc: "Research interests and background" },
-];
-
-function compile(gl: WebGLRenderingContext, type: number, src: string) {
-  const sh = gl.createShader(type);
-  if (!sh) return null;
-  gl.shaderSource(sh, src);
-  gl.compileShader(sh);
-  if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
-    gl.deleteShader(sh);
-    return null;
-  }
-  return sh;
-}
+const diffractionImageUrl = imageUrl("ctis-diffraction.jpg");
+const animationDistance = () => window.innerHeight * (window.innerWidth <= 700 && window.innerHeight <= 700 ? 1 : 0.6);
 
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const heroRef = useRef<HTMLElement>(null);
+  const figureRef = useRef<HTMLElement>(null);
+  const detailsRef = useRef<HTMLDivElement>(null);
+  const controlsRef = useRef<HTMLDivElement>(null);
+  const sceneRef = useRef<CameraScene | null>(null);
+  const progressRef = useRef(0);
+  const visualRef = useRef<{progress: number; bounds?: CameraSceneBounds}>({progress:0});
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [chapter, setChapter] = useState(0);
+  const [detailsVisible, setDetailsVisible] = useState(false);
+  const [snapshotVisible, setSnapshotVisible] = useState(false);
+  const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
   const reducedMotion = usePrefersReducedMotion();
+  const scrollToChapter = useCameraScrollPacing(sectionRef, ready && !failed && !reducedMotion, animationDistance);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const hero = heroRef.current;
-    if (!canvas || !hero) return;
-
-    const gl = (canvas.getContext("webgl", { antialias: false, alpha: false }) ||
-      canvas.getContext("experimental-webgl", { antialias: false, alpha: false })) as
-      | WebGLRenderingContext
-      | null;
-    if (!gl) {
-      setFailed(true);
-      return;
+  const layoutViewer = useCallback((progress: number, bounds?: CameraSceneBounds) => {
+    const pose = cameraPoseAt(progress);
+    const section=sectionRef.current, figure=figureRef.current, details=detailsRef.current, controls=controlsRef.current;
+    if (section && figure && details && controls) {
+      const motion = cameraMotionAt(pose, window.innerWidth, window.innerHeight);
+      const landscape = (window.innerWidth > 520 && window.innerHeight <= 600)
+        || (window.innerWidth > 1000 && window.innerHeight <= 800);
+      const flow = cameraFlowOffset(progress) * animationDistance();
+      const navHeight=Number.parseFloat(getComputedStyle(section).getPropertyValue('--nav-h'));
+      const scrolled=navHeight-section.getBoundingClientRect().top;
+      let controlsTravel=Math.min(Math.max(0,scrolled),cameraTimeline.length*animationDistance());
+      let controlsTop=window.innerHeight-navHeight-80+controlsTravel;
+      const figureHeight=figure.offsetHeight, figureTop=figure.offsetTop;
+      let y=motion.y*(motion.unit==='svh'?window.innerHeight/100:1)+flow;
+      const scale=motion.scale;
+      let notesY=flow+motion.notes;
+      // Give the opened camera its full width. Move the copy into the space
+      // above it instead of shrinking the hardware to fit below the copy.
+      if(!reducedMotion && bounds){
+        const safeBottom=controlsTop-24;
+        const t=Math.max(0,Math.min(1,(pose-cameraTimeline.separationStart)/(cameraTimeline.separationEnd-cameraTimeline.separationStart)));
+        const reading=t*t*(3-2*t);
+        const bottom=figureTop+y+figureHeight/2+(bounds.bottom-.5)*figureHeight*scale;
+        const anchoredY=y+safeBottom-bottom;
+        y=Math.min(y,anchoredY)*(1-reading)+anchoredY*reading;
+        const copyTravel=Math.min(scrolled,cameraTimeline.length*animationDistance());
+        const anchoredTop=figureTop+anchoredY+figureHeight/2+(bounds.top-.5)*figureHeight*scale;
+        const compactBy=landscape ? 0 : Math.max(0,anchoredTop-(copyTravel+24+details.offsetHeight+20))*reading;
+        y-=compactBy;
+        controlsTravel-=compactBy;
+        controlsTop-=compactBy;
+        section.style.setProperty('--camera-tighten',`${compactBy}px`);
+        const modelTop=figureTop+y+figureHeight/2+(bounds.top-.5)*figureHeight*scale;
+        figure.dataset.contentTop=modelTop.toFixed(2);
+        const notesTop=landscape ? copyTravel+16 : Math.min(copyTravel+24,modelTop-details.offsetHeight-20);
+        notesY+=(notesTop-details.offsetTop-notesY)*reading;
+        section.style.setProperty('--intro-opacity',String(1-reading));
+      }
+      figure.style.transform = reducedMotion ? "none" : `translate3d(${landscape ? 0 : motion.x}%, ${y}px, 0) scale(${scale})`;
+      details.style.transform = reducedMotion ? "none" : `translate3d(0, ${notesY}px, 0)`;
+      controls.style.transform=reducedMotion?'none':`translateY(${controlsTravel}px)`;
+      // Occupied bounds are also useful for checking responsive clearances.
+      if(bounds && !reducedMotion){
+        figure.dataset.contentBottom=(figureTop+y+figureHeight/2+(bounds.bottom-.5)*figureHeight*scale).toFixed(2);
+        controls.dataset.layoutTop=controlsTop.toFixed(2);
+      }
     }
-
-    const vs = compile(gl, gl.VERTEX_SHADER, VERT);
-    const fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
-    const prog = gl.createProgram();
-    if (!vs || !fs || !prog) {
-      setFailed(true);
-      return;
-    }
-    gl.attachShader(prog, vs);
-    gl.attachShader(prog, fs);
-    gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-      setFailed(true);
-      return;
-    }
-    gl.useProgram(prog);
-
-    // full-screen triangle
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    const loc = gl.getAttribLocation(prog, "a_pos");
-    gl.enableVertexAttribArray(loc);
-    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-
-    const uRes = gl.getUniformLocation(prog, "u_res");
-    const uTime = gl.getUniformLocation(prog, "u_time");
-    const uMouse = gl.getUniformLocation(prog, "u_mouse");
-    const uActive = gl.getUniformLocation(prog, "u_active");
-
-    let W = 0;
-    let H = 0;
-    let heroRect = hero.getBoundingClientRect();
-    const resize = () => {
-      heroRect = hero.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.75);
-      W = Math.max(1, Math.round(heroRect.width * dpr));
-      H = Math.max(1, Math.round(heroRect.height * dpr));
-      canvas.width = W;
-      canvas.height = H;
-      canvas.style.width = heroRect.width + "px";
-      canvas.style.height = heroRect.height + "px";
-      gl.viewport(0, 0, W, H);
-      gl.uniform2f(uRes, W, H);
-    };
-    resize();
-
-    // pointer — targets are lerped for buttery motion
-    const mouse = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5, a: 0, ta: 0 };
-    const start = performance.now();
-    const onMove = (e: PointerEvent) => {
-      mouse.tx = (e.clientX - heroRect.left) / heroRect.width;
-      mouse.ty = 1 - (e.clientY - heroRect.top) / heroRect.height;
-      mouse.ta = 1;
-    };
-    const onEnter = () => {
-      heroRect = hero.getBoundingClientRect();
-    };
-    const onLeave = () => {
-      mouse.ta = 0;
-    };
-    const passive = { passive: true };
-    if (!reducedMotion) {
-      hero.addEventListener("pointerenter", onEnter, passive);
-      hero.addEventListener("pointermove", onMove, passive);
-      hero.addEventListener("pointerleave", onLeave, passive);
-      hero.addEventListener("pointerdown", onMove, passive);
-    }
-
-    let raf = 0;
-    let running = false;
-
-    const render = (now: number) => {
-      const t = (now - start) / 1000;
-      mouse.x += (mouse.tx - mouse.x) * 0.06;
-      mouse.y += (mouse.ty - mouse.y) * 0.06;
-      mouse.a += (mouse.ta - mouse.a) * 0.05;
-      gl.uniform1f(uTime, t);
-      gl.uniform2f(uMouse, mouse.x, mouse.y);
-      gl.uniform1f(uActive, mouse.a);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
-
-      raf = requestAnimationFrame(render);
-    };
-
-    const startLoop = () => {
-      if (running) return;
-      running = true;
-      raf = requestAnimationFrame(render);
-    };
-    const stopLoop = () => {
-      running = false;
-      cancelAnimationFrame(raf);
-    };
-
-    if (reducedMotion) {
-      // one composed static frame
-      gl.uniform1f(uTime, 12.0);
-      gl.uniform2f(uMouse, 0.5, 0.5);
-      gl.uniform1f(uActive, 0);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
-    }
-
-    let resizeRaf = 0;
-    const onResize = () => {
-      if (resizeRaf) return;
-      resizeRaf = requestAnimationFrame(() => {
-        resizeRaf = 0;
-        resize();
-        if (reducedMotion) {
-          gl.uniform1f(uTime, 12.0);
-          gl.drawArrays(gl.TRIANGLES, 0, 3);
-        }
-      });
-    };
-    window.addEventListener("resize", onResize);
-
-    let heroVisible = false;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        heroVisible = entry.isIntersecting;
-        if (reducedMotion) return;
-        if (heroVisible && !document.hidden) startLoop();
-        else stopLoop();
-      },
-      { threshold: 0.02 },
-    );
-    io.observe(hero);
-    const onVis = () => {
-      if (reducedMotion) return;
-      if (document.hidden) stopLoop();
-      else if (heroVisible) startLoop();
-    };
-    document.addEventListener("visibilitychange", onVis);
-
-    const onLost = (e: Event) => {
-      e.preventDefault();
-      stopLoop();
-      setFailed(true);
-    };
-    canvas.addEventListener("webglcontextlost", onLost);
-
-    return () => {
-      stopLoop();
-      cancelAnimationFrame(resizeRaf);
-      io.disconnect();
-      window.removeEventListener("resize", onResize);
-      document.removeEventListener("visibilitychange", onVis);
-      canvas.removeEventListener("webglcontextlost", onLost);
-      hero.removeEventListener("pointerenter", onEnter);
-      hero.removeEventListener("pointermove", onMove);
-      hero.removeEventListener("pointerleave", onLeave);
-      hero.removeEventListener("pointerdown", onMove);
-      gl.deleteProgram(prog);
-      gl.deleteShader(vs);
-      gl.deleteShader(fs);
-      gl.deleteBuffer(buf);
-    };
   }, [reducedMotion]);
 
-  const [w1, w2] = site.name.split(" ");
+  const setVisualProgress = useCallback((progress: number, bounds?: CameraSceneBounds) => {
+    visualRef.current={progress,bounds};
+    const pose=cameraPoseAt(progress);
+    if(sectionRef.current)sectionRef.current.dataset.pose=pose.toFixed(4);
+    layoutViewer(progress,bounds);
+    setChapter(cameraChapterAt(progress));
+    setDetailsVisible(pose >= cameraTimeline.separationEnd);
+    setSnapshotVisible(pose >= 0.9);
+  }, [layoutViewer]);
+
+  useEffect(() => {
+    let cancelled = false;
+    setReady(false);
+    setFailed(false);
+    const diffractionImage = new Image();
+    diffractionImage.src = diffractionImageUrl;
+    Promise.all([import("./cameraScene"), diffractionImage.decode()]).then(([{ createCameraScene }]) => {
+      if (cancelled || !canvasRef.current) return;
+      const scene = createCameraScene(canvasRef.current, diffractionImage, reducedMotion, () => {
+        setFailed(true);
+        setReady(false);
+      }, setVisualProgress, () => { if (!cancelled) setReady(true); });
+      sceneRef.current = scene;
+      scene.setProgress(progressRef.current);
+    }).catch(() => { if (!cancelled) setFailed(true); });
+    return () => {
+      cancelled = true;
+      sceneRef.current?.dispose();
+      sceneRef.current = null;
+    };
+  }, [reducedMotion, setVisualProgress]);
+
+  useEffect(() => {
+    if (reducedMotion) {
+      if (controlsRef.current) controlsRef.current.style.transform = "none";
+      return;
+    }
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const section = sectionRef.current;
+      if (!section) return;
+      const navHeight = Number.parseFloat(getComputedStyle(section).getPropertyValue("--nav-h"));
+      // Deconstruction keeps its pace; the opened view has extra reading space.
+      const scrolled = navHeight - section.getBoundingClientRect().top;
+      const progress = Math.max(0, Math.min(cameraTimeline.length, scrolled / animationDistance()));
+      progressRef.current = progress;
+      if (sceneRef.current && !failed) {
+        sceneRef.current.setProgress(progress);
+        layoutViewer(visualRef.current.progress,visualRef.current.bounds);
+      }
+      else setVisualProgress(progress);
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(measure); };
+    measure();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [reducedMotion, failed, setVisualProgress, layoutViewer]);
+
+  // Recheck the copy's clearance after a font swap or responsive text reflow.
+  useEffect(() => {
+    const details = detailsRef.current;
+    if (!details) return;
+    const observer = new ResizeObserver(() => {
+      layoutViewer(visualRef.current.progress, visualRef.current.bounds);
+    });
+    observer.observe(details);
+    return () => observer.disconnect();
+  }, [layoutViewer]);
+
+  // A single, cancellable first-visit nudge. Never override an ongoing gesture,
+  // a restored scroll position, a fragment link, or a reduced-motion preference.
+  useEffect(() => {
+    if (!ready || reducedMotion || window.scrollY > 2 || window.location.hash) return;
+    try { if (sessionStorage.getItem("mh:camera-preview")) return; } catch { return; }
+    let frame = 0;
+    let cancelled = false;
+    const stop = () => { cancelled = true; clearTimeout(timer); cancelAnimationFrame(frame); };
+    const events = ["wheel", "touchstart", "pointerdown", "keydown"] as const;
+    events.forEach(name => window.addEventListener(name, stop, { passive: true, once: true }));
+    const onVisibility = () => { if (document.hidden) stop(); };
+    document.addEventListener("visibilitychange", onVisibility);
+    const timer = window.setTimeout(() => {
+      if (cancelled || window.scrollY > 2 || document.hidden) return;
+      try { sessionStorage.setItem("mh:camera-preview", "1"); } catch { return; }
+      const start = performance.now();
+      const distance = Math.min(48, window.innerHeight * 0.05);
+      const tick = (now: number) => {
+        if (cancelled) return;
+        const t = Math.min(1, (now - start) / 1450);
+        const amount = Math.sin(Math.PI * t) ** 2;
+        window.scrollTo({ top: distance * amount, behavior: "instant" });
+        if (t < 1) frame = requestAnimationFrame(tick);
+      };
+      frame = requestAnimationFrame(tick);
+    }, 1100);
+    return () => {
+      stop();
+      events.forEach(name => window.removeEventListener(name, stop));
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [ready, reducedMotion]);
+
+  const goToChapter = useCallback((index: number) => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const progress = cameraChapters[index].position;
+    if (reducedMotion) {
+      progressRef.current = progress;
+      sceneRef.current?.setProgress(progress);
+      setVisualProgress(progress);
+      return;
+    }
+    const navHeight = Number.parseFloat(getComputedStyle(section).getPropertyValue("--nav-h"));
+    scrollToChapter(Math.ceil(window.scrollY + section.getBoundingClientRect().top - navHeight + progress * animationDistance()));
+  }, [reducedMotion, scrollToChapter, setVisualProgress]);
+
+  // Let the visitor read Optics before advancing. Every gesture restarts the
+  // delay, and background tabs never advance the page.
+  useEffect(() => {
+    if (!ready || failed || reducedMotion || chapter !== 1 || !detailsVisible) return;
+    let timer = 0;
+    let cancelled = false;
+    const reset = () => {
+      window.clearTimeout(timer);
+      if (cancelled || document.hidden) return;
+      timer = window.setTimeout(() => {
+        const details = detailsRef.current?.getBoundingClientRect();
+        const pose = cameraPoseAt(visualRef.current.progress);
+        if (!details || details.bottom < 72 || details.top > window.innerHeight || dialogRef.current?.open) return;
+        if (pose >= cameraTimeline.separationEnd && pose < cameraTimeline.sensorStart) goToChapter(2);
+      }, 3000);
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") cancelled = true;
+      reset();
+    };
+    const events = ["scroll", "wheel", "touchstart", "pointerdown"] as const;
+    events.forEach(name => window.addEventListener(name, reset, { passive: true }));
+    window.addEventListener("keydown", onKey);
+    document.addEventListener("visibilitychange", reset);
+    reset();
+    return () => {
+      window.clearTimeout(timer);
+      events.forEach(name => window.removeEventListener(name, reset));
+      window.removeEventListener("keydown", onKey);
+      document.removeEventListener("visibilitychange", reset);
+    };
+  }, [ready, failed, reducedMotion, chapter, detailsVisible, goToChapter]);
 
   return (
-    <section
-      ref={heroRef}
-      className={`hero ${failed ? "hero--fallback" : ""}`}
-      aria-label="Introduction"
-    >
-      <canvas ref={canvasRef} className="hero__canvas" aria-hidden="true" />
-      <div className="hero__scrim" aria-hidden="true" />
-
-      <div className="hero__content">
-        <h1 className="hero__title">
-          <span className="hero__word">{w1}</span>{" "}
-          <span className="hero__word">{w2}</span>
-        </h1>
-
-        <p className="hero__lede">
-          My work connects <em>computer vision</em> and <em>hyperspectral imaging</em> with
-          software development, documentary research, and public service.
-        </p>
+    <section ref={sectionRef} className={`camera-story ${reducedMotion ? "camera-story--still" : ""}`} data-chapter={chapter} aria-label="Michael Hua and his homemade hyperspectral camera">
+      <div ref={controlsRef} className="camera-story__controls">
+        <p className="camera-story__cost" aria-label="Camera build cost: under 300 dollars"><span>Build cost</span><span>&lt; $300</span></p>
+        <div className="camera-story__chapters" role="group" aria-label="Camera animation chapters">{cameraChapters.map((item, index) => <button key={item.label} type="button" onClick={() => goToChapter(index)} className={chapter === index ? "is-active" : ""} aria-pressed={chapter === index} aria-controls="camera-view">{item.label}</button>)}</div>
       </div>
+      <div className="camera-story__inner">
+        <header className="camera-story__intro" inert={!reducedMotion && detailsVisible} aria-hidden={!reducedMotion && detailsVisible}>
+          <p className="camera-story__eyebrow">Hi, I’m</p>
+          <h1>Michael Hua</h1>
+          <p className="camera-story__description">I’m a student at Cranbrook. I built this hyperspectral camera for under $300. With my reconstruction model, it reaches about 95% of the accuracy of scanning hyperspectral cameras.</p>
+          <Link to="/portfolio" className="camera-story__link">My Work <span aria-hidden="true">↗</span></Link>
+          <a href="#camera-build" className="camera-story__next" aria-label="See inside the camera" onClick={event => { event.preventDefault(); goToChapter(1); }}><span aria-hidden="true">↓</span></a>
+        </header>
 
-      <nav className="hero__wayfind" aria-label="Explore the site">
-        {DESTS.map((d) => (
-          <Link key={d.to} to={d.to} className="hero__way">
-            <span className="hero__way-text">
-              <span className="hero__way-label">{d.label}</span>
-              <span className="hero__way-desc mono-copy mono-copy--quiet">
-                {d.desc}
-              </span>
-            </span>
-            <span className="hero__way-arrow" aria-hidden="true">
-              →
-            </span>
-          </Link>
-        ))}
-      </nav>
+        <figure ref={figureRef} id="camera-view" className={`camera-story__figure ${ready ? "is-ready" : ""}`} aria-busy={!ready && !failed}>
+          {failed && <div className="camera-story__unavailable"><p>The camera view couldn’t load.</p><Link to="/portfolio/decoding-light">Read About the Camera ↗</Link></div>}
+          <canvas ref={canvasRef} className="camera-story__canvas" role="img" aria-hidden={!ready} aria-label="3D illustration of my homemade hyperspectral camera. Scrolling reveals a cutaway of the rectangular tube, then separates the fitted optics along their axis to show the lenses, diffraction grating, sensor, and Raspberry Pi connected by a ribbon cable." />
+          <figcaption className="sr-only">My homemade hyperspectral camera</figcaption>
+        </figure>
 
+        <div ref={detailsRef} id="camera-build" className={`camera-story__details ${detailsVisible ? "is-visible" : ""}`} inert={!detailsVisible} aria-hidden={!detailsVisible}>
+          <div className="camera-story__explanation">
+            <h2 className="camera-story__chapter-title">
+              <span className={chapter !== 2 ? "is-active" : ""} aria-hidden={chapter === 2}>Inside My Camera</span>
+              <span className={chapter === 2 ? "is-active" : ""} aria-hidden={chapter !== 2}>The Sensor Image</span>
+            </h2>
+            <p className="camera-story__scale-note">Spacing expanded for clarity</p>
+            <p className="camera-story__explanation-copy">
+              <span className={chapter !== 2 ? "is-active" : ""} aria-hidden={chapter === 2}>The lenses focus light through a square aperture. A dual-axis grating separates the light by wavelength before it reaches the camera sensor.</span>
+              <span className={chapter === 2 ? "is-active" : ""} aria-hidden={chapter !== 2}>The sensor captures the 0th, ±1st, and diagonal orders in one exposure. My PASS-Transformer reconstructs the hyperspectral image from this measurement.</span>
+            </p>
+            <Link to="/portfolio/decoding-light" className="camera-story__link">About This Project <span aria-hidden="true">↗</span></Link>
+          </div>
+          <button type="button" className={`camera-snapshot ${snapshotVisible ? "is-visible" : ""}`} aria-label="Enlarge the captured diffraction pattern" onClick={() => dialogRef.current?.showModal()} inert={!snapshotVisible}>
+            <img src={diffractionImageUrl} width="1184" height="1139" alt="Captured diffraction pattern showing the 0th, ±1st, and diagonal orders" />
+            <span>Sensor Image <span aria-hidden="true">↗</span></span>
+          </button>
+        </div>
+
+      </div>
+      <dialog ref={dialogRef} className="camera-pattern-dialog" onClick={event => { if (event.target === event.currentTarget) dialogRef.current?.close(); }}>
+        <div className="camera-pattern-dialog__head"><h2>Sensor Image</h2><button type="button" aria-label="Close sensor image" onClick={() => dialogRef.current?.close()}>×</button></div>
+        <img src={diffractionImageUrl} width="1184" height="1139" alt="Captured 0th-order image at the center, with ±1st and diagonal diffraction orders around it" />
+        <p>Captured 0th, ±1st, and diagonal diffraction orders.</p>
+      </dialog>
     </section>
   );
 }

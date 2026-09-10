@@ -41,7 +41,7 @@ export default function About() {
           </figure>
 
           <div className="about__copy">
-            <h2 className="about__heading">Research, technology, and historical inquiry</h2>
+            <h2 className="about__heading">My Interests</h2>
             {bio.map((para, i) => (
               <p key={i}>{para}</p>
             ))}

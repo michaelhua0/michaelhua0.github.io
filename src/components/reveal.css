@@ -1,14 +1,5 @@
-.reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition:
-    opacity var(--dur-4) var(--ease-out),
-    transform var(--dur-4) var(--ease-out);
-}
-.reveal.is-shown {
-  opacity: 1;
-  transform: none;
-}
+.reveal { opacity: 0; transition: opacity 280ms ease; }
+.reveal.is-shown, .reveal:focus-within { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; transition: none; }
+  .reveal { opacity: 1; transition: none; }
 }

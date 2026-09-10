@@ -43,6 +43,7 @@ export default function Nav() {
       <div className="nav__inner container">
         <Link to="/" className="nav__brand" aria-label="Michael Hua, home">
           <CTISCameraMark className="nav__mark" />
+          <span className="nav__name">Michael Hua</span>
         </Link>
 
         <nav className="nav__links" aria-label="Primary">
