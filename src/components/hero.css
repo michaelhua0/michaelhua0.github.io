@@ -27,11 +27,11 @@
   pointer-events: none;
   will-change: transform;
 }
-.camera-story__canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.camera-story__canvas, .camera-story__labels { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
 .camera-story__unavailable { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--text-soft); pointer-events: auto; }
 .camera-story__unavailable p { margin: 0; }
-.camera-story__canvas { opacity: 0; transition: opacity 220ms ease; }
-.is-ready .camera-story__canvas { opacity: 1; }
+.camera-story__canvas, .camera-story__labels { opacity: 0; transition: opacity 220ms ease; }
+.is-ready .camera-story__canvas, .is-ready .camera-story__labels { opacity: 1; }
 .camera-story__details { position: absolute; z-index: 2; top: 73svh; left: var(--gutter); right: var(--gutter); display: flex; justify-content: space-between; align-items: flex-start; gap: 48px; scroll-margin-top: calc(var(--nav-h) + 30px); transition: opacity 180ms ease, visibility 180ms; will-change: transform; }
 .camera-story__details:not(.is-visible) { opacity: 0; visibility: hidden; pointer-events: none; }
 .camera-story__explanation { flex: 0 1 580px; max-width: 580px; }
