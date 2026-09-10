@@ -30,9 +30,7 @@
   border-bottom: 1px solid var(--border);
   aspect-ratio: 16 / 10;
 }
-.pcard__media > .scan__media,
 .pcard__media > .pcard__media-inner { width: 100%; height: 100%; }
-.pcard__media > .scan__media > div,
 .pcard__media > .pcard__media-inner > div { height: 100%; }
 
 .pcard__body {
@@ -59,7 +57,7 @@
   color: var(--text);
   transition: color var(--dur-1) var(--ease-snap);
 }
-.pcard__link:hover .pcard__title { color: var(--white); }
+.pcard__link:hover .pcard__title { color: var(--cat); }
 .pcard__teaser {
   font-size: 0.98rem;
   line-height: 1.5;
@@ -75,7 +73,5 @@
   gap: 8px;
 }
 .pcard__cta .arrow {
-  transition: transform var(--dur-2) var(--ease-snap);
   display: inline-block;
 }
-.pcard__link:hover .pcard__cta .arrow { transform: translateX(4px); }

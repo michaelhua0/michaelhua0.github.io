@@ -7,6 +7,8 @@
     border-color var(--dur-1) var(--ease);
 }
 
+.nav__inner.container { max-width: 1440px; }
+
 .nav__inner {
   height: var(--nav-h);
   display: flex;
@@ -21,8 +23,8 @@
   border-bottom: 1px solid var(--border);
 }
 .nav--transparent {
-  background: transparent;
-  border-bottom: 1px solid transparent;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
 }
 
 /* Brand */
@@ -30,7 +32,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 46px;
+  gap: 9px;
   height: 46px;
   color: var(--text);
   text-decoration: none;
@@ -56,6 +58,7 @@
 .nav__link {
   color: var(--text-soft);
   padding: 8px 14px;
+  font-size: 0.9rem;
   border-radius: var(--radius);
   position: relative;
   text-decoration: none;
@@ -73,7 +76,7 @@
   background: var(--accent-bright);
 }
 
-/* Transparent (over dark hero) variant */
+/* White landing-page navigation. */
 .nav--transparent .nav__brand { color: var(--on-ink); }
 .nav--transparent .nav__brand:hover {
   color: var(--research-bright);
@@ -139,3 +142,5 @@
 }
 .nav__mobile-link:hover { color: var(--accent-bright); text-decoration: none; }
 .nav__mobile-link.is-active { color: var(--accent-bright); }
+
+.nav__name { font-size: 1.06rem; font-weight: 600; letter-spacing: -0.02em; }

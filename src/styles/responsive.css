@@ -78,14 +78,6 @@
     background: transparent;
   }
 
-  .hero__wayfind {
-    grid-template-columns: 1fr;
-  }
-
-  .hero__way + .hero__way {
-    border-left: 0;
-  }
-
   .portfolio__grid {
     grid-template-columns: 1fr;
   }
@@ -118,10 +110,6 @@
 
   .footer__meta {
     justify-self: start;
-  }
-
-  .hero__lede {
-    max-width: none;
   }
 
   .home-recognition__additional {

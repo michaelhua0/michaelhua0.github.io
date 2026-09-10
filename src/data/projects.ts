@@ -48,8 +48,6 @@ export interface Project {
   imageAlt: string;
   /** Optional responsive variants of the same real image. */
   imageSources?: ResponsiveImageSource[];
-  /** Use the scan reveal only for images that show technical evidence resolving. */
-  scanReveal?: boolean;
   /** Use contain for diagrams, logos, and document pages that should remain uncropped. */
   imageFit?: "cover" | "contain";
   /** Preserve a source image's native proportions when a standard landscape frame would add bars. */
@@ -69,13 +67,12 @@ export const projects: Project[] = [
     ...projectMetadata.decodingLight,
     category: "research",
     domain: "hyperspectral",
-    tag: "Hyperspectral imaging",
+    tag: "Hyperspectral Imaging",
     image: "decoding-light.jpg",
     imageAlt:
       "A camera beside a laptop showing a spectral curve, with a multicolored cube in front",
     imageFit: "contain",
     imageRatio: "928 / 826",
-    scanReveal: true,
     gallery: isef2026Photos,
     body: [
       p(
@@ -109,12 +106,11 @@ export const projects: Project[] = [
     ...projectMetadata.brainVesselSegmentation,
     category: "research",
     domain: "medical",
-    tag: "Medical computer vision",
+    tag: "Medical Computer Vision",
     image: "brain-vessel.png",
     imageAlt:
       "Diagram of a multiscale convolutional transformer with 3D brain-vessel visualizations",
     imageFit: "contain",
-    scanReveal: true,
     body: [
       p(
         "I developed a Multi-Scale Knowledge Transfer Convolutional Transformer for automated segmentation of cerebral vasculature in 3D in vivo MRI. The model integrates convolutional feature extraction and transformer encoders within a U-Net architecture. A knowledge-transfer mechanism shares structural information across image scales and improves performance on lower-resolution volumes. Comparative experiments showed higher segmentation accuracy than existing methods, with applications in vascular visualization and quantitative analysis.",
@@ -154,7 +150,7 @@ export const projects: Project[] = [
     ...projectMetadata.msstTransformer,
     category: "research",
     domain: "hyperspectral",
-    tag: "Transformer architecture",
+    tag: "Transformer Architecture",
     image: "msst.webp",
     imageAlt:
       "Diagram of the multimodal spatial-spectral-temporal transformer architecture",
@@ -163,7 +159,6 @@ export const projects: Project[] = [
       { src: "msst.webp", width: 1126 },
     ],
     imageFit: "contain",
-    scanReveal: true,
     body: [
       p(
         "I designed a multimodal spatial-spectral-temporal transformer that combines hyperspectral imagery, environmental light conditions, and longitudinal measurements. The architecture models spatial-spectral relationships within each observation and temporal changes across observations. It predicts biomass and quantifies how early plant growth responds to environmental conditions, with applications in precision-controlled agriculture and vertical farming.",
@@ -254,7 +249,7 @@ export const projects: Project[] = [
     ...projectMetadata.historysTrigger,
     category: "history",
     domain: "history",
-    tag: "Documentary filmmaking",
+    tag: "Documentary Filmmaking",
     image: "historys-trigger.jpg",
     imageAlt: "Red and black collage of layered newspaper clippings",
     imageFit: "contain",

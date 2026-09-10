@@ -10,15 +10,15 @@ export default function Portfolio() {
   return (
     <>
       <SEO {...pageMetadata.portfolio} />
-      <PageHeader eyebrow="Selected Work" title="Research and Creative Portfolio">
+      <PageHeader eyebrow="Selected Work" title="Portfolio">
         <ul className="portfolio__legend" aria-label="Project categories">
           <li className="readout">
             <span className="portfolio__legend-mark portfolio__legend-mark--research" />
-            Research and software
+            Research and Software
           </li>
           <li className="readout">
             <span className="portfolio__legend-mark portfolio__legend-mark--history" />
-            History and documentary
+            History and Documentary
           </li>
         </ul>
       </PageHeader>

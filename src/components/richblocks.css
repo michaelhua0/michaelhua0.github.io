@@ -34,7 +34,7 @@
   color: var(--accent-bright);
 }
 
-/* Citation — a set-in serif quotation, hairline only. */
+/* Citation — an inset quotation with a simple rule. */
 .rb-cite {
   margin: 1.8rem 0 0;
   padding: 4px 0 4px 22px;

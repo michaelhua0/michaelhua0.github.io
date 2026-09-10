@@ -1,29 +1,11 @@
-/* Content below the hero bridges the dark front door and the reading surface. */
-.home-body {
-  position: relative;
-  z-index: 1;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-}
-
-.home-body::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 220px;
-  transform: translateY(-100%);
-  pointer-events: none;
-  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--bg) 88%, transparent));
-}
+/* The camera story continues into a white reading surface. */
+.home-body { position: relative; z-index: 1; background: var(--white); }
 
 /* ---- Recognition: evidence immediately after the front door ---- */
 .home-recognition {
   position: relative;
   border-bottom: 1px solid var(--border);
-  background:
-    linear-gradient(120deg, color-mix(in srgb, var(--research-bright) 7%, transparent), transparent 48%),
-    var(--surface-1);
+  background: var(--surface-1);
 }
 
 .home-recognition__grid {
@@ -61,8 +43,8 @@
 .home-recognition__feature h3 {
   max-width: 13ch;
   margin: 0;
-  font-size: clamp(2.7rem, 7vw, 5.8rem);
-  font-weight: 700;
+  font-size: clamp(2.5rem, 5vw, 4.4rem);
+  font-weight: 600;
   line-height: 0.98;
   letter-spacing: -0.04em;
 }
@@ -120,23 +102,10 @@
   position: relative;
   overflow: clip;
   border-bottom: 1px solid var(--border);
-  background:
-    radial-gradient(circle at 5% 35%, color-mix(in srgb, var(--portrait-red) 13%, transparent), transparent 30%),
-    radial-gradient(circle at 92% 2%, color-mix(in srgb, var(--research-bright) 6%, transparent), transparent 27%),
-    color-mix(in srgb, var(--surface-1) 64%, var(--bg));
+  background: var(--white);
 }
 
-.home-profile::before {
-  content: "";
-  position: absolute;
-  width: clamp(240px, 34vw, 520px);
-  aspect-ratio: 1;
-  left: clamp(-260px, -15vw, -100px);
-  bottom: clamp(-300px, -16vw, -150px);
-  border: 1px solid color-mix(in srgb, var(--portrait-red) 18%, transparent);
-  transform: rotate(18deg);
-  pointer-events: none;
-}
+.home-profile.section { padding-top: clamp(32px, 4vw, 48px); }
 
 .home-profile .container {
   position: relative;
@@ -312,13 +281,4 @@
   color: var(--accent-bright);
 }
 
-.home-work__all .arrow {
-  display: inline-block;
-  transition: transform var(--dur-2) var(--ease-snap);
-}
-
-.home-work__all:hover .arrow,
-.home-work__all:focus-visible .arrow {
-  transform: translateX(4px);
-}
-
+.home-work__all .arrow { display: inline-block; }
