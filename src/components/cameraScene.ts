@@ -26,7 +26,6 @@ export function createCameraScene(canvas: HTMLCanvasElement, diffractionImage: H
   renderer.transmissionResolutionScale = 0.5;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.localClippingEnabled = true;
 
   const scene = new THREE.Scene();
   const studio = new RoomEnvironment();
@@ -123,7 +122,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, diffractionImage: H
   const shellMat = material(charcoal.clone());
   shellMat.bumpMap = null;
   shellMat.bumpScale = 0;
-  const bodyHeight = mm(dimensions.overall.height), bodyDepth = mm(dimensions.overall.depth);
+  const bodyHeight = mm(dimensions.overall.height);
   const housing = new THREE.Mesh(geometry(createCameraHousingGeometry()), shellMat);
   housing.castShadow = true;
   housing.receiveShadow = true;
@@ -148,23 +147,30 @@ export function createCameraScene(canvas: HTMLCanvasElement, diffractionImage: H
     return mesh;
   }
 
-  const cutawayPlane=new THREE.Plane();
-  const housingFeather={value:0};
-  for(const mat of [shellMat]) {
-    mat.clippingPlanes=[cutawayPlane];
-    mat.clipShadows=true;
-    // Multisample coverage fades the cut edge while preserving depth ordering.
-    mat.alphaToCoverage=true;
-    mat.onBeforeCompile=shader=>{
-      shader.uniforms.housingFeather=housingFeather;
-      const clipping=THREE.ShaderChunk.clipping_planes_fragment.replaceAll(
-        'distanceGradient = fwidth( distanceToPlane ) / 2.0;',
-        'distanceGradient = max( fwidth( distanceToPlane ) / 2.0, housingFeather );',
-      );
-      shader.fragmentShader='uniform float housingFeather;\n'+shader.fragmentShader.replace('#include <clipping_planes_fragment>',clipping);
-    };
-    mat.customProgramCacheKey=()=> 'ctis-feathered-cutaway';
-  }
+  // Crossfade two complete renders rather than making individual faces
+  // transparent. This keeps the rectangular housing intact throughout its fade.
+  let fadeTargets: [THREE.WebGLRenderTarget, THREE.WebGLRenderTarget] | null = null;
+  const fadeScene = new THREE.Scene();
+  const fadeCamera = new THREE.OrthographicCamera(-1,1,1,-1,0,2);
+  const fadeMaterial = material(new THREE.ShaderMaterial({
+    uniforms: { closed: {value:null}, opened: {value:null}, amount: {value:0} },
+    vertexShader: 'varying vec2 vUv; void main(){vUv=uv;gl_Position=vec4(position.xy,0.0,1.0);}',
+    fragmentShader: `
+      uniform sampler2D closed;
+      uniform sampler2D opened;
+      uniform float amount;
+      varying vec2 vUv;
+      void main(){
+        vec4 color=mix(texture2D(closed,vUv),texture2D(opened,vUv),amount);
+        gl_FragColor=vec4(color.a>0.00001 ? color.rgb/color.a : vec3(0.0),color.a);
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+        #include <premultiplied_alpha_fragment>
+      }`,
+    transparent:true, premultipliedAlpha:true, depthTest:false, depthWrite:false,
+  }));
+  fadeScene.add(new THREE.Mesh(geometry(new THREE.PlaneGeometry(2,2)),fadeMaterial));
+  const renderSize = new THREE.Vector2();
 
   const parts = Array.from({ length: 6 }, () => new THREE.Group());
   parts.forEach(part => model.add(part));
@@ -437,9 +443,8 @@ export function createCameraScene(canvas: HTMLCanvasElement, diffractionImage: H
     if (renderPose === renderedPose) {onFrame(position,visibleBounds);return;}
     // Reveal the fitted arrangement before expanding it along the optical axis.
     const explode = smooth(cameraTimeline.separationStart, cameraTimeline.separationEnd, progress);
-    const cutaway = smooth(cameraTimeline.openingStart, cameraTimeline.openingEnd, progress);
-    housingFeather.value=mm(5)*smooth(0,.18,cutaway);
-    shell.visible = cutaway < 1;
+    const fade = smooth(cameraTimeline.openingStart, cameraTimeline.openingEnd, progress);
+    shell.visible = fade < 1;
     parts.forEach((part, index) => {
       part.position.x = THREE.MathUtils.lerp(assembledX[index], openX[index], explode);
       part.visible = index === 0 || progress > cameraTimeline.openingStart;
@@ -481,9 +486,32 @@ export function createCameraScene(canvas: HTMLCanvasElement, diffractionImage: H
     camera.left = -viewHeight * aspect / 2; camera.right = viewHeight * aspect / 2;
     camera.top = viewHeight / 2; camera.bottom = -viewHeight / 2; camera.updateProjectionMatrix();
     model.updateMatrixWorld(true);
-    cutawayPlane.set(new THREE.Vector3(0,0,-1),THREE.MathUtils.lerp(bodyDepth/2+mm(8),-bodyDepth/2-mm(8),cutaway)).applyMatrix4(model.matrixWorld);
-    renderer.render(scene, camera);
-    visibleBounds=measureVisibleBounds();
+    if(fade>0 && fade<1){
+      renderer.getDrawingBufferSize(renderSize);
+      // Limit temporary crossfade buffers; settled views retain full resolution.
+      const fadeScale=Math.min(1,1600/Math.max(renderSize.x,renderSize.y));
+      renderSize.set(Math.round(renderSize.x*fadeScale),Math.round(renderSize.y*fadeScale));
+      if(!fadeTargets){
+        fadeTargets=[new THREE.WebGLRenderTarget(renderSize.x,renderSize.y,{type:THREE.HalfFloatType,samples:2}),new THREE.WebGLRenderTarget(renderSize.x,renderSize.y,{type:THREE.HalfFloatType,samples:2})];
+        fadeMaterial.uniforms.closed.value=fadeTargets[0].texture;
+        fadeMaterial.uniforms.opened.value=fadeTargets[1].texture;
+      }
+      for(const target of fadeTargets) if(target.width!==renderSize.x || target.height!==renderSize.y) target.setSize(renderSize.x,renderSize.y);
+      renderer.setClearColor(0x000000,0);
+      shell.visible=true;
+      renderer.setRenderTarget(fadeTargets[0]);renderer.render(scene,camera);
+      const closedBounds=measureVisibleBounds();
+      shell.visible=false;
+      renderer.setRenderTarget(fadeTargets[1]);renderer.render(scene,camera);
+      const openBounds=measureVisibleBounds();
+      fadeMaterial.uniforms.amount.value=fade;
+      renderer.setRenderTarget(null);renderer.render(fadeScene,fadeCamera);
+      renderer.setClearColor(0xffffff,0);
+      visibleBounds={top:THREE.MathUtils.lerp(closedBounds.top,openBounds.top,fade),bottom:THREE.MathUtils.lerp(closedBounds.bottom,openBounds.bottom,fade)};
+    }else{
+      renderer.render(scene, camera);
+      visibleBounds=measureVisibleBounds();
+    }
     onFrame(position,visibleBounds);
     renderedPose = renderPose;
     if (!firstFrameRendered) {
@@ -536,6 +564,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, diffractionImage: H
       document.removeEventListener("visibilitychange", onVisibility); canvas.removeEventListener("webglcontextlost", onLost);
       model.traverse(object => { if (object instanceof THREE.InstancedMesh) object.dispose(); });
       geometries.forEach(item => item.dispose()); materials.forEach(item => item.dispose()); textures.forEach(item => item.dispose());
+      fadeTargets?.forEach(target=>target.dispose());fadeScene.clear();
       scene.clear(); key.shadow.dispose(); environment.dispose(); renderer.dispose(); renderer.forceContextLoss();
     },
   };
