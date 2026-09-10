@@ -16,9 +16,8 @@ export interface CameraScene {
 const smooth = (a: number, b: number, value: number) => THREE.MathUtils.smoothstep(value, a, b);
 
 /** An illustrative optical assembly based on Michael's CTIS hardware diagram. */
-export function createCameraScene(canvas: HTMLCanvasElement, diffractionImage: HTMLImageElement, reducedMotion: boolean, onFailure: () => void, onFrame: (progress: number, bounds: CameraSceneBounds) => void, onReady: () => void): CameraScene {
+export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGElement, diffractionImage: HTMLImageElement, reducedMotion: boolean, onFailure: () => void, onFrame: (progress: number, bounds: CameraSceneBounds) => void, onReady: () => void): CameraScene {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "low-power" });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, window.innerWidth < 700 ? 1.5 : 1.75));
   renderer.setClearColor(0xffffff, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -344,21 +343,31 @@ export function createCameraScene(canvas: HTMLCanvasElement, diffractionImage: H
   const capture = new THREE.Mesh(geometry(new THREE.PlaneGeometry(captureHeight * diffractionImage.naturalWidth / diffractionImage.naturalHeight, captureHeight)), captureMat);
   capture.rotation.y = -Math.PI / 2; capture.position.x = 0; capture.renderOrder = 3; parts[5].add(capture);
 
-  // Component labels stay in the scene, so they follow their respective parts.
-  const labels: THREE.Sprite[] = [];
+  // Vector text uses the original sprite dimensions, baselines, and anchors.
+  // Keeping it outside WebGL avoids raster-text blur at browser zoom levels.
+  const labels: { anchor: THREE.Object3D; element: SVGSVGElement }[] = [];
+  const svgNamespace = "http://www.w3.org/2000/svg";
   const names = ["Imaging Lens", "Square Aperture", "Collimating Lens", "Diffraction Grating", "Re-imaging Lens", "CMOS Sensor", "Raspberry Pi"];
   names.forEach((name, index) => {
-    const map = textureFrom(ctx => {
-      ctx.fillStyle = "#68756c"; ctx.font = "38px sans-serif"; ctx.textAlign = "center"; ctx.fillText(`${index + 1}`, 256, 39);
-      ctx.fillStyle = "#34443a"; ctx.font = "49px sans-serif"; ctx.fillText(name, 256, 86);
+    const anchor = new THREE.Object3D();
+    anchor.scale.set(1.55, 0.3875, 1);
+    anchor.position.set(0, index === 6 ? -2.35 : index >= 4 ? 0.9 : 1.18, 0);
+    model.add(anchor);
+    const element = document.createElementNS(svgNamespace, "svg");
+    element.setAttribute("viewBox", "0 0 512 128");
+    element.setAttribute("font-family", "sans-serif");
+    element.setAttribute("text-anchor", "middle");
+    element.style.opacity = "0";
+    [[String(index + 1), "38", "39", "#68756c"], [name, "49", "86", "#34443a"]].forEach(([text, size, y, color]) => {
+      const node = document.createElementNS(svgNamespace, "text");
+      node.textContent = text;
+      node.setAttribute("x", "256"); node.setAttribute("y", y);
+      node.setAttribute("font-size", size); node.setAttribute("fill", color);
+      element.append(node);
     });
-    const label = new THREE.Sprite(material(new THREE.SpriteMaterial({ map, transparent: true, opacity: 0, depthTest: false })));
-    label.scale.set(1.55, 0.3875, 1);
-    label.position.set(0, index === 6 ? -2.35 : index >= 4 ? 0.9 : 1.18, 0);
-    // Labels are diagram annotations, independent of the physical part scale.
-    model.add(label); labels.push(label);
+    labelLayer.append(element);
+    labels.push({ anchor, element });
   });
-
   const rayGroup = new THREE.Group();
   model.add(rayGroup);
   const wavelengthSamples = [440, 540, 650];
@@ -412,16 +421,29 @@ export function createCameraScene(canvas: HTMLCanvasElement, diffractionImage: H
   let firstFrameRendered = false;
   let revealFrame = 0;
   let visibleBounds: CameraSceneBounds = {top:0,bottom:1};
-  const objectBounds=new THREE.Box3(), corner=new THREE.Vector3(), spriteCenter=new THREE.Vector3(), spriteScale=new THREE.Vector3();
+  const objectBounds=new THREE.Box3(), corner=new THREE.Vector3(), labelCenter=new THREE.Vector3(), labelScale=new THREE.Vector3();
+  let labelOpacity = 0;
+  function projectLabel(anchor: THREE.Object3D) {
+    anchor.getWorldPosition(labelCenter).project(camera);
+    anchor.getWorldScale(labelScale);
+    return { x: (labelCenter.x + 1) / 2, y: (1 - labelCenter.y) / 2,
+      width: labelScale.x / (camera.right - camera.left), height: labelScale.y / (camera.top - camera.bottom) };
+  }
+  function positionLabels() {
+    labelLayer.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    labels.forEach(({ anchor, element }) => {
+      const projected = projectLabel(anchor);
+      element.setAttribute("x", String((projected.x - projected.width / 2) * width));
+      element.setAttribute("y", String((projected.y - projected.height / 2) * height));
+      element.setAttribute("width", String(projected.width * width));
+      element.setAttribute("height", String(projected.height * height));
+      element.style.opacity = String(anchor.visible ? labelOpacity : 0);
+    });
+  }
   function measureVisibleBounds(): CameraSceneBounds {
     let top=1,bottom=0;
     model.traverseVisible(object=>{
-      if(object instanceof THREE.Sprite){
-        if(object.material.opacity<.01)return;
-        object.getWorldPosition(spriteCenter).project(camera);object.getWorldScale(spriteScale);
-        const center=(1-spriteCenter.y)/2,half=spriteScale.y/(camera.top-camera.bottom)/2;
-        top=Math.min(top,center-half);bottom=Math.max(bottom,center+half);
-      } else if(object instanceof THREE.Mesh){
+      if(object instanceof THREE.Mesh){
         if(!Array.isArray(object.material)&&object.material.opacity<.01)return;
         objectBounds.setFromObject(object);
         for(let i=0;i<8;i++){
@@ -429,6 +451,12 @@ export function createCameraScene(canvas: HTMLCanvasElement, diffractionImage: H
           const y=(1-corner.y)/2;top=Math.min(top,y);bottom=Math.max(bottom,y);
         }
       }
+    });
+    if (labelOpacity >= .01) labels.forEach(({ anchor }) => {
+      if (!anchor.visible) return;
+      const projected = projectLabel(anchor);
+      top = Math.min(top, projected.y - projected.height / 2);
+      bottom = Math.max(bottom, projected.y + projected.height / 2);
     });
     return {top,bottom};
   }
@@ -455,7 +483,8 @@ export function createCameraScene(canvas: HTMLCanvasElement, diffractionImage: H
     const ribbonPath=cameraRibbonPath([parts[5].position.x*30+1.4,-10.5,0],[computer.position.x*30,computer.position.y*30,computer.position.z*30],ribbonSegments+1);
     ribbonPath.forEach(([x,y,z],i)=>ribbonPositions.set([mm(x),mm(y),mm(z-dimensions.computer.ribbonWidth/2),mm(x),mm(y),mm(z+dimensions.computer.ribbonWidth/2)],i*6));
     ribbonGeo.getAttribute('position').needsUpdate=true;ribbonGeo.computeVertexNormals();ribbonGeo.computeBoundingSphere();ribbonGeo.computeBoundingBox();
-    labels.forEach((label, index) => { label.position.x = index===6?computer.position.x+1.65:parts[index].position.x; label.visible = width > 520; (label.material as THREE.SpriteMaterial).opacity = smooth(0.5, cameraTimeline.separationEnd, progress); });
+    labelOpacity = smooth(0.5, cameraTimeline.separationEnd, progress);
+    labels.forEach(({ anchor }, index) => { anchor.position.x = index===6?computer.position.x+1.65:parts[index].position.x; anchor.visible = width > 520; });
     const rayOpacity = smooth(cameraTimeline.sensorStart, cameraTimeline.sensorEnd, progress);
     captureMat.opacity = rayOpacity;
     rays.forEach(({ line, orderY, orderZ, wavelength }) => {
@@ -512,6 +541,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, diffractionImage: H
       renderer.render(scene, camera);
       visibleBounds=measureVisibleBounds();
     }
+    positionLabels();
     onFrame(position,visibleBounds);
     renderedPose = renderPose;
     if (!firstFrameRendered) {
@@ -537,11 +567,31 @@ export function createCameraScene(canvas: HTMLCanvasElement, diffractionImage: H
     if (reducedMotion) { current = target; draw(current); return; }
     if (!running) { running = true; previousTime = 0; renderer.setAnimationLoop(animate); }
   }
+  // Match display/browser zoom, including the figure's existing CSS enlargement.
+  // Bound GPU memory by pixel area rather than a fixed DPR that blurs zoomed views.
+  function syncResolution() {
+    if (!width || !height || destroyed) return;
+    const desired = (window.devicePixelRatio || 1) * (window.visualViewport?.scale || 1) * 1.12;
+    const ratio = Math.min(desired, Math.sqrt(8_000_000 / (width * height)), renderer.capabilities.maxTextureSize / Math.max(width, height));
+    renderer.setPixelRatio(ratio);
+    renderer.setSize(width, height, false);
+    renderedPose = null;
+    requestDraw();
+  }
   const resize = new ResizeObserver(([entry]) => {
     width = Math.max(1, entry.contentRect.width); height = Math.max(1, entry.contentRect.height);
-    renderedPose = null;
-    renderer.setSize(width, height, false); requestDraw();
+    syncResolution();
   });
+  let resolutionQuery: MediaQueryList;
+  const onResolutionChange = () => {
+    resolutionQuery?.removeEventListener("change", onResolutionChange);
+    resolutionQuery = window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`);
+    resolutionQuery.addEventListener("change", onResolutionChange);
+    syncResolution();
+  };
+  onResolutionChange();
+  window.addEventListener("resize", syncResolution);
+  window.visualViewport?.addEventListener("resize", syncResolution);
   resize.observe(canvas);
   // Complete each short transition even if scrolling briefly moves the canvas
   // outside the viewport. Intersection-based pausing can strand it halfway
@@ -560,6 +610,10 @@ export function createCameraScene(canvas: HTMLCanvasElement, diffractionImage: H
     },
     dispose() {
       destroyed = true; stop(); resize.disconnect();
+      resolutionQuery.removeEventListener("change", onResolutionChange);
+      window.removeEventListener("resize", syncResolution);
+      window.visualViewport?.removeEventListener("resize", syncResolution);
+      labels.forEach(({ element }) => element.remove());
       cancelAnimationFrame(revealFrame);
       document.removeEventListener("visibilitychange", onVisibility); canvas.removeEventListener("webglcontextlost", onLost);
       model.traverse(object => { if (object instanceof THREE.InstancedMesh) object.dispose(); });

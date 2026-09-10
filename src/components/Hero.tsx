@@ -14,6 +14,7 @@ const animationDistance = () => window.innerHeight * (window.innerWidth <= 700 &
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const labelsRef = useRef<SVGSVGElement>(null);
   const figureRef = useRef<HTMLElement>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
   const controlsRef = useRef<HTMLDivElement>(null);
@@ -95,8 +96,8 @@ export default function Hero() {
     const diffractionImage = new Image();
     diffractionImage.src = diffractionImageUrl;
     Promise.all([import("./cameraScene"), diffractionImage.decode()]).then(([{ createCameraScene }]) => {
-      if (cancelled || !canvasRef.current) return;
-      const scene = createCameraScene(canvasRef.current, diffractionImage, reducedMotion, () => {
+      if (cancelled || !canvasRef.current || !labelsRef.current) return;
+      const scene = createCameraScene(canvasRef.current, labelsRef.current, diffractionImage, reducedMotion, () => {
         setFailed(true);
         setReady(false);
       }, setVisualProgress, () => { if (!cancelled) setReady(true); });
@@ -200,39 +201,6 @@ export default function Hero() {
     scrollToChapter(Math.ceil(window.scrollY + section.getBoundingClientRect().top - navHeight + progress * animationDistance()));
   }, [reducedMotion, scrollToChapter, setVisualProgress]);
 
-  // Let the visitor read Optics before advancing. Every gesture restarts the
-  // delay, and background tabs never advance the page.
-  useEffect(() => {
-    if (!ready || failed || reducedMotion || chapter !== 1 || !detailsVisible) return;
-    let timer = 0;
-    let cancelled = false;
-    const reset = () => {
-      window.clearTimeout(timer);
-      if (cancelled || document.hidden) return;
-      timer = window.setTimeout(() => {
-        const details = detailsRef.current?.getBoundingClientRect();
-        const pose = cameraPoseAt(visualRef.current.progress);
-        if (!details || details.bottom < 72 || details.top > window.innerHeight || dialogRef.current?.open) return;
-        if (pose >= cameraTimeline.separationEnd && pose < cameraTimeline.sensorStart) goToChapter(2);
-      }, 3000);
-    };
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") cancelled = true;
-      reset();
-    };
-    const events = ["scroll", "wheel", "touchstart", "pointerdown"] as const;
-    events.forEach(name => window.addEventListener(name, reset, { passive: true }));
-    window.addEventListener("keydown", onKey);
-    document.addEventListener("visibilitychange", reset);
-    reset();
-    return () => {
-      window.clearTimeout(timer);
-      events.forEach(name => window.removeEventListener(name, reset));
-      window.removeEventListener("keydown", onKey);
-      document.removeEventListener("visibilitychange", reset);
-    };
-  }, [ready, failed, reducedMotion, chapter, detailsVisible, goToChapter]);
-
   return (
     <section ref={sectionRef} className={`camera-story ${reducedMotion ? "camera-story--still" : ""}`} data-chapter={chapter} aria-label="Michael Hua and his homemade hyperspectral camera">
       <div ref={controlsRef} className="camera-story__controls">
@@ -251,6 +219,7 @@ export default function Hero() {
         <figure ref={figureRef} id="camera-view" className={`camera-story__figure ${ready ? "is-ready" : ""}`} aria-busy={!ready && !failed}>
           {failed && <div className="camera-story__unavailable"><p>The camera view couldn’t load.</p><Link to="/portfolio/decoding-light">Read About the Camera ↗</Link></div>}
           <canvas ref={canvasRef} className="camera-story__canvas" role="img" aria-hidden={!ready} aria-label="3D illustration of my homemade hyperspectral camera. Scrolling fades the whole rectangular housing to reveal the fitted optics, then separates them along their axis to show the lenses, diffraction grating, sensor, and Raspberry Pi connected by a ribbon cable." />
+          <svg ref={labelsRef} className="camera-story__labels" aria-hidden="true" />
           <figcaption className="sr-only">My homemade hyperspectral camera</figcaption>
         </figure>
 
