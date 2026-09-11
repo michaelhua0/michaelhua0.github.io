@@ -220,7 +220,7 @@ export const projects: Project[] = [
     ...projectMetadata.nationalHistoryDay,
     category: "history",
     domain: "history",
-    tag: "National History Day",
+    tag: "National History Day 2025",
     image: "nhd.jpg",
     imageAlt:
       "Two archival photographs of a man, including one beside laboratory equipment",
@@ -241,6 +241,36 @@ export const projects: Project[] = [
         kind: "links",
         items: [
           { label: "NHD paper", href: "/publications#nhd-paper", internal: true, primary: true },
+        ],
+      },
+    ],
+  },
+  {
+    ...projectMetadata.cryptoWars,
+    category: "history",
+    domain: "history",
+    tag: "National History Day 2026",
+    image: "nhd-2026.webp",
+    imageBackground: "#000000",
+    imageAlt: "Documentary collage with archival images, the Electronic Frontier Foundation logo, and a portrait and audio waveform labeled Philip Zimmermann",
+    imageFit: "contain",
+    imageRatio: "16 / 9",
+    body: [
+      {
+        kind: "video",
+        id: "3_4yd6FuGZM",
+        title: "From Munitions to Speech: The Crypto Wars and the Fight for Digital Freedom",
+      },
+      p(
+        "I examined how civilian access to strong encryption challenged U.S. government control over digital communication. In the documentary, I trace public-key cryptography, the release of PGP, the Clipper Chip controversy, and court challenges over whether computer code qualifies as protected speech.",
+      ),
+      p(
+        "I created this individual documentary for National History Day 2026. I compared government records, technical publications, and civil liberties arguments, and interviewed PGP creator Phil Zimmermann about his decision to release the software. Through these sources, I explored the conflict between national security and digital privacy.",
+      ),
+      {
+        kind: "links",
+        items: [
+          { label: "NHD paper", href: "/publications#nhd-2026-paper", internal: true, primary: true },
         ],
       },
     ],

@@ -31,5 +31,6 @@ export const projectMetadata: {
   msstTransformer: ProjectMetadata;
   aigro: ProjectMetadata;
   nationalHistoryDay: ProjectMetadata;
+  cryptoWars: ProjectMetadata;
   historysTrigger: ProjectMetadata;
 };

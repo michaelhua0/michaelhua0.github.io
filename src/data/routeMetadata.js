@@ -71,6 +71,13 @@ export const projectMetadata = {
     teaser:
       "A documentary and historical study of the reform movement that produced the 1906 Food and Drug Act.",
   },
+  cryptoWars: {
+    slug: "crypto-wars",
+    cardTitle: "From Munitions to Speech: The Crypto Wars",
+    detailTitle: "From Munitions to Speech: The Crypto Wars and the Fight for Digital Freedom",
+    teaser:
+      "My 2026 NHD documentary on civilian encryption, government control, and the fight to recognize code as speech.",
+  },
   historysTrigger: {
     slug: "historys-trigger",
     cardTitle: "History's Trigger",

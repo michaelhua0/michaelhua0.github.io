@@ -80,4 +80,26 @@ export const publications: Publication[] = [
       "Michigan History Day judges recognized the documentary and supporting research with the Best Use of Economic History award and the Top Two Documentary grand award. The project then advanced to the 2025 National History Day competition.",
     ],
   },
+  {
+    id: "nhd-2026-paper",
+    index: 4,
+    category: "history",
+    title: "From Munitions to Speech: The Crypto Wars and the Fight for Digital Freedom",
+    image: "nhd-2026-paper-928.webp",
+    imageSources: [
+      { src: "nhd-2026-paper-464.webp", width: 464 },
+      { src: "nhd-2026-paper-928.webp", width: 928 },
+    ],
+    imageAlt: "Title page of my 2026 National History Day process paper on the Crypto Wars",
+    links: [
+      {
+        label: "Process paper and bibliography",
+        href: `${import.meta.env.BASE_URL}documents/nhd-2026-crypto-wars.pdf`,
+      },
+    ],
+    copy: [
+      "I wrote this process paper and annotated bibliography for my 2026 National History Day documentary on the Crypto Wars. I explain how I researched the dispute over civilian encryption, from public-key cryptography and PGP to the Clipper Chip and court challenges over code as speech.",
+      "I drew on technical publications, government records, and competing arguments about privacy and national security. The bibliography also documents my interview with PGP creator Phil Zimmermann, who discussed his reasons for releasing the software.",
+    ],
+  },
 ];

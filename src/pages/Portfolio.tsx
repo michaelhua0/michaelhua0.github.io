@@ -28,7 +28,7 @@ export default function Portfolio() {
           {projects.length > 0 ? (
             <div className="portfolio__grid">
               {projects.map((p, i) => (
-                <Reveal key={p.slug} delay={(i % 2) * 80}>
+                <Reveal key={p.slug} className={`portfolio__item--${p.category}`} delay={(i % 2) * 80}>
                   <ProjectCard project={p} priority={i === 0} titleAs="h2" />
                 </Reveal>
               ))}
