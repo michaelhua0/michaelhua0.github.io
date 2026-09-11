@@ -1,18 +1,19 @@
 .camera-story {
+  --snapshot-w: clamp(150px, min(24vw, 21svh), 320px);
   position: relative;
   height: calc(199svh - var(--nav-h) + 32px - var(--camera-tighten, 0px));
   background: var(--white);
   overflow: clip;
   overflow-anchor: none;
 }
-.camera-story__inner { position: absolute; inset: 0; width: 100%; max-width: 1520px; height: 100%; margin-inline: auto; padding-inline: var(--gutter); }
-.camera-story__intro { opacity: var(--intro-opacity, 1); position: absolute; z-index: 2; top: 10svh; left: var(--gutter); width: 33%; max-width: 420px; }
-.camera-story__eyebrow { margin: 0 0 18px; color: var(--text-soft); font-size: 1rem; }
-.camera-story__intro h1 { max-width: 6ch; margin: 0 0 28px -3px; font-size: clamp(4.4rem, 7.6vw, 7.3rem); font-weight: 550; letter-spacing: -0.055em; line-height: 0.94; text-wrap: initial; }
-.camera-story__description { max-width: 34ch; font-size: clamp(1rem, 1.3vw, 1.16rem); line-height: 1.55; color: var(--text-soft); }
-.camera-story__link { display: inline-flex; align-items: center; gap: 22px; min-height: 44px; color: var(--text); font-size: 0.95rem; font-weight: 550; text-decoration: none; }
+.camera-story__inner { position: absolute; inset: 0; width: 100%; max-width: 1760px; height: 100%; margin-inline: auto; padding-inline: var(--gutter); }
+.camera-story__intro { opacity: var(--intro-opacity, 1); position: absolute; z-index: 2; top: 10svh; left: var(--gutter); width: min(42%, 580px); }
+.camera-story__eyebrow { margin: 0 0 20px; color: var(--text-soft); font-size: clamp(1rem, 0.42vw + 0.82rem, 1.3rem); }
+.camera-story__intro h1 { max-width: 7ch; margin: 0 0 30px -3px; font-size: clamp(4.4rem, 8vw, 8.2rem); font-weight: 550; letter-spacing: -0.055em; line-height: 0.94; text-wrap: initial; }
+.camera-story__description { max-width: 32ch; font-size: clamp(1.06rem, 0.62vw + 0.78rem, 1.5rem); line-height: 1.5; color: var(--text-soft); }
+.camera-story__link { display: inline-flex; align-items: center; gap: 22px; min-height: 44px; color: var(--text); font-size: clamp(0.95rem, 0.22vw + 0.86rem, 1.18rem); font-weight: 550; text-decoration: none; }
 .camera-story__link:hover { color: var(--accent); text-decoration: underline; }
-.camera-story__next { display: block; width: 44px; margin-top: 26px; min-height: 44px; color: var(--text-soft); font-size: 1.5rem; }
+.camera-story__next { display: block; width: 44px; margin-top: 26px; min-height: 44px; color: var(--text-soft); font-size: clamp(1.5rem, 0.35vw + 1.35rem, 1.9rem); }
 .camera-story__next:hover { color: var(--accent); text-decoration: none; }
 .camera-story__figure {
   position: absolute;
@@ -32,19 +33,19 @@
 .camera-story__unavailable p { margin: 0; }
 .camera-story__canvas, .camera-story__labels { opacity: 0; transition: opacity 220ms ease; }
 .is-ready .camera-story__canvas, .is-ready .camera-story__labels { opacity: 1; }
-.camera-story__details { position: absolute; z-index: 2; top: 73svh; left: var(--gutter); right: var(--gutter); display: flex; justify-content: space-between; align-items: flex-start; gap: 48px; scroll-margin-top: calc(var(--nav-h) + 30px); transition: opacity 180ms ease, visibility 180ms; will-change: transform; }
+.camera-story__details { position: absolute; z-index: 2; top: 73svh; left: var(--gutter); right: var(--gutter); display: flex; justify-content: space-between; align-items: flex-start; gap: clamp(32px, 4vw, 72px); scroll-margin-top: calc(var(--nav-h) + 30px); transition: opacity 180ms ease, visibility 180ms; will-change: transform; }
 .camera-story__details:not(.is-visible) { opacity: 0; visibility: hidden; pointer-events: none; }
-.camera-story__explanation { flex: 0 1 580px; max-width: 580px; }
-.camera-story__explanation h2 { font-size: clamp(1.9rem, 3.2vw, 2.85rem); line-height: 1.12; font-weight: 550; letter-spacing: -0.025em; margin-bottom: 16px; }
-.camera-story__explanation p { font-size: 1rem; max-width: none; color: var(--text-soft); line-height: 1.55; margin-bottom: 6px; }
-.camera-story__explanation .camera-story__scale-note { font-size: 0.75rem; margin: -7px 0 12px; }
+.camera-story__explanation { flex: 0 1 auto; max-width: clamp(420px, 42vw, 700px); }
+.camera-story__explanation h2 { font-size: clamp(2.2rem, 3.9vw, 3.8rem); line-height: 1.08; font-weight: 550; letter-spacing: -0.03em; margin-bottom: 18px; }
+.camera-story__explanation p { font-size: clamp(1.04rem, 0.58vw + 0.8rem, 1.42rem); max-width: none; color: var(--text-soft); line-height: 1.5; margin-bottom: 8px; }
+.camera-story__explanation .camera-story__scale-note { font-size: clamp(0.78rem, 0.18vw + 0.7rem, 0.95rem); margin: -4px 0 16px; }
 .camera-story__chapter-title, .camera-story__explanation-copy { display: grid; }
 .camera-story__chapter-title > span, .camera-story__explanation-copy > span { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity 180ms ease; }
 .camera-story__chapter-title > .is-active, .camera-story__explanation-copy > .is-active { opacity: 1; visibility: visible; }
-.camera-snapshot { flex: 0 0 clamp(130px, 12vw, 170px); margin-top: 0; padding: 0; border: 0; background: none; color: var(--text-soft); cursor: zoom-in; opacity: 0; visibility: hidden; transition: opacity 220ms ease, visibility 220ms; }
+.camera-snapshot { flex: 0 0 var(--snapshot-w); margin-top: 0; padding: 0; border: 0; background: none; color: var(--text-soft); cursor: zoom-in; opacity: 0; visibility: hidden; transition: opacity 220ms ease, visibility 220ms; }
 .camera-snapshot.is-visible { opacity: 1; visibility: visible; }
-.camera-snapshot img { width: 100%; border-radius: 3px; }
-.camera-snapshot > span { display: flex; justify-content: space-between; padding-top: 8px; font-family: var(--font-body); font-size: 0.8rem; }
+.camera-snapshot img { display: block; width: 100%; border: 1px solid var(--border); border-radius: 3px; }
+.camera-snapshot > span { display: flex; justify-content: space-between; gap: 16px; padding-top: 8px; font-family: var(--font-body); font-size: clamp(0.8rem, 0.2vw + 0.72rem, 1rem); }
 /* The bar stays within this section, including after a chapter button scrolls.
    Its build-cost label belongs to the same camera viewer as the controls. */
 .camera-story__controls { position: absolute; top: calc(100svh - var(--nav-h) - 80px); left: 0; right: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 24px; width: min(560px, calc(100% - var(--gutter) * 2)); height: 64px; margin-inline: auto; padding: 8px 16px; border: 1px solid var(--border); border-radius: 4px; background: var(--white); box-shadow: 0 4px 18px rgb(26 42 31 / 5%); }
@@ -67,7 +68,7 @@
   .camera-story__intro h1 { font-size: 5rem; }
   .camera-story__figure { width: calc(100% - 20px); left: 10px; }
   .camera-story__details { gap: 30px; }
-  .camera-story__explanation { max-width: calc(100% - 170px); flex-basis: 580px; }
+  .camera-story__explanation { max-width: calc(100% - var(--snapshot-w) - 30px); flex-basis: 580px; }
   .camera-story__explanation p { max-width: none; }
   .camera-story__explanation h2 { margin-bottom: 12px; }
   .camera-story__explanation .camera-story__scale-note { margin-bottom: 8px; }
@@ -119,8 +120,8 @@
   .camera-story__explanation h2 { font-size: 1.5rem; margin-bottom: 10px; }
   .camera-story__explanation p { font-size: .8rem; line-height: 1.4; }
   .camera-story__explanation .camera-story__scale-note { font-size: .65rem; margin-bottom: 8px; }
-  .camera-snapshot { flex: none; width: 76px; margin: 0; }
-  .camera-snapshot > span { font-size: .6rem; white-space: nowrap; }
+  .camera-snapshot { flex: none; width: min(100%, 150px); margin: 0; }
+  .camera-snapshot > span { font-size: .68rem; white-space: nowrap; }
 }
 .camera-story--still { height: auto; min-height: 0; }
 .camera-story--still .camera-story__controls { position: sticky; top: calc(100svh - 80px); }

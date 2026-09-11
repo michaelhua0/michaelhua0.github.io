@@ -64,7 +64,8 @@ export default function Hero() {
         section.style.setProperty('--camera-tighten',`${compactBy}px`);
         const modelTop=figureTop+y+figureHeight/2+(bounds.top-.5)*figureHeight*scale;
         figure.dataset.contentTop=modelTop.toFixed(2);
-        const notesTop=landscape ? copyTravel+16 : Math.min(copyTravel+24,modelTop-details.offsetHeight-20);
+        // Never let the copy ride up under the nav, even when the band is tall.
+        const notesTop=landscape ? copyTravel+16 : Math.max(copyTravel+16,Math.min(copyTravel+24,modelTop-details.offsetHeight-20));
         notesY+=(notesTop-details.offsetTop-notesY)*reading;
         section.style.setProperty('--intro-opacity',String(1-reading));
       }
