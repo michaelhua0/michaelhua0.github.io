@@ -34,7 +34,7 @@ export const publications: Publication[] = [
       },
       {
         label: "Manuscript",
-        href: "https://drive.google.com/drive/u/0/folders/1qHb3ACtxRcbW1AObT_0jHse8wstzY_bM",
+        href: `${import.meta.env.BASE_URL}documents/vessel-transformer-2024.pdf`,
       },
     ],
     copy: [
@@ -53,7 +53,7 @@ export const publications: Publication[] = [
     links: [
       {
         label: "Manuscript",
-        href: "https://drive.google.com/drive/u/0/folders/1qHb3ACtxRcbW1AObT_0jHse8wstzY_bM",
+        href: `${import.meta.env.BASE_URL}documents/msst-transformer-2025.pdf`,
       },
     ],
     copy: [
@@ -72,7 +72,7 @@ export const publications: Publication[] = [
     links: [
       {
         label: "Research paper",
-        href: "https://drive.google.com/drive/u/0/folders/1qHb3ACtxRcbW1AObT_0jHse8wstzY_bM",
+        href: `${import.meta.env.BASE_URL}documents/nhd-2025-food-and-drug-act.pdf`,
       },
     ],
     copy: [
@@ -93,7 +93,7 @@ export const publications: Publication[] = [
     imageAlt: "Title page of my 2026 National History Day process paper on the Crypto Wars",
     links: [
       {
-        label: "Process paper and bibliography",
+        label: "Research paper",
         href: `${import.meta.env.BASE_URL}documents/nhd-2026-crypto-wars.pdf`,
       },
     ],

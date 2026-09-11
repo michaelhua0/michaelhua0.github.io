@@ -267,6 +267,9 @@ export const projects: Project[] = [
       p(
         "I created this individual documentary for National History Day 2026. I compared government records, technical publications, and civil liberties arguments, and interviewed PGP creator Phil Zimmermann about his decision to release the software. Through these sources, I explored the conflict between national security and digital privacy.",
       ),
+      p(
+        "At the 2026 Michigan History Day competition, the documentary received the Top Two Documentary grand award and advanced to the National History Day competition.",
+      ),
       {
         kind: "links",
         items: [
