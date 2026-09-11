@@ -30,5 +30,6 @@ export const projectMetadata: {
   brainVesselSegmentation: ProjectMetadata;
   msstTransformer: ProjectMetadata;
   nationalHistoryDay: ProjectMetadata;
+  cryptoWars: ProjectMetadata;
   historysTrigger: ProjectMetadata;
 };

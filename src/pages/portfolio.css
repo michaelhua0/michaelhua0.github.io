@@ -25,3 +25,10 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 26px;
 }
+
+/* Keep the research pairs, with all three documentaries together below. */
+@media (min-width: 901px) {
+  .portfolio__grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .portfolio__item--research { grid-column: span 3; }
+  .portfolio__item--history { grid-column: span 2; }
+}
