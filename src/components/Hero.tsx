@@ -6,10 +6,17 @@ import type { CameraScene, CameraSceneBounds } from "./cameraScene";
 import { cameraChapters, cameraChapterAt, cameraFlowOffset, cameraPoseAt, cameraTimeline } from "../lib/cameraTimeline";
 import { cameraMotionAt } from "../lib/cameraMotion";
 import { imageUrl } from "../lib/images";
+import { invalidateViewportHeight, viewportHeight } from "../lib/viewport";
+import ArrowUpRight from "./ArrowUpRight";
 import "./hero.css";
 
 const diffractionImageUrl = imageUrl("ctis-diffraction.jpg");
-const animationDistance = () => window.innerHeight * (window.innerWidth <= 700 && window.innerHeight <= 700 ? 1 : 0.6);
+// Measured in svh, the unit the section is sized in, so a collapsing mobile
+// toolbar cannot stretch the scroll budget out from under the layout.
+const animationDistance = () => {
+  const height = viewportHeight();
+  return height * (window.innerWidth <= 700 && height <= 700 ? 1 : 0.6);
+};
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -34,16 +41,19 @@ export default function Hero() {
     const pose = cameraPoseAt(progress);
     const section=sectionRef.current, figure=figureRef.current, details=detailsRef.current, controls=controlsRef.current;
     if (section && figure && details && controls) {
-      const motion = cameraMotionAt(pose, window.innerWidth, window.innerHeight);
-      const landscape = (window.innerWidth > 520 && window.innerHeight <= 600)
-        || (window.innerWidth > 1000 && window.innerHeight <= 800);
+      const height = viewportHeight();
+      const motion = cameraMotionAt(pose, window.innerWidth, height);
+      // Matches the short-window rules in hero.css. A 1440x900 laptop leaves a
+      // ~790px viewport, which must stay on the full-width layout.
+      const landscape = (window.innerWidth > 520 && height <= 600)
+        || (window.innerWidth > 1000 && height <= 620);
       const flow = cameraFlowOffset(progress) * animationDistance();
       const navHeight=Number.parseFloat(getComputedStyle(section).getPropertyValue('--nav-h'));
       const scrolled=navHeight-section.getBoundingClientRect().top;
       let controlsTravel=Math.min(Math.max(0,scrolled),cameraTimeline.length*animationDistance());
-      let controlsTop=window.innerHeight-navHeight-80+controlsTravel;
+      let controlsTop=height-navHeight-80+controlsTravel;
       const figureHeight=figure.offsetHeight, figureTop=figure.offsetTop;
-      let y=motion.y*(motion.unit==='svh'?window.innerHeight/100:1)+flow;
+      let y=motion.y*(motion.unit==='svh'?height/100:1)+flow;
       const scale=motion.scale;
       let notesY=flow+motion.notes;
       // Give the opened camera its full width. Move the copy into the space
@@ -61,7 +71,11 @@ export default function Hero() {
         y-=compactBy;
         controlsTravel-=compactBy;
         controlsTop-=compactBy;
-        section.style.setProperty('--camera-tighten',`${compactBy}px`);
+        // Shortens the section by however much the model was pulled up, so the
+        // story ends where the hardware does. Quantised because it feeds the
+        // document's scroll extent, which moves ~266px on a phone, and a value
+        // that changed every frame churned that extent through every gesture.
+        section.style.setProperty('--camera-tighten',`${Math.round(compactBy/4)*4}px`);
         const modelTop=figureTop+y+figureHeight/2+(bounds.top-.5)*figureHeight*scale;
         figure.dataset.contentTop=modelTop.toFixed(2);
         // Never let the copy ride up under the nav, even when the band is tall.
@@ -134,13 +148,14 @@ export default function Hero() {
       else setVisualProgress(progress);
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(measure); };
+    const onResize = () => { invalidateViewportHeight(); onScroll(); };
     measure();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    window.addEventListener("resize", onResize);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("resize", onResize);
     };
   }, [reducedMotion, failed, setVisualProgress, layoutViewer]);
 
@@ -171,7 +186,7 @@ export default function Hero() {
       if (cancelled || window.scrollY > 2 || document.hidden) return;
       try { sessionStorage.setItem("mh:camera-preview", "1"); } catch { return; }
       const start = performance.now();
-      const distance = Math.min(48, window.innerHeight * 0.05);
+      const distance = Math.min(48, viewportHeight() * 0.05);
       const tick = (now: number) => {
         if (cancelled) return;
         const t = Math.min(1, (now - start) / 1450);
@@ -213,12 +228,12 @@ export default function Hero() {
           <p className="camera-story__eyebrow">Hi, I’m</p>
           <h1>Michael Hua</h1>
           <p className="camera-story__description">I’m a student at Cranbrook. I built this hyperspectral camera for under $300. With my reconstruction model, it reaches about 95% of the accuracy of scanning hyperspectral cameras.</p>
-          <Link to="/portfolio" className="camera-story__link">My Work <span aria-hidden="true">↗</span></Link>
+          <Link to="/portfolio" className="camera-story__link">My Work <ArrowUpRight /></Link>
           <a href="#camera-build" className="camera-story__next" aria-label="See inside the camera" onClick={event => { event.preventDefault(); goToChapter(1); }}><span aria-hidden="true">↓</span></a>
         </header>
 
         <figure ref={figureRef} id="camera-view" className={`camera-story__figure ${ready ? "is-ready" : ""}`} aria-busy={!ready && !failed}>
-          {failed && <div className="camera-story__unavailable"><p>The camera view couldn’t load.</p><Link to="/portfolio/decoding-light">Read About the Camera ↗</Link></div>}
+          {failed && <div className="camera-story__unavailable"><p>The camera view couldn’t load.</p><Link to="/portfolio/decoding-light">Read About the Camera <ArrowUpRight /></Link></div>}
           <canvas ref={canvasRef} className="camera-story__canvas" role="img" aria-hidden={!ready} aria-label="3D illustration of my homemade hyperspectral camera. Scrolling fades the whole rectangular housing to reveal the fitted optics, then separates them along their axis to show the lenses, diffraction grating, sensor, and Raspberry Pi connected by a ribbon cable." />
           <svg ref={labelsRef} className="camera-story__labels" aria-hidden="true" />
           <figcaption className="sr-only">My homemade hyperspectral camera</figcaption>
@@ -235,11 +250,11 @@ export default function Hero() {
               <span className={chapter !== 2 ? "is-active" : ""} aria-hidden={chapter === 2}>The lenses focus light through a square aperture. A dual-axis grating separates the light by wavelength before it reaches the camera sensor.</span>
               <span className={chapter === 2 ? "is-active" : ""} aria-hidden={chapter !== 2}>The sensor captures the 0th, ±1st, and diagonal orders in one exposure. My PASS-Transformer reconstructs the hyperspectral image from this measurement.</span>
             </p>
-            <Link to="/portfolio/decoding-light" className="camera-story__link">About This Project <span aria-hidden="true">↗</span></Link>
+            <Link to="/portfolio/decoding-light" className="camera-story__link">About This Project <ArrowUpRight /></Link>
           </div>
           <button type="button" className={`camera-snapshot ${snapshotVisible ? "is-visible" : ""}`} aria-label="Enlarge the captured diffraction pattern" onClick={() => dialogRef.current?.showModal()} inert={!snapshotVisible}>
             <img src={diffractionImageUrl} width="1184" height="1139" alt="Captured diffraction pattern showing the 0th, ±1st, and diagonal orders" />
-            <span>Sensor Image <span aria-hidden="true">↗</span></span>
+            <span>Sensor Image <ArrowUpRight /></span>
           </button>
         </div>
 

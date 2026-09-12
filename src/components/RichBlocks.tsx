@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import type { Block, Segment, LinkItem } from "../data/projects";
 import YouTubeEmbed from "./YouTubeEmbed";
+import ArrowUpRight from "./ArrowUpRight";
 import "./richblocks.css";
 
 function InlineSegment({ seg }: { seg: Segment }) {
@@ -35,7 +36,7 @@ function LinkButton({ item }: { item: LinkItem }) {
     <a href={item.href} target="_blank" rel="noopener noreferrer" className={cls}>
       <span className="btn__label">
         {item.label}
-        <span className="arrow" aria-hidden="true">↗</span>
+        <ArrowUpRight className="arrow" />
       </span>
     </a>
   );

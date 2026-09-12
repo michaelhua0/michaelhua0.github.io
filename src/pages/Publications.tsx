@@ -2,6 +2,7 @@ import { useState } from "react";
 import SEO from "../components/SEO";
 import PageHeader from "../components/PageHeader";
 import Reveal from "../components/Reveal";
+import ArrowUpRight from "../components/ArrowUpRight";
 import { publications } from "../data/publications";
 import { pageMetadata } from "../data/routeMetadata.js";
 import { imageSrcSet, imageUrl } from "../lib/images";
@@ -88,7 +89,7 @@ export default function Publications() {
                       >
                         <span className="btn__label">
                           {l.label}
-                          <span className="arrow" aria-hidden="true">↗</span>
+                          <ArrowUpRight className="arrow" />
                         </span>
                       </a>
                     ))}
