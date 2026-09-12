@@ -13,7 +13,7 @@
 .camera-story__intro { opacity: var(--intro-opacity, 1); position: absolute; z-index: 2; top: 10svh; left: var(--gutter); width: min(42%, 580px); }
 .camera-story__eyebrow { margin: 0 0 20px; color: var(--text-soft); font-size: clamp(0.94rem, min(0.42vw + 0.82rem, 1.9svh), 1.3rem); }
 .camera-story__intro h1 { max-width: 7ch; margin: 0 0 30px -3px; font-size: clamp(3.4rem, min(8vw, 13svh), 8.2rem); font-weight: 550; letter-spacing: -0.055em; line-height: 0.94; text-wrap: initial; }
-.camera-story__description { max-width: 32ch; font-size: clamp(1rem, min(0.62vw + 0.78rem, 2.6svh), 1.5rem); line-height: 1.5; color: var(--text-soft); }
+.camera-story__description { max-width: 32ch; font-size: clamp(1rem, min(0.62vw + 0.78rem, 2.6svh), 1.5rem); line-height: 1.5; color: var(--text-soft); text-wrap: pretty; }
 .camera-story__link { display: inline-flex; align-items: center; gap: 22px; min-height: 44px; color: var(--text); font-size: clamp(0.95rem, 0.22vw + 0.86rem, 1.18rem); font-weight: 550; text-decoration: none; }
 .camera-story__link:hover { color: var(--accent); text-decoration: underline; }
 .camera-story__next { display: block; width: 44px; margin-top: 26px; min-height: 44px; color: var(--text-soft); font-size: clamp(1.5rem, 0.35vw + 1.35rem, 1.9rem); }
@@ -38,9 +38,9 @@
 .is-ready .camera-story__canvas, .is-ready .camera-story__labels { opacity: 1; }
 .camera-story__details { position: absolute; z-index: 2; top: 73svh; left: var(--gutter); right: var(--gutter); display: flex; justify-content: space-between; align-items: flex-start; gap: clamp(32px, 4vw, 72px); scroll-margin-top: calc(var(--nav-h) + 30px); transition: opacity 180ms ease, visibility 180ms; will-change: transform; }
 .camera-story__details:not(.is-visible) { opacity: 0; visibility: hidden; pointer-events: none; }
-.camera-story__explanation { flex: 0 1 auto; max-width: clamp(420px, 42vw, 700px); }
+.camera-story__explanation { flex: 0 1 auto; max-width: clamp(420px, 44vw, 740px); }
 .camera-story__explanation h2 { font-size: clamp(1.9rem, min(3.9vw, 7svh), 3.8rem); line-height: 1.08; font-weight: 550; letter-spacing: -0.03em; margin-bottom: 18px; }
-.camera-story__explanation p { font-size: clamp(0.95rem, min(0.58vw + 0.8rem, 2.5svh), 1.42rem); max-width: none; color: var(--text-soft); line-height: 1.5; margin-bottom: 8px; }
+.camera-story__explanation p { font-size: clamp(0.95rem, min(0.58vw + 0.8rem, 2.5svh), 1.42rem); max-width: none; color: var(--text-soft); line-height: 1.5; margin-bottom: 8px; text-wrap: pretty; }
 .camera-story__explanation .camera-story__scale-note { font-size: clamp(0.78rem, 0.18vw + 0.7rem, 0.95rem); margin: -4px 0 16px; }
 .camera-story__chapter-title, .camera-story__explanation-copy { display: grid; }
 .camera-story__chapter-title > span, .camera-story__explanation-copy > span { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity 180ms ease; }

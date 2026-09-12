@@ -229,7 +229,7 @@ export default function Hero() {
         <header className="camera-story__intro" inert={!reducedMotion && detailsVisible} aria-hidden={!reducedMotion && detailsVisible}>
           <p className="camera-story__eyebrow">Hi, I’m</p>
           <h1>Michael Hua</h1>
-          <p className="camera-story__description">I’m a student at Cranbrook. I built this hyperspectral camera for under $300. With my reconstruction model, it reaches about 95% of the accuracy of scanning hyperspectral cameras.</p>
+          <p className="camera-story__description">I’m a student at Cranbrook. I built this hyperspectral camera for under $300. With my reconstruction model, it reaches about 95% of the accuracy of scanning hyperspectral cameras, which cost $10,000 to $20,000 or more.</p>
           <Link to="/portfolio" className="camera-story__link">My Work <ArrowUpRight /></Link>
           <a href="#camera-build" className="camera-story__next" aria-label="See inside the camera" onClick={event => { event.preventDefault(); goToChapter(1); }}><span aria-hidden="true">↓</span></a>
         </header>
@@ -250,7 +250,7 @@ export default function Hero() {
             <p className="camera-story__scale-note">Spacing expanded for clarity</p>
             <p className="camera-story__explanation-copy">
               <span className={chapter !== 2 ? "is-active" : ""} aria-hidden={chapter === 2}>The lenses focus light through a square aperture. A dual-axis grating separates the light by wavelength before it reaches the camera sensor.</span>
-              <span className={chapter === 2 ? "is-active" : ""} aria-hidden={chapter !== 2}>The sensor captures the 0th, ±1st, and diagonal orders in one exposure. My PASS-Transformer reconstructs the hyperspectral image from this measurement.</span>
+              <span className={chapter === 2 ? "is-active" : ""} aria-hidden={chapter !== 2}>The sensor captures the 0th, ±1st, and diagonal orders in one exposure. My <span className="nowrap">PASS-Transformer</span> recovers the spectra with PSF-aware spatial attention, dispersion-aware spectral attention, and iterative physical consistency. Training is self-supervised, with no ground truth.</span>
             </p>
             <Link to="/portfolio/decoding-light" className="camera-story__link">About This Project <ArrowUpRight /></Link>
           </div>
