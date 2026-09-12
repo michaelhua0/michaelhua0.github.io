@@ -29,6 +29,7 @@ export const projectMetadata: {
   decodingLight: ProjectMetadata;
   brainVesselSegmentation: ProjectMetadata;
   msstTransformer: ProjectMetadata;
+  chemosensoryGrounding: ProjectMetadata;
   nationalHistoryDay: ProjectMetadata;
   cryptoWars: ProjectMetadata;
   historysTrigger: ProjectMetadata;
