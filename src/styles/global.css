@@ -14,6 +14,14 @@
   src: url("@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-italic.woff2") format("woff2-variations");
 }
 
+@font-face {
+  font-family: "Fraunces Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2") format("woff2-variations");
+}
+
 :root {
   color-scheme: light;
 
@@ -65,6 +73,8 @@
   --font-display: "Source Sans 3 Variable", "Segoe UI", sans-serif;
   --font-body: "Source Sans 3 Variable", "Segoe UI", sans-serif;
   --font-mono: var(--font-body);
+  /* Reserved for the few places the page should sound pleased with itself. */
+  --font-accent: "Fraunces Variable", Georgia, serif;
 
   --mono-xs: 0.75rem;
   --mono-track-xs: 0.07em;

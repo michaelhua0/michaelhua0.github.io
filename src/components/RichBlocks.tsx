@@ -63,7 +63,7 @@ export default function RichBlocks({ blocks }: { blocks: Block[] }) {
             );
           case "note":
             return (
-              <p key={i} className="rb-note mono-copy mono-copy--strong">
+              <p key={i} className="rb-note">
                 <span className="rb-note__label readout readout--quiet">Note</span>
                 {b.text}
               </p>
@@ -90,6 +90,17 @@ export default function RichBlocks({ blocks }: { blocks: Block[] }) {
                 <div className="rb-aside__note">
                   <span className="rb-aside__label readout">{b.label}</span>
                   <p className="rb-aside__text">{b.text}</p>
+                  {b.link && (
+                    <a
+                      className="rb-aside__link"
+                      href={b.link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {b.link.label}
+                      <ArrowUpRight className="arrow" />
+                    </a>
+                  )}
                 </div>
               </aside>
             );

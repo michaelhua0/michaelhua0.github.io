@@ -19,7 +19,7 @@ export type Block =
   | { kind: "subheading"; text: string }
   | { kind: "note"; text: string }
   | { kind: "citation"; text: string }
-  | { kind: "aside"; label: string; text: string }
+  | { kind: "aside"; label: string; text: string; link?: LinkItem }
   | { kind: "video"; id: string; title?: string }
   | { kind: "links"; items: LinkItem[] };
 
@@ -233,21 +233,18 @@ export const projects: Project[] = [
     imageBackground: "#ffffff",
     body: [
       p(
-        "I spent the summer at Boston University working under Dr. Boqing Gong and Dr. Kate Saenko on developmentally grounded vision-language learning. Vision-language models train on hundreds of millions of image-text pairs, while infants build the same concepts from a small fraction of that experience. Work on infant-perspective video, including CVCL, BabyVLM, and BabyVLM-V2, treats early development as a reference point for sample-efficient pretraining. That line of work stops at vision, hearing, and touch, because those are the only senses egocentric infant datasets record.",
+        "I spent the summer at Boston University working under Dr. Boqing Gong and Dr. Kate Saenko on developmentally grounded vision-language learning. Research in this area treats infant-perspective video as a reference point for sample-efficient pretraining, but it stops at vision, hearing, and touch, because those are the only senses egocentric infant datasets record.",
       ),
       {
         kind: "aside",
         label: "Fun fact",
         text:
-          "I drew that logo. The BabyVLM Challenge needed a mark for its NeurIPS 2026 workshop, so the baby got a head-mounted camera. I tidied up their site while I was in there.",
+          "I designed that logo! The BabyVLM Challenge needed a mark for its NeurIPS 2026 workshop. I tidied up their website while I was there.",
+        link: { label: "babyvlm.github.io", href: "https://babyvlm.github.io/" },
       },
       p(
-        "Taste and smell are already functioning before birth and run through an infant's most ordinary daily moments, yet no developmentally grounded corpus represents them. They are also difficult to label: a head-mounted camera points away from the mouth and nose, and food in frame does not prove that anyone tasted it. I built a five-field annotation schema covering condition, smell-verb, smell-noun, scenario, and taste-noun, which records the observable context and motion consistent with a chemosensory event rather than the private sensation itself. Four rounds of revision, each driven by error analysis and annotator disagreement, raised inter-annotator agreement by 27.6 percentage points.",
+        "Taste and smell are harder to capture: a head-mounted camera points away from the mouth and nose, and food in frame does not prove that anyone tasted it. I built a five-field annotation schema that records the observable context and motion consistent with a chemosensory event, then a human-in-the-loop framework that scaled it from a few hundred expert-reviewed clips to a verified corpus of 20,000.",
       ),
-      p(
-        "Scaling that schema past a few hundred hand-checked clips called for a dual-memory human-in-the-loop framework. It keeps an interpretable rule bank distilled from expert corrections alongside a MiniLM-indexed memory of past prediction errors, queries both when annotating new clips drawn from a 2.19M-clip corpus, and folds reviewer feedback back into the model through reward-weighted LoRA updates. On a 500-clip manual audit the full system reached 78.5 percent accuracy and 80.7 F1, against 65.3 percent and 64.7 for the frozen annotator, and the pipeline turned a few hundred expert-reviewed clips into a verified corpus of 20,000.",
-      ),
-      { kind: "subheading", text: "Selection" },
       {
         kind: "note",
         text:
@@ -257,14 +254,10 @@ export const projects: Project[] = [
         kind: "links",
         items: [
           {
-            label: "BabyVLM workshop site",
-            href: "https://babyvlm.github.io/",
-            primary: true,
-          },
-          {
             label: "Research paper",
             href: "/publications#chemosensory-grounding",
             internal: true,
+            primary: true,
           },
         ],
       },
