@@ -78,6 +78,13 @@ export default function Publications() {
                     ))}
                   </div>
 
+                  {pub.note && (
+                    <p className="pub__note mono-copy mono-copy--strong">
+                      <span className="pub__note-label readout readout--quiet">Note</span>
+                      {pub.note}
+                    </p>
+                  )}
+
                   <div className="pub__links">
                     {pub.links.map((l, i) => (
                       <a

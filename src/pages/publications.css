@@ -44,6 +44,22 @@
 .pub__copy p:first-of-type { color: var(--text); }
 .pub__links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
 
+/* A caveat about the record itself — scope, status — kept quieter than the
+   entry it qualifies. */
+.pub__note {
+  max-width: var(--measure-prose);
+  margin: 24px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  line-height: 1.62;
+  color: var(--text-faint);
+}
+.pub__note-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--accent);
+}
+
 .pub__figure {
   position: relative;
   align-self: start;

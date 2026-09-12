@@ -239,11 +239,17 @@ export const projects: Project[] = [
         kind: "aside",
         label: "Fun fact",
         text:
-          "I designed that logo! The BabyVLM Challenge needed a mark for its NeurIPS 2026 workshop. I tidied up their website while I was there.",
+          "I designed that logo! The BabyVLM Challenge needed a mark for its NeurIPS 2026 workshop. I tidied up their website during the BU RISE Program as well!",
         link: { label: "babyvlm.github.io", href: "https://babyvlm.github.io/" },
       },
       p(
-        "Taste and smell are harder to capture: a head-mounted camera points away from the mouth and nose, and food in frame does not prove that anyone tasted it. I built a five-field annotation schema that records the observable context and motion consistent with a chemosensory event, then a human-in-the-loop framework that scaled it from a few hundred expert-reviewed clips to a verified corpus of 20,000.",
+        "Taste and smell are harder to capture: a head-mounted camera points away from the mouth and nose, and food in frame does not prove that anyone tasted it. I worked with high school students Karthik Srikumar and Jason Liu on developing a five-field annotation schema through iterative refinement, one that records the observable context and motion consistent with a chemosensory event rather than the private sensation itself.",
+      ),
+      p(
+        "I then developed a dual-memory human-in-the-loop framework to scale that schema, pairing a rule bank distilled from expert corrections with a searchable memory of past prediction errors. It grew a few hundred expert-reviewed clips into a verified corpus of 20,000.",
+      ),
+      p(
+        "The project is still running. The 2026 BU RISE interns and the rest of the Gong Lab are continuing the research, and we plan to submit to CVPR 2027.",
       ),
       {
         kind: "note",
