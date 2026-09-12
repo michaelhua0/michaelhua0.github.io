@@ -2,8 +2,8 @@ import { useCallback, useLayoutEffect, useRef, type RefObject } from "react";
 import { cameraChapters, cameraTimeline } from "../lib/cameraTimeline";
 
 // Give the moving hardware more time than the interval between the open views.
-const seekTime = (position: number) => position <= .65 ? position / .62 : .65 / .62 + (position - .65) / 2.3;
-const seekPosition = (time: number) => time <= .65 / .62 ? time * .62 : .65 + (time - .65 / .62) * 2.3;
+const seekTime = (position: number) => position <= .65 ? position / .78 : .65 / .78 + (position - .65) / 2.8;
+const seekPosition = (time: number) => time <= .65 / .78 ? time * .78 : .65 + (time - .65 / .78) * 2.8;
 const seekEase = (t: number) => t < .15 ? t * t / .255 : t > .85 ? 1 - (1 - t) ** 2 / .255 : (t - .075) / .85;
 const nativeScrollTo = (top: number) => window.scrollTo({ top, behavior: "smooth" });
 
@@ -55,7 +55,10 @@ export function useCameraScrollPacing(
       lastY = target = window.scrollY;
     };
     const tick = (now: number) => {
-      chapterElapsed += Math.min(100, now - previousTime);
+      // Advance by real elapsed time rather than a 100ms slice. Capping it that
+      // tightly made a device rendering at 10fps play the same transition several
+      // times slower than one at 60fps, and stretched the cold opening scroll.
+      chapterElapsed += Math.min(250, now - previousTime);
       previousTime = now;
       const t = Math.min(1, chapterElapsed / chapterDuration);
       const playbackTime = chapterStart + (chapterEnd - chapterStart) * seekEase(t);
@@ -77,7 +80,7 @@ export function useCameraScrollPacing(
       chapterStart = seekTime((lastY - chapterOrigin) / chapterDistance);
       chapterEnd = seekTime((target - chapterOrigin) / chapterDistance);
       chapterElapsed = 0;
-      chapterDuration = Math.min(1800, Math.max(520, Math.abs(chapterEnd - chapterStart) * 1000));
+      chapterDuration = Math.min(1500, Math.max(450, Math.abs(chapterEnd - chapterStart) * 1000));
       previousTime = performance.now();
       frame = requestAnimationFrame(tick);
     };

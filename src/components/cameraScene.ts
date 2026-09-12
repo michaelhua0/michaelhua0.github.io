@@ -149,6 +149,8 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   // Crossfade two complete renders rather than making individual faces
   // transparent. This keeps the rectangular housing intact throughout its fade.
   let fadeTargets: [THREE.WebGLRenderTarget, THREE.WebGLRenderTarget] | null = null;
+  let warmed = false;
+  let warmTimer = 0;
   const fadeScene = new THREE.Scene();
   const fadeCamera = new THREE.OrthographicCamera(-1,1,1,-1,0,2);
   const fadeMaterial = material(new THREE.ShaderMaterial({
@@ -170,6 +172,43 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   }));
   fadeScene.add(new THREE.Mesh(geometry(new THREE.PlaneGeometry(2,2)),fadeMaterial));
   const renderSize = new THREE.Vector2();
+  function ensureFadeTargets() {
+    renderer.getDrawingBufferSize(renderSize);
+    // Limit temporary crossfade buffers; settled views retain full resolution.
+    const fadeScale = Math.min(1, 1600 / Math.max(renderSize.x, renderSize.y));
+    renderSize.set(Math.round(renderSize.x * fadeScale), Math.round(renderSize.y * fadeScale));
+    if (!fadeTargets) {
+      fadeTargets = [
+        new THREE.WebGLRenderTarget(renderSize.x, renderSize.y, { type: THREE.HalfFloatType, samples: 2 }),
+        new THREE.WebGLRenderTarget(renderSize.x, renderSize.y, { type: THREE.HalfFloatType, samples: 2 }),
+      ];
+      fadeMaterial.uniforms.closed.value = fadeTargets[0].texture;
+      fadeMaterial.uniforms.opened.value = fadeTargets[1].texture;
+    }
+    for (const target of fadeTargets) {
+      if (target.width !== renderSize.x || target.height !== renderSize.y) target.setSize(renderSize.x, renderSize.y);
+    }
+    return fadeTargets;
+  }
+  // The opening scroll is the first thing anyone does, and it was the one that
+  // had to allocate these buffers, compile the crossfade shader, and upload the
+  // opened model's materials — several times the cost of every later stage, in
+  // both directions. Pay for it once while the canvas is still fading in.
+  function warmCrossfade() {
+    if (warmed || destroyed || contextLost || !width || !height) return;
+    warmed = true;
+    const targets = ensureFadeTargets();
+    const wasVisible = shell.visible;
+    renderer.setClearColor(0x000000, 0);
+    shell.visible = true;
+    renderer.setRenderTarget(targets[0]); renderer.render(scene, camera);
+    shell.visible = false;
+    renderer.setRenderTarget(targets[1]); renderer.render(scene, camera);
+    shell.visible = wasVisible;
+    renderer.setRenderTarget(null);
+    renderer.setClearColor(0xffffff, 0);
+    renderer.compile(fadeScene, fadeCamera);
+  }
 
   const parts = Array.from({ length: 6 }, () => new THREE.Group());
   parts.forEach(part => model.add(part));
@@ -516,22 +555,13 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
     camera.top = viewHeight / 2; camera.bottom = -viewHeight / 2; camera.updateProjectionMatrix();
     model.updateMatrixWorld(true);
     if(fade>0 && fade<1){
-      renderer.getDrawingBufferSize(renderSize);
-      // Limit temporary crossfade buffers; settled views retain full resolution.
-      const fadeScale=Math.min(1,1600/Math.max(renderSize.x,renderSize.y));
-      renderSize.set(Math.round(renderSize.x*fadeScale),Math.round(renderSize.y*fadeScale));
-      if(!fadeTargets){
-        fadeTargets=[new THREE.WebGLRenderTarget(renderSize.x,renderSize.y,{type:THREE.HalfFloatType,samples:2}),new THREE.WebGLRenderTarget(renderSize.x,renderSize.y,{type:THREE.HalfFloatType,samples:2})];
-        fadeMaterial.uniforms.closed.value=fadeTargets[0].texture;
-        fadeMaterial.uniforms.opened.value=fadeTargets[1].texture;
-      }
-      for(const target of fadeTargets) if(target.width!==renderSize.x || target.height!==renderSize.y) target.setSize(renderSize.x,renderSize.y);
+      const targets=ensureFadeTargets();
       renderer.setClearColor(0x000000,0);
       shell.visible=true;
-      renderer.setRenderTarget(fadeTargets[0]);renderer.render(scene,camera);
+      renderer.setRenderTarget(targets[0]);renderer.render(scene,camera);
       const closedBounds=measureVisibleBounds();
       shell.visible=false;
-      renderer.setRenderTarget(fadeTargets[1]);renderer.render(scene,camera);
+      renderer.setRenderTarget(targets[1]);renderer.render(scene,camera);
       const openBounds=measureVisibleBounds();
       fadeMaterial.uniforms.amount.value=fade;
       renderer.setRenderTarget(null);renderer.render(fadeScene,fadeCamera);
@@ -547,14 +577,19 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
     if (!firstFrameRendered) {
       firstFrameRendered = true;
       // Reveal only after a correctly sized, textured frame has been rendered.
-      revealFrame = requestAnimationFrame(() => { if (!destroyed && !contextLost) onReady(); });
+      revealFrame = requestAnimationFrame(() => {
+        if (destroyed || contextLost) return;
+        onReady();
+        // After the reveal transition, so warming does not stutter it.
+        warmTimer = window.setTimeout(warmCrossfade, 300);
+      });
     }
   }
   function stop() { renderer.setAnimationLoop(null); running = false; }
   function animate(time: number) {
     const elapsed = previousTime ? Math.min(time - previousTime, 250) : 16;
     previousTime = time;
-    current += (target - current) * (1 - Math.exp(-elapsed / 75));
+    current += (target - current) * (1 - Math.exp(-elapsed / 62));
     if (Math.abs(target - current) < 0.0001) current = target;
     draw(current);
     if (current === target) stop();
@@ -614,7 +649,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
       window.removeEventListener("resize", syncResolution);
       window.visualViewport?.removeEventListener("resize", syncResolution);
       labels.forEach(({ element }) => element.remove());
-      cancelAnimationFrame(revealFrame);
+      cancelAnimationFrame(revealFrame); clearTimeout(warmTimer);
       document.removeEventListener("visibilitychange", onVisibility); canvas.removeEventListener("webglcontextlost", onLost);
       model.traverse(object => { if (object instanceof THREE.InstancedMesh) object.dispose(); });
       geometries.forEach(item => item.dispose()); materials.forEach(item => item.dispose()); textures.forEach(item => item.dispose());
