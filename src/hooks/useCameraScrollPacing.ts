@@ -34,6 +34,8 @@ export function useCameraScrollPacing(
     let arrivalTries = 0;
     let settleY = 0;
     let settleTries = 0;
+    let moving = false;
+    let touchChain = -1;
     // Touch screens own their scrolling. Driving window.scrollTo while a finger
     // is down fights the platform's scroller on iOS, which stalled small swipes
     // and made large ones stutter, so those devices settle into a stage on
@@ -74,7 +76,7 @@ export function useCameraScrollPacing(
       // Touch platforms arbitrate their own fling against a programmatic
       // scroll, so a hand-paced rAF loop only races it and stalls a stage
       // behind. Hand the browser the destination and let it do the easing.
-      if (coarse) { nativeScrollTo(target); ensureArrival(target); return; }
+      if (coarse) { moving = true; nativeScrollTo(target); ensureArrival(target); return; }
       chapterOrigin = limits().start;
       chapterDistance = distance();
       chapterStart = seekTime((lastY - chapterOrigin) / chapterDistance);
@@ -92,7 +94,7 @@ export function useCameraScrollPacing(
       arrivalTries = 0;
       const check = () => {
         arrivalTimer = 0;
-        if (blocked() || Math.abs(window.scrollY - top) <= 2 || ++arrivalTries > 4) return;
+        if (blocked() || Math.abs(window.scrollY - top) <= 2 || ++arrivalTries > 4) { moving = false; return; }
         nativeScrollTo(top);
         arrivalTimer = window.setTimeout(check, 500);
       };
@@ -102,18 +104,24 @@ export function useCameraScrollPacing(
     const advance = (direction: number, continuation = false) => {
       if (blocked()) return false;
       const now = performance.now();
-      const sameGesture = direction === gestureDirection && (continuation || now - lastGestureTime < 220);
+      const sameGesture = direction === gestureDirection && (continuation || now - lastGestureTime < 150);
       lastGestureTime = now;
       gestureDirection = direction;
-      if ((frame && Math.sign(target - lastY) === direction) || (sameGesture && gestureCaptured)) { gestureCaptured = true; return true; }
+      // Momentum from the gesture that already chose a stage. One flick is one
+      // stage however many events the platform sends for it.
+      if (sameGesture && gestureCaptured) return true;
       gestureCaptured = false;
-      if (frame) stop();
       const { start, end } = limits();
-      if (lastY < start - 2 || lastY > end + 2) return false;
-      const position = (lastY - start) / distance();
+      // A fresh gesture part way through a transition steps on from wherever
+      // that transition was headed. Swallowing it until the movement landed is
+      // what made stages need a pause between them.
+      const from = frame ? target : lastY;
+      const bail = () => { if (frame) stop(); return false; };
+      if (from < start - 2 || from > end + 2) return bail();
+      const position = (from - start) / distance();
       const stages = direction > 0 ? cameraChapters : [...cameraChapters].reverse();
       const next = stages.find(stage => direction > 0 ? stage.position > position + .005 : stage.position < position - .005);
-      if (!next) return false;
+      if (!next) return bail();
       gestureCaptured = true;
       navigate(Math.ceil(start + next.position * distance()));
       return true;
@@ -157,11 +165,13 @@ export function useCameraScrollPacing(
       snapPending = false;
       if (blocked()) return;
       const { start, end } = limits();
-      if (touchOrigin < start - 2 || touchOrigin > end + 2) return;
+      const from = touchChain >= 0 ? touchChain : touchOrigin;
+      touchChain = -1;
+      if (from < start - 2 || from > end + 2) return;
       const settled = window.scrollY;
       const direction = Math.sign(settled - touchOrigin);
       if (!direction) return;
-      const position = (touchOrigin - start) / distance();
+      const position = (from - start) / distance();
       const stages = direction > 0 ? cameraChapters : [...cameraChapters].reverse();
       const next = stages.find(stage => direction > 0 ? stage.position > position + .005 : stage.position < position - .005);
       if (!next) return;
@@ -181,7 +191,7 @@ export function useCameraScrollPacing(
     };
     const onTouchStart = (event: TouchEvent) => {
       interacted = true;
-      if (coarse) { cancelSnap(); stop(); }
+      if (coarse) { touchChain = moving ? target : -1; moving = false; cancelSnap(); stop(); }
       touchY = event.touches[0]?.clientY ?? 0;
       touchOrigin = window.scrollY;
       touchUsed = false;
