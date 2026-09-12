@@ -2,8 +2,8 @@ import { useCallback, useLayoutEffect, useRef, type RefObject } from "react";
 import { cameraChapters, cameraTimeline } from "../lib/cameraTimeline";
 
 // Give the moving hardware more time than the interval between the open views.
-const seekTime = (position: number) => position <= .65 ? position / .45 : .65 / .45 + (position - .65) / 1.8;
-const seekPosition = (time: number) => time <= .65 / .45 ? time * .45 : .65 + (time - .65 / .45) * 1.8;
+const seekTime = (position: number) => position <= .65 ? position / .62 : .65 / .62 + (position - .65) / 2.3;
+const seekPosition = (time: number) => time <= .65 / .62 ? time * .62 : .65 + (time - .65 / .62) * 2.3;
 const seekEase = (t: number) => t < .15 ? t * t / .255 : t > .85 ? 1 - (1 - t) ** 2 / .255 : (t - .075) / .85;
 const nativeScrollTo = (top: number) => window.scrollTo({ top, behavior: "smooth" });
 
@@ -77,7 +77,7 @@ export function useCameraScrollPacing(
       chapterStart = seekTime((lastY - chapterOrigin) / chapterDistance);
       chapterEnd = seekTime((target - chapterOrigin) / chapterDistance);
       chapterElapsed = 0;
-      chapterDuration = Math.min(2400, Math.max(650, Math.abs(chapterEnd - chapterStart) * 1000));
+      chapterDuration = Math.min(1800, Math.max(520, Math.abs(chapterEnd - chapterStart) * 1000));
       previousTime = performance.now();
       frame = requestAnimationFrame(tick);
     };
@@ -168,7 +168,7 @@ export function useCameraScrollPacing(
     function scheduleSnap() {
       window.clearTimeout(settleTimer);
       settleY = window.scrollY;
-      settleTimer = window.setTimeout(runSnap, 160);
+      settleTimer = window.setTimeout(runSnap, 120);
     }
     const cancelSnap = () => {
       window.clearTimeout(settleTimer);
