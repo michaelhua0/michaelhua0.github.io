@@ -11,6 +11,8 @@ export interface Publication {
   imageAlt: string;
   links: { label: string; href: string }[];
   copy: string[];
+  /** Optional caveat about the manuscript's scope or status. */
+  note?: string;
 }
 
 export const publications: Publication[] = [
@@ -81,8 +83,10 @@ export const publications: Publication[] = [
     ],
     copy: [
       "This paper extends developmentally grounded vision-language learning to taste and smell, the two senses that egocentric infant datasets leave unrecorded. It introduces a five-field annotation schema that captures the observable context and motion consistent with a chemosensory event, then scales it with a dual-memory human-in-the-loop framework: an interpretable rule bank distilled from expert corrections, a MiniLM index of past prediction errors, and reward-weighted LoRA updates that carry reviewer feedback back into the model. A 500-clip manual audit reports 78.5 percent accuracy and 80.7 F1 against 65.3 percent and 64.7 for the frozen annotator, and the pipeline expands a few hundred expert-reviewed clips into a verified corpus of 20,000.",
-      "The research behind the paper comes from my work at Boston University under Dr. Boqing Gong and Dr. Kate Saenko during the BU RISE Summer Program. I submitted the manuscript to the 2026 Junior Science and Humanities Symposium recognition program, where it received a $550 award and a Meta Quest 3S.",
+      "I completed this research at Boston University under Dr. Boqing Gong and Dr. Kate Saenko during the BU RISE Summer Program, and submitted the manuscript to the 2026 Junior Science and Humanities Symposium recognition program, where it received a $550 award and a Meta Quest 3S.",
     ],
+    note:
+      "This paper covers the work I contributed during the program. It is a competition manuscript, not one I plan to publish: the 2026 BU RISE interns and the rest of the Gong Lab are continuing the research, and we plan to submit to CVPR 2027.",
   },
   {
     id: "nhd-paper",
