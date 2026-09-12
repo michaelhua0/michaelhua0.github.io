@@ -64,6 +64,13 @@ export const projectMetadata = {
     teaser:
       "A mobile cultivation platform that connects environmental sensors, predictive growth models, and automated controls.",
   },
+  chemosensoryGrounding: {
+    slug: "chemosensory-grounding",
+    cardTitle: "Chemosensory Grounding in Egocentric Infant Video",
+    detailTitle: "Enabling and Scaling Chemosensory Grounding in Egocentric Infant Video",
+    teaser:
+      "A taste-and-smell annotation schema for infant-perspective video, and a human-in-the-loop framework that scaled it to 20,000 verified clips.",
+  },
   nationalHistoryDay: {
     slug: "national-history-day",
     cardTitle: "From Poison to Protection: The 1906 Food and Drug Act",

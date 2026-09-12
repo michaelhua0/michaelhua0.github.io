@@ -30,6 +30,7 @@ export const projectMetadata: {
   brainVesselSegmentation: ProjectMetadata;
   msstTransformer: ProjectMetadata;
   aigro: ProjectMetadata;
+  chemosensoryGrounding: ProjectMetadata;
   nationalHistoryDay: ProjectMetadata;
   cryptoWars: ProjectMetadata;
   historysTrigger: ProjectMetadata;

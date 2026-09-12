@@ -26,9 +26,11 @@
   gap: 26px;
 }
 
-/* Keep the research pairs, with all three documentaries together below. */
+/* The two lead research projects run half-width; the rest of the research
+   group and all three documentaries run three to a row. */
 @media (min-width: 901px) {
   .portfolio__grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .portfolio__item--research { grid-column: span 3; }
+  .portfolio__item--research:nth-child(n + 3) { grid-column: span 2; }
   .portfolio__item--history { grid-column: span 2; }
 }

@@ -69,6 +69,58 @@
   margin: 2rem 0;
 }
 
+/* Aside — one handwritten sticky note that points back at the lead image.
+   Deliberately off-grid: it leans, and its corner clips the paragraph
+   beside it. Used once, as an easter egg, never as a system. */
+.rb-aside {
+  --sticky-paper: #f6efc6;
+  --sticky-ink: #4a431f;
+  --sticky-ink-soft: #7a6516;
+  position: relative;
+  grid-column: span 6;
+  justify-self: start;
+  width: min(320px, 92%);
+  margin: 30px 0 2rem -39px;
+  align-self: start;
+}
+
+.rb-aside__arrow {
+  position: absolute;
+  right: calc(100% - 56px);
+  bottom: calc(100% - 26px);
+  width: 132px;
+  height: 106px;
+  overflow: visible;
+  pointer-events: none;
+}
+.rb-aside__arrow path {
+  fill: none;
+  stroke: var(--sticky-ink-soft);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rb-aside__note {
+  padding: 15px 18px 17px;
+  background: var(--sticky-paper);
+  color: var(--sticky-ink);
+  transform: rotate(-3.4deg);
+  box-shadow:
+    0 1px 1px color-mix(in srgb, var(--black) 14%, transparent),
+    0 16px 28px -20px color-mix(in srgb, var(--black) 70%, transparent);
+}
+.rb-aside__label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--sticky-ink-soft);
+}
+.rb-aside__text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.52;
+}
+
 /* Consecutive videos after a section heading form a compact episode shelf. */
 .rb-sub + .yt,
 .rb-sub + .yt + .yt,
@@ -85,12 +137,30 @@
 
 @media (max-width: 900px) {
   .rb { gap: 0 20px; }
+  /* Narrower columns leave no room to lean onto the paragraph beside it. */
+  .rb-aside {
+    width: min(320px, 100%);
+    margin-left: 0;
+  }
   .rb-sub + .yt,
   .rb-sub + .yt + .yt,
   .rb-sub + .yt + .yt + .yt { grid-column: span 6; }
 }
 
 @media (max-width: 620px) {
+  /* On one column the note sits to the right, so the shortened arrow still
+     reaches the lead image instead of running off the page. */
+  .rb-aside {
+    width: min(250px, 100%);
+    margin: 34px 0 2rem auto;
+  }
+  .rb-aside__arrow {
+    right: calc(100% - 20px);
+    bottom: calc(100% - 18px);
+    width: 80px;
+    height: 72px;
+  }
+  .rb-aside,
   .rb-p,
   .rb-sub + .yt,
   .rb-sub + .yt + .yt,

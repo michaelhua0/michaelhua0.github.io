@@ -74,6 +74,25 @@ export default function RichBlocks({ blocks }: { blocks: Block[] }) {
                 {b.text}
               </blockquote>
             );
+          case "aside":
+            return (
+              <aside key={i} className="rb-aside">
+                <svg
+                  className="rb-aside__arrow"
+                  viewBox="0 0 140 112"
+                  fill="none"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d="M133 104C114 93 88 96 66 79 46 64 30 41 15 19" />
+                  <path d="M17 35 14.5 17.5 29.5 25" />
+                </svg>
+                <div className="rb-aside__note">
+                  <span className="rb-aside__label readout">{b.label}</span>
+                  <p className="rb-aside__text">{b.text}</p>
+                </div>
+              </aside>
+            );
           case "video":
             return <YouTubeEmbed key={i} id={b.id} title={b.title ?? "Video"} />;
           case "links":

@@ -14,6 +14,7 @@ Project cards / detail pages:
 | `brain-vessel.png` | Novel Multi-Scale Knowledge Transfer Transformer (3D Brain Vessel Segmentation) |
 | `msst.webp` | Novel MSST Transformer (Hyperspectral Imaging in Plant Growth Modeling) |
 | `aigro.webp` | AIGRO |
+| `babyvlm.webp` | Chemosensory Grounding in Egocentric Infant Video (BabyVLM Challenge logo) |
 | `nhd.jpg` | 2025 National History Day |
 | `historys-trigger.jpg` | History's Trigger |
 
@@ -23,6 +24,7 @@ Publication and competition paper previews:
 | --- | --- |
 | `publication-vessel-transformer.webp` | Computers & Graphics vessel-segmentation paper |
 | `publication-msst.png` | MSST competition paper |
+| `publication-chemosensory-928.webp` | Chemosensory grounding JSHS manuscript |
 | `nhd-paper.png` | National History Day process paper |
 
 About page photos:

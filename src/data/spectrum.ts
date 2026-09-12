@@ -25,7 +25,12 @@ export const SPECTRUM_RAMP: string[] = [
 ];
 
 /** A research/creative domain, mapped onto the visible spectrum. */
-export type Domain = "medical" | "hyperspectral" | "physical-ai" | "history";
+export type Domain =
+  | "vision-language"
+  | "medical"
+  | "hyperspectral"
+  | "physical-ai"
+  | "history";
 
 export interface Band {
   id: Domain;
@@ -38,8 +43,9 @@ export interface Band {
 }
 
 /* The canonical domain → wavelength map. Ascending nm so the list is
-   already in spine order (blue medical → red history). */
+   already in spine order (violet vision-language → red history). */
 export const BANDS: Band[] = [
+  { id: "vision-language", nm: 430, label: "Vision-Language Learning", color: SPECTRUM.violet },
   { id: "medical", nm: 470, label: "Medical Computer Vision", color: SPECTRUM.blue },
   { id: "hyperspectral", nm: 520, label: "Hyperspectral Imaging", color: SPECTRUM.teal },
   { id: "physical-ai", nm: 600, label: "Physical AI and Software", color: SPECTRUM.amber },
