@@ -554,7 +554,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   function animate(time: number) {
     const elapsed = previousTime ? Math.min(time - previousTime, 250) : 16;
     previousTime = time;
-    current += (target - current) * (1 - Math.exp(-elapsed / 110));
+    current += (target - current) * (1 - Math.exp(-elapsed / 75));
     if (Math.abs(target - current) < 0.0001) current = target;
     draw(current);
     if (current === target) stop();

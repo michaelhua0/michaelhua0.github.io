@@ -1,7 +1,10 @@
+/* The section is 100svh of content plus the travel the animation consumes,
+   which is cameraTimeline.length * the factor in Hero.tsx's animationDistance
+   (1.65 * 0.5 = 82.5svh). Changing that factor means changing this height. */
 .camera-story {
   --snapshot-w: clamp(140px, min(24vw, 36svh - 130px), 340px);
   position: relative;
-  height: calc(199svh - var(--nav-h) + 32px - var(--camera-tighten, 0px));
+  height: calc(182.5svh - var(--nav-h) + 32px - var(--camera-tighten, 0px));
   background: var(--white);
   overflow: clip;
   overflow-anchor: none;

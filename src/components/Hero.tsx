@@ -12,10 +12,12 @@ import "./hero.css";
 
 const diffractionImageUrl = imageUrl("ctis-diffraction.jpg");
 // Measured in svh, the unit the section is sized in, so a collapsing mobile
-// toolbar cannot stretch the scroll budget out from under the layout.
+// toolbar cannot stretch the scroll budget out from under the layout. The
+// factor sets how much scrolling the whole story costs, and hero.css sizes the
+// section from it; the two have to move together.
 const animationDistance = () => {
   const height = viewportHeight();
-  return height * (window.innerWidth <= 700 && height <= 700 ? 1 : 0.6);
+  return height * (window.innerWidth <= 700 && height <= 700 ? 1 : 0.5);
 };
 
 export default function Hero() {
