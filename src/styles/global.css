@@ -166,6 +166,7 @@ img { max-width: 100%; height: auto; display: block; }
   text-align: center;
 }
 
+.icon-arrow { display: inline-block; width: 1em; height: 1em; vertical-align: -0.12em; flex: none; }
 ::selection { background: color-mix(in srgb, var(--accent-bright) 30%, transparent); color: var(--text); }
 
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }

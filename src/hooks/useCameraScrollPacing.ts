@@ -26,6 +26,19 @@ export function useCameraScrollPacing(
     let interacted = false;
     let touchY = 0;
     let touchUsed = false;
+    let touchOrigin = 0;
+    let touchMoved = false;
+    let snapPending = false;
+    let settleTimer = 0;
+    let arrivalTimer = 0;
+    let arrivalTries = 0;
+    let settleY = 0;
+    let settleTries = 0;
+    // Touch screens own their scrolling. Driving window.scrollTo while a finger
+    // is down fights the platform's scroller on iOS, which stalled small swipes
+    // and made large ones stutter, so those devices settle into a stage on
+    // release instead of being paced mid-gesture.
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
     let lastGestureTime = -Infinity;
     let gestureDirection = 0;
     let gestureCaptured = false;
@@ -55,6 +68,10 @@ export function useCameraScrollPacing(
       stop();
       escaped = false;
       target = Math.max(0, Math.min(document.documentElement.scrollHeight - innerHeight, top));
+      // Touch platforms arbitrate their own fling against a programmatic
+      // scroll, so a hand-paced rAF loop only races it and stalls a stage
+      // behind. Hand the browser the destination and let it do the easing.
+      if (coarse) { nativeScrollTo(target); ensureArrival(target); return; }
       chapterOrigin = limits().start;
       chapterDistance = distance();
       chapterStart = seekTime((lastY - chapterOrigin) / chapterDistance);
@@ -65,6 +82,19 @@ export function useCameraScrollPacing(
       frame = requestAnimationFrame(tick);
     };
     navigateRef.current = navigate;
+    // Leftover momentum can cancel the browser's own smooth scroll partway.
+    // Re-issue it a couple of times if the page stopped short of the stage.
+    function ensureArrival(top: number) {
+      window.clearTimeout(arrivalTimer);
+      arrivalTries = 0;
+      const check = () => {
+        arrivalTimer = 0;
+        if (blocked() || Math.abs(window.scrollY - top) <= 2 || ++arrivalTries > 4) return;
+        nativeScrollTo(top);
+        arrivalTimer = window.setTimeout(check, 500);
+      };
+      arrivalTimer = window.setTimeout(check, 500);
+    }
     const blocked = () => escaped || !!document.querySelector("dialog[open]");
     const advance = (direction: number, continuation = false) => {
       if (blocked()) return false;
@@ -93,6 +123,7 @@ export function useCameraScrollPacing(
     const onScroll = () => {
       const actual = window.scrollY;
       if (Math.abs(actual - lastY) <= 1) return;
+      if (coarse) { lastY = actual; if (snapPending) scheduleSnap(); return; }
       const delta = actual - lastY;
       const { start, end } = limits();
       if (interacted && !blocked()) {
@@ -112,10 +143,46 @@ export function useCameraScrollPacing(
       }
       stop();
     };
+    // A flick keeps travelling after the finger lifts, and the platform cancels
+    // a programmatic scroll that collides with its own momentum. Wait for the
+    // page to come to rest, then take it to the stage the gesture asked for.
+    const runSnap = () => {
+      settleTimer = 0;
+      // The browser abandons its own smooth scroll if momentum is still
+      // running, so only leave once the page has genuinely come to rest.
+      if (Math.abs(window.scrollY - settleY) > 1 && ++settleTries < 20) { scheduleSnap(); return; }
+      snapPending = false;
+      if (blocked()) return;
+      const { start, end } = limits();
+      if (touchOrigin < start - 2 || touchOrigin > end + 2) return;
+      const settled = window.scrollY;
+      const direction = Math.sign(settled - touchOrigin);
+      if (!direction) return;
+      const position = (touchOrigin - start) / distance();
+      const stages = direction > 0 ? cameraChapters : [...cameraChapters].reverse();
+      const next = stages.find(stage => direction > 0 ? stage.position > position + .005 : stage.position < position - .005);
+      if (!next) return;
+      lastY = settled;
+      navigate(Math.ceil(start + next.position * distance()));
+    };
+    function scheduleSnap() {
+      window.clearTimeout(settleTimer);
+      settleY = window.scrollY;
+      settleTimer = window.setTimeout(runSnap, 160);
+    }
+    const cancelSnap = () => {
+      window.clearTimeout(settleTimer);
+      window.clearTimeout(arrivalTimer);
+      settleTimer = arrivalTimer = 0;
+      snapPending = false;
+    };
     const onTouchStart = (event: TouchEvent) => {
       interacted = true;
+      if (coarse) { cancelSnap(); stop(); }
       touchY = event.touches[0]?.clientY ?? 0;
+      touchOrigin = window.scrollY;
       touchUsed = false;
+      touchMoved = false;
     };
     const onTouchMove = (event: TouchEvent) => {
       if (event.touches.length !== 1) return;
@@ -123,7 +190,17 @@ export function useCameraScrollPacing(
       const delta = touchY - next;
       touchY = next;
       if (!delta) return;
+      if (coarse) { touchMoved = true; return; }
       if (advance(Math.sign(delta), touchUsed)) { event.preventDefault(); touchUsed = true; }
+    };
+    // Any swipe that started inside the viewer advances exactly one stage, no
+    // matter how short or how hard it was flicked.
+    const onTouchEnd = () => {
+      if (!coarse || !touchMoved || blocked()) return;
+      touchMoved = false;
+      snapPending = true;
+      settleTries = 0;
+      scheduleSnap();
     };
     const onKey = (event: KeyboardEvent) => {
       interacted = true;
@@ -137,7 +214,7 @@ export function useCameraScrollPacing(
     const onPointer = (event: PointerEvent) => {
       interacted = true;
       const element = event.target as Element;
-      if (element.closest("a:not(.camera-story__next)")) escaped = true;
+      if (!coarse && element.closest("a:not(.camera-story__next)")) escaped = true;
       if (element.closest("a, button, input, select, textarea")) {
         stop(); lastGestureTime = -Infinity; gestureDirection = 0; gestureCaptured = false;
       }
@@ -146,16 +223,20 @@ export function useCameraScrollPacing(
     window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("touchstart", onTouchStart, { passive: true });
-    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchmove", onTouchMove, { passive: !!coarse });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("touchcancel", onTouchEnd, { passive: true });
     window.addEventListener("keydown", onKey);
     window.addEventListener("pointerdown", onPointer);
     document.addEventListener("visibilitychange", onVisibility);
     return () => {
-      stop(); navigateRef.current = nativeScrollTo;
+      stop(); cancelSnap(); navigateRef.current = nativeScrollTo;
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchEnd);
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("pointerdown", onPointer);
       document.removeEventListener("visibilitychange", onVisibility);
