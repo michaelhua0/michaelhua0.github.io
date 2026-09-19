@@ -40,7 +40,7 @@ export const publications: Publication[] = [
       },
     ],
     copy: [
-      "This peer-reviewed paper with 6 citations to-date presents a Multi-Scale Knowledge Transfer Convolutional Transformer for 3D brain-vessel segmentation in in vivo MRI. The architecture features a novel integration of convolutional feature extraction and transformer encoders, along with a novel knowledge transfer mechanism to improve segmentation at lower image resolutions. The method supports vascular visualization and quantitative analysis in medical-imaging research.",
+      "This peer-reviewed paper with 6 citations to-date presents a Multi-Scale Knowledge Transfer Convolutional Transformer for 3D brain-vessel segmentation in in-vivo MRI. The architecture features a novel integration of convolutional feature extraction and transformer encoders, along with a novel knowledge transfer mechanism to improve segmentation at lower image resolutions. The method supports vascular visualization and quantitative analysis in medical-imaging research.",
       "I developed this work for my 2024 research project, which qualified for Regeneron ISEF and the National Junior Science and Humanities Symposium. I presented the paper at Shape Modeling International in Detroit in July 2024 to expert researchers in computer vision and graphics.",
     ],
   },
