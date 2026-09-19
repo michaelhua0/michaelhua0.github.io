@@ -25,7 +25,12 @@ export function useCameraScrollPacing(sectionRef: RefObject<HTMLElement | null>,
       if (window.matchMedia("(pointer: coarse)").matches) { nativeScrollTo(top); return; }
       target = Math.max(0, Math.min(document.documentElement.scrollHeight - window.innerHeight, top));
       const from = window.scrollY;
-      const duration = Math.min(1500, Math.max(750, Math.abs(target - from) / distance() * 1000));
+      const span = distance(), start = origin();
+      const openingEnd = start + cameraChapters[1].position * span;
+      const openingTravel = Math.max(0, Math.min(Math.max(from, target), openingEnd) - Math.max(Math.min(from, target), start));
+      // Give the housing reveal and separation 35% more time in either
+      // direction, without changing the continuous easing or sensor pacing.
+      const duration = Math.min(1850, Math.max(750, (Math.abs(target - from) + openingTravel * .35) / span * 1000));
       const began = performance.now();
       const tick = (now: number) => {
         // Wall-clock timing prevents low frame rates from stretching a chapter.
