@@ -29,7 +29,7 @@ export function useCameraScrollPacing(sectionRef: RefObject<HTMLElement | null>,
       const start = origin(), span = distance();
       const from = seekTime((window.scrollY - start) / span);
       const to = seekTime((target - start) / span);
-      const duration = Math.min(1500, Math.max(450, Math.abs(to - from) * 1000));
+      const duration = Math.min(1500, Math.max(750, Math.abs(to - from) * 1000));
       const began = performance.now();
       const tick = (now: number) => {
         // Wall-clock timing prevents low frame rates from stretching a chapter.
