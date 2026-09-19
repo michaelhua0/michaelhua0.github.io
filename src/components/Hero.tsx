@@ -36,7 +36,25 @@ export default function Hero() {
   const [snapshotVisible, setSnapshotVisible] = useState(false);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
-  const reducedMotion = usePrefersReducedMotion();
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const [animationEnabled, setAnimationEnabled] = useState(() => {
+    try { return sessionStorage.getItem("mh:camera-animation") === "enabled"; }
+    catch { return false; }
+  });
+  const reducedMotion = prefersReducedMotion && !animationEnabled;
+  const toggleAnimation = () => {
+    const enabled = !animationEnabled;
+    try {
+      if (enabled) sessionStorage.setItem("mh:camera-animation", "enabled");
+      else sessionStorage.removeItem("mh:camera-animation");
+    } catch { /* The choice still works when browser storage is unavailable. */ }
+    // Switching layouts changes the document geometry. Start at Camera so the
+    // old static layout's scroll position cannot skip the animated chapters.
+    progressRef.current = 0;
+    visualRef.current = { progress: 0 };
+    window.scrollTo({ top: 0, behavior: "instant" });
+    setAnimationEnabled(enabled);
+  };
   const scrollToChapter = useCameraScrollPacing(sectionRef, ready && !failed && !reducedMotion, animationDistance);
 
   const layoutViewer = useCallback((progress: number, bounds?: CameraSceneBounds) => {
@@ -183,7 +201,7 @@ export default function Hero() {
   }, [reducedMotion, scrollToChapter, setVisualProgress]);
 
   return (
-    <section ref={sectionRef} className={`camera-story ${reducedMotion ? "camera-story--still" : ""}`} data-chapter={chapter} aria-label="Michael Hua and his homemade hyperspectral camera">
+    <section ref={sectionRef} className={`camera-story ${reducedMotion ? "camera-story--still" : ""}`} data-chapter={chapter} data-motion={reducedMotion ? "reduced" : "animated"} aria-label="Michael Hua and his homemade hyperspectral camera">
       <div ref={controlsRef} className="camera-story__controls">
         <p className="camera-story__cost" aria-label="Camera build cost: under 300 dollars"><span>Build cost</span><span>&lt; $300</span></p>
         <div className="camera-story__chapters" role="group" aria-label="Camera animation chapters">{cameraChapters.map((item, index) => <button key={item.label} type="button" onClick={() => goToChapter(index)} className={chapter === index ? "is-active" : ""} aria-pressed={chapter === index} aria-controls="camera-view">{item.label}</button>)}</div>
@@ -194,6 +212,10 @@ export default function Hero() {
           <h1>Michael Hua</h1>
           <p className="camera-story__description">I’m a student at Cranbrook. I built this hyperspectral camera for under $300. With my reconstruction model, it reaches about 95% of the accuracy of scanning hyperspectral cameras, which cost $10,000 to $20,000 or more.</p>
           <Link to="/portfolio" className="camera-story__link">My Work <ArrowUpRight /></Link>
+          {prefersReducedMotion && <div className="camera-story__motion-choice">
+            <p>{reducedMotion ? "Camera animation is off to match your device’s motion settings." : "Camera animation is enabled for this visit."}</p>
+            <button type="button" onClick={toggleAnimation} aria-pressed={animationEnabled} aria-controls="camera-view">{reducedMotion ? "Enable camera animation" : "Use reduced motion"}</button>
+          </div>}
           <a href="#camera-build" className="camera-story__next" aria-label="See inside the camera" onClick={event => { event.preventDefault(); goToChapter(1); }}><span aria-hidden="true">↓</span></a>
         </header>
 

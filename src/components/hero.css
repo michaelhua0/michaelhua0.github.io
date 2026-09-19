@@ -137,3 +137,7 @@
 @media (prefers-reduced-motion: reduce) {
   .camera-story__chapter-title > span, .camera-story__explanation-copy > span { transition: none; }
 }
+
+.camera-story__motion-choice { margin-top: 12px; max-width: 36ch; }
+.camera-story__motion-choice p { margin: 0; font-size: .85rem; color: var(--text-soft); }
+.camera-story__motion-choice button { min-height: 44px; padding: 4px 0; border: 0; background: none; color: var(--accent); font: inherit; font-size: .9rem; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
