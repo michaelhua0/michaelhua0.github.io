@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { useCameraScrollPacing } from "../hooks/useCameraScrollPacing";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import type { CameraScene, CameraSceneBounds } from "./cameraScene";
 import { cameraChapters, cameraChapterAt, cameraFlowOffset, cameraPoseAt, cameraTimeline } from "../lib/cameraTimeline";
@@ -37,7 +36,6 @@ export default function Hero() {
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
   const reducedMotion = usePrefersReducedMotion();
-  const scrollToChapter = useCameraScrollPacing(sectionRef, ready && !failed && !reducedMotion, animationDistance);
 
   const layoutViewer = useCallback((progress: number, bounds?: CameraSceneBounds) => {
     const pose = cameraPoseAt(progress);
@@ -73,11 +71,8 @@ export default function Hero() {
         y-=compactBy;
         controlsTravel-=compactBy;
         controlsTop-=compactBy;
-        // Shortens the section by however much the model was pulled up, so the
-        // story ends where the hardware does. Quantised because it feeds the
-        // document's scroll extent, which moves ~266px on a phone, and a value
-        // that changed every frame churned that extent through every gesture.
-        section.style.setProperty('--camera-tighten',`${Math.round(compactBy/4)*4}px`);
+        // Keep the document height fixed throughout a gesture. Changing it here
+        // makes scroll clamping and mobile momentum feed back into the layout.
         const modelTop=figureTop+y+figureHeight/2+(bounds.top-.5)*figureHeight*scale;
         figure.dataset.contentTop=modelTop.toFixed(2);
         // Never let the copy ride up under the nav, even when the band is tall.
@@ -145,7 +140,6 @@ export default function Hero() {
       progressRef.current = progress;
       if (sceneRef.current && !failed) {
         sceneRef.current.setProgress(progress);
-        layoutViewer(visualRef.current.progress,visualRef.current.bounds);
       }
       else setVisualProgress(progress);
     };
@@ -172,39 +166,6 @@ export default function Hero() {
     return () => observer.disconnect();
   }, [layoutViewer]);
 
-  // A single, cancellable first-visit nudge. Never override an ongoing gesture,
-  // a restored scroll position, a fragment link, or a reduced-motion preference.
-  useEffect(() => {
-    if (!ready || reducedMotion || window.scrollY > 2 || window.location.hash) return;
-    try { if (sessionStorage.getItem("mh:camera-preview")) return; } catch { return; }
-    let frame = 0;
-    let cancelled = false;
-    const stop = () => { cancelled = true; clearTimeout(timer); cancelAnimationFrame(frame); };
-    const events = ["wheel", "touchstart", "pointerdown", "keydown"] as const;
-    events.forEach(name => window.addEventListener(name, stop, { passive: true, once: true }));
-    const onVisibility = () => { if (document.hidden) stop(); };
-    document.addEventListener("visibilitychange", onVisibility);
-    const timer = window.setTimeout(() => {
-      if (cancelled || window.scrollY > 2 || document.hidden) return;
-      try { sessionStorage.setItem("mh:camera-preview", "1"); } catch { return; }
-      const start = performance.now();
-      const distance = Math.min(48, viewportHeight() * 0.05);
-      const tick = (now: number) => {
-        if (cancelled) return;
-        const t = Math.min(1, (now - start) / 1450);
-        const amount = Math.sin(Math.PI * t) ** 2;
-        window.scrollTo({ top: distance * amount, behavior: "instant" });
-        if (t < 1) frame = requestAnimationFrame(tick);
-      };
-      frame = requestAnimationFrame(tick);
-    }, 1100);
-    return () => {
-      stop();
-      events.forEach(name => window.removeEventListener(name, stop));
-      document.removeEventListener("visibilitychange", onVisibility);
-    };
-  }, [ready, reducedMotion]);
-
   const goToChapter = useCallback((index: number) => {
     const section = sectionRef.current;
     if (!section) return;
@@ -216,8 +177,11 @@ export default function Hero() {
       return;
     }
     const navHeight = Number.parseFloat(getComputedStyle(section).getPropertyValue("--nav-h"));
-    scrollToChapter(Math.ceil(window.scrollY + section.getBoundingClientRect().top - navHeight + progress * animationDistance()));
-  }, [reducedMotion, scrollToChapter, setVisualProgress]);
+    window.scrollTo({
+      top: Math.ceil(window.scrollY + section.getBoundingClientRect().top - navHeight + progress * animationDistance()),
+      behavior: "smooth",
+    });
+  }, [reducedMotion, setVisualProgress]);
 
   return (
     <section ref={sectionRef} className={`camera-story ${reducedMotion ? "camera-story--still" : ""}`} data-chapter={chapter} aria-label="Michael Hua and his homemade hyperspectral camera">
