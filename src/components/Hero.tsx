@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useCameraScrollPacing } from "../hooks/useCameraScrollPacing";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import type { CameraScene, CameraSceneBounds } from "./cameraScene";
 import { cameraChapters, cameraChapterAt, cameraFlowOffset, cameraPoseAt, cameraTimeline } from "../lib/cameraTimeline";
@@ -36,6 +37,7 @@ export default function Hero() {
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
   const reducedMotion = usePrefersReducedMotion();
+  const scrollToChapter = useCameraScrollPacing(sectionRef, ready && !failed && !reducedMotion, animationDistance);
 
   const layoutViewer = useCallback((progress: number, bounds?: CameraSceneBounds) => {
     const pose = cameraPoseAt(progress);
@@ -177,11 +179,8 @@ export default function Hero() {
       return;
     }
     const navHeight = Number.parseFloat(getComputedStyle(section).getPropertyValue("--nav-h"));
-    window.scrollTo({
-      top: Math.ceil(window.scrollY + section.getBoundingClientRect().top - navHeight + progress * animationDistance()),
-      behavior: "smooth",
-    });
-  }, [reducedMotion, setVisualProgress]);
+    scrollToChapter(Math.ceil(window.scrollY + section.getBoundingClientRect().top - navHeight + progress * animationDistance()));
+  }, [reducedMotion, scrollToChapter, setVisualProgress]);
 
   return (
     <section ref={sectionRef} className={`camera-story ${reducedMotion ? "camera-story--still" : ""}`} data-chapter={chapter} aria-label="Michael Hua and his homemade hyperspectral camera">
