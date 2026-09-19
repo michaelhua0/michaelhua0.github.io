@@ -17,7 +17,7 @@ const smooth = (a: number, b: number, value: number) => THREE.MathUtils.smoothst
 
 /** An illustrative optical assembly based on Michael's CTIS hardware diagram. */
 export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGElement, diffractionImage: HTMLImageElement, reducedMotion: boolean, onFailure: () => void, onFrame: (progress: number, bounds: CameraSceneBounds) => void, onReady: () => void): CameraScene {
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "low-power" });
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "default" });
   renderer.setClearColor(0xffffff, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -456,6 +456,9 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   let contextLost = false;
   let running = false;
   let previousTime = 0;
+  let quality = 1;
+  let slowFrames = 0;
+  let bufferWidth = 0, bufferHeight = 0;
   let renderedPose: number | null = null;
   let firstFrameRendered = false;
   let revealFrame = 0;
@@ -591,7 +594,17 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
     previousTime = time;
     current += (target - current) * (1 - Math.exp(-elapsed / 62));
     if (Math.abs(target - current) < 0.0001) current = target;
+    const started = performance.now();
     draw(current);
+    // Sustained slow rendering lowers resolution, never the animation itself.
+    // Only downgrade during motion so idle gaps do not count as slow frames.
+    if (target !== current && (elapsed > 34 || performance.now() - started > 24)) slowFrames++;
+    else slowFrames = Math.max(0, slowFrames - 1);
+    if (slowFrames >= 8 && quality > 0.5) {
+      quality = Math.max(0.5, quality * 0.75);
+      slowFrames = 0;
+      syncResolution();
+    }
     if (current === target) stop();
   }
   function requestDraw() {
@@ -602,12 +615,15 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
     if (reducedMotion) { current = target; draw(current); return; }
     if (!running) { running = true; previousTime = 0; renderer.setAnimationLoop(animate); }
   }
-  // Match display/browser zoom, including the figure's existing CSS enlargement.
-  // Bound GPU memory by pixel area rather than a fixed DPR that blurs zoomed views.
+  // Cap the work on high-DPI displays. Mobile toolbar/zoom events must not
+  // repeatedly allocate identical drawing buffers and invalidate cached poses.
   function syncResolution() {
     if (!width || !height || destroyed) return;
-    const desired = (window.devicePixelRatio || 1) * (window.visualViewport?.scale || 1) * 1.12;
-    const ratio = Math.min(desired, Math.sqrt(8_000_000 / (width * height)), renderer.capabilities.maxTextureSize / Math.max(width, height));
+    const desired = Math.min(window.devicePixelRatio || 1, 1.75) * quality;
+    const ratio = Math.min(desired, Math.sqrt(2_000_000 / (width * height)), renderer.capabilities.maxTextureSize / Math.max(width, height));
+    const nextWidth = Math.floor(width * ratio), nextHeight = Math.floor(height * ratio);
+    if (nextWidth === bufferWidth && nextHeight === bufferHeight) return;
+    bufferWidth = nextWidth; bufferHeight = nextHeight;
     renderer.setPixelRatio(ratio);
     renderer.setSize(width, height, false);
     renderedPose = null;
@@ -626,7 +642,6 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   };
   onResolutionChange();
   window.addEventListener("resize", syncResolution);
-  window.visualViewport?.addEventListener("resize", syncResolution);
   resize.observe(canvas);
   // Complete each short transition even if scrolling briefly moves the canvas
   // outside the viewport. Intersection-based pausing can strand it halfway
@@ -647,7 +662,6 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
       destroyed = true; stop(); resize.disconnect();
       resolutionQuery.removeEventListener("change", onResolutionChange);
       window.removeEventListener("resize", syncResolution);
-      window.visualViewport?.removeEventListener("resize", syncResolution);
       labels.forEach(({ element }) => element.remove());
       cancelAnimationFrame(revealFrame); clearTimeout(warmTimer);
       document.removeEventListener("visibilitychange", onVisibility); canvas.removeEventListener("webglcontextlost", onLost);
