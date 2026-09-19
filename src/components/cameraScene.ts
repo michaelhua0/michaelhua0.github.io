@@ -511,6 +511,20 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
       : progress >= cameraTimeline.sensorEnd ? 1
       : progress >= cameraTimeline.separationEnd && progress <= cameraTimeline.sensorStart ? cameraTimeline.separationEnd : progress;
     if (renderPose === renderedPose) {onFrame(position,visibleBounds);return;}
+    // Optics ↔ Sensor only fades the capture and light rays. Keep the open
+    // hardware and its framing fixed instead of rebuilding the ribbon and
+    // walking hundreds of mesh bounds on every opacity frame. A resize clears
+    // renderedPose, so the full geometry path still recomputes the projection.
+    if (renderedPose !== null && renderedPose >= cameraTimeline.separationEnd && progress >= cameraTimeline.separationEnd) {
+      const opacity = smooth(cameraTimeline.sensorStart, cameraTimeline.sensorEnd, progress);
+      captureMat.opacity = opacity;
+      rays.forEach(({ line }) => { (line.material as THREE.LineBasicMaterial).opacity = opacity * 0.78; });
+      incomingMat.opacity = opacity * 0.6;
+      onFrame(position, visibleBounds);
+      renderer.render(scene, camera);
+      renderedPose = renderPose;
+      return;
+    }
     // Reveal the fitted arrangement before expanding it along the optical axis.
     const explode = smooth(cameraTimeline.separationStart, cameraTimeline.separationEnd, progress);
     const fade = smooth(cameraTimeline.openingStart, cameraTimeline.openingEnd, progress);
