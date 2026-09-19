@@ -2,13 +2,11 @@ import { useCallback, useLayoutEffect, useRef, type RefObject } from "react";
 import { cameraChapters, cameraTimeline } from "../lib/cameraTimeline";
 
 const nativeScrollTo = (top: number) => window.scrollTo({ top, behavior: "smooth" });
-const seekTime = (position: number) => position <= .65 ? position / .78 : .65 / .78 + (position - .65) / 2.8;
-const seekPosition = (time: number) => time <= .65 / .78 ? time * .78 : .65 + (time - .65 / .78) * 2.8;
 const ease = (t: number) => t * t * (3 - 2 * t);
 
-// Wheel input selects a chapter; scroll events only update the scene in Hero.
+// Wheel input selects a chapter and updates the scene in the same frame.
 // Never feed our own scroll events back into chapter selection.
-export function useCameraScrollPacing(sectionRef: RefObject<HTMLElement | null>, enabled: boolean, distance: () => number) {
+export function useCameraScrollPacing(sectionRef: RefObject<HTMLElement | null>, enabled: boolean, distance: () => number, onScrollFrame?: () => void) {
   const navigateRef = useRef(nativeScrollTo);
   useLayoutEffect(() => {
     const section = sectionRef.current;
@@ -26,15 +24,14 @@ export function useCameraScrollPacing(sectionRef: RefObject<HTMLElement | null>,
       stop();
       if (window.matchMedia("(pointer: coarse)").matches) { nativeScrollTo(top); return; }
       target = Math.max(0, Math.min(document.documentElement.scrollHeight - window.innerHeight, top));
-      const start = origin(), span = distance();
-      const from = seekTime((window.scrollY - start) / span);
-      const to = seekTime((target - start) / span);
-      const duration = Math.min(1500, Math.max(750, Math.abs(to - from) * 1000));
+      const from = window.scrollY;
+      const duration = Math.min(1500, Math.max(750, Math.abs(target - from) / distance() * 1000));
       const began = performance.now();
       const tick = (now: number) => {
         // Wall-clock timing prevents low frame rates from stretching a chapter.
         const t = Math.min(1, (now - began) / duration);
-        window.scrollTo({ top: t === 1 ? target : start + seekPosition(from + (to - from) * ease(t)) * span, behavior: "instant" });
+        window.scrollTo({ top: t === 1 ? target : from + (target - from) * ease(t), behavior: "instant" });
+        onScrollFrame?.();
         frame = t < 1 ? requestAnimationFrame(tick) : 0;
       };
       frame = requestAnimationFrame(tick);
@@ -90,6 +87,6 @@ export function useCameraScrollPacing(sectionRef: RefObject<HTMLElement | null>,
       window.removeEventListener("resize", interrupt);
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, [sectionRef, enabled, distance]);
+  }, [sectionRef, enabled, distance, onScrollFrame]);
   return useCallback((top: number) => navigateRef.current(top), []);
 }

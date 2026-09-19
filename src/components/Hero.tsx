@@ -55,7 +55,17 @@ export default function Hero() {
     window.scrollTo({ top: 0, behavior: "instant" });
     setAnimationEnabled(enabled);
   };
-  const scrollToChapter = useCameraScrollPacing(sectionRef, ready && !failed && !reducedMotion, animationDistance);
+  const syncPacedScroll = useCallback(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const nav = Number.parseFloat(getComputedStyle(section).getPropertyValue("--nav-h"));
+    const progress = Math.max(0, Math.min(cameraTimeline.length, (nav - section.getBoundingClientRect().top) / animationDistance()));
+    progressRef.current = progress;
+    // The page has just moved. Render this exact pose before the browser paints,
+    // without waiting for a scroll event and a second animation frame.
+    sceneRef.current?.setProgress(progress, true);
+  }, []);
+  const scrollToChapter = useCameraScrollPacing(sectionRef, ready && !failed && !reducedMotion, animationDistance, syncPacedScroll);
 
   const layoutViewer = useCallback((progress: number, bounds?: CameraSceneBounds) => {
     const pose = cameraPoseAt(progress);

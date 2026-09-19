@@ -9,7 +9,7 @@ import { cameraRibbonPath } from "../lib/cameraRibbon";
 export interface CameraSceneBounds { top: number; bottom: number }
 
 export interface CameraScene {
-  setProgress: (progress: number) => void;
+  setProgress: (progress: number, immediate?: boolean) => void;
   dispose: () => void;
 }
 
@@ -486,6 +486,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
     let top=1,bottom=0;
     model.traverseVisible(object=>{
       if(object instanceof THREE.Mesh){
+        if (object === capture) return; // The fading image must not change hardware framing.
         if(!Array.isArray(object.material)&&object.material.opacity<.01)return;
         objectBounds.setFromObject(object);
         for(let i=0;i<8;i++){
@@ -494,12 +495,15 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
         }
       }
     });
-    if (labelOpacity >= .01) labels.forEach(({ anchor }) => {
+    let labeledTop = top, labeledBottom = bottom;
+    labels.forEach(({ anchor }) => {
       if (!anchor.visible) return;
       const projected = projectLabel(anchor);
-      top = Math.min(top, projected.y - projected.height / 2);
-      bottom = Math.max(bottom, projected.y + projected.height / 2);
+      labeledTop = Math.min(labeledTop, projected.y - projected.height / 2);
+      labeledBottom = Math.max(labeledBottom, projected.y + projected.height / 2);
     });
+    top = THREE.MathUtils.lerp(top, labeledTop, labelOpacity);
+    bottom = THREE.MathUtils.lerp(bottom, labeledBottom, labelOpacity);
     return {top,bottom};
   }
 
@@ -604,30 +608,27 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   }
   function stop() { renderer.setAnimationLoop(null); running = false; }
   function animate(time: number) {
-    const elapsed = previousTime ? Math.min(time - previousTime, 250) : 16;
+    stop();
+    const elapsed = previousTime && time - previousTime < 250 ? time - previousTime : 16;
     previousTime = time;
-    current += (target - current) * (1 - Math.exp(-elapsed / 62));
-    if (Math.abs(target - current) < 0.0001) current = target;
+    const changed = current !== target;
+    current = target;
     const started = performance.now();
     draw(current);
-    // Sustained slow rendering lowers resolution, never the animation itself.
-    // Only downgrade during motion so idle gaps do not count as slow frames.
-    if (target !== current && (elapsed > 34 || performance.now() - started > 24)) slowFrames++;
+    // Use one pose for the canvas and DOM. Extra easing here used to trail the
+    // already-eased scroll, then catch up after the page had stopped moving.
+    if (changed && (elapsed > 34 || performance.now() - started > 24)) slowFrames++;
     else slowFrames = Math.max(0, slowFrames - 1);
     if (slowFrames >= 8 && quality > 0.5) {
       quality = Math.max(0.5, quality * 0.75);
       slowFrames = 0;
       syncResolution();
     }
-    if (current === target) stop();
   }
-  function requestDraw() {
+  function requestDraw(immediate = false) {
     if (destroyed || contextLost || document.hidden || width === 0 || height === 0) return;
-    // A restored scroll position or a chapter selected during loading should
-    // be the first visible pose, without briefly showing the closed model.
-    if (!firstFrameRendered) current = target;
-    if (reducedMotion) { current = target; draw(current); return; }
-    if (!running) { running = true; previousTime = 0; renderer.setAnimationLoop(animate); }
+    if (immediate || reducedMotion) { animate(performance.now()); return; }
+    if (!running) { running = true; renderer.setAnimationLoop(animate); }
   }
   // Cap the work on high-DPI displays. Mobile toolbar/zoom events must not
   // repeatedly allocate identical drawing buffers and invalidate cached poses.
@@ -657,20 +658,19 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   onResolutionChange();
   window.addEventListener("resize", syncResolution);
   resize.observe(canvas);
-  // Complete each short transition even if scrolling briefly moves the canvas
-  // outside the viewport. Intersection-based pausing can strand it halfway
-  // between layouts. The loop stops at its target and cached poses skip WebGL.
+  // A newly visible tab draws the latest target. Each update renders once;
+  // cached poses still update DOM positioning without repeating WebGL work.
   const onVisibility = () => { if (document.hidden) stop(); else requestDraw(); };
   const onLost = (event: Event) => { event.preventDefault(); contextLost = true; stop(); onFailure(); };
   document.addEventListener("visibilitychange", onVisibility);
   canvas.addEventListener("webglcontextlost", onLost);
 
   return {
-    setProgress(progress) {
+    setProgress(progress, immediate = false) {
       const next = THREE.MathUtils.clamp(progress, 0, cameraTimeline.length);
-      if (next === target) return;
+      if (next === target && (!immediate || (current === target && renderedPose !== null))) return;
       target = next;
-      requestDraw();
+      requestDraw(immediate);
     },
     dispose() {
       destroyed = true; stop(); resize.disconnect();
