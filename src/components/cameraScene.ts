@@ -1,4 +1,7 @@
 import * as THREE from "three";
+import { Line2 } from "three/addons/lines/Line2.js";
+import { LineGeometry } from "three/addons/lines/LineGeometry.js";
+import { LineMaterial } from "three/addons/lines/LineMaterial.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { cameraPoseAt, cameraTimeline } from "../lib/cameraTimeline";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
@@ -352,7 +355,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   const rayGroup = new THREE.Group();
   model.add(rayGroup);
   const wavelengthSamples = [440, 540, 650];
-  const rays: { line: THREE.Line; orderY: number; orderZ: number; wavelength: number }[] = [];
+  const rays: { line: Line2; material: LineMaterial; orderY: number; orderZ: number; wavelength: number }[] = [];
   for (let y = -1; y <= 1; y++) for (let z = -1; z <= 1; z++) {
     if (y === 0 && z === 0) continue;
     for (let band = 0; band < 3; band++) {
@@ -360,17 +363,17 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
       // Remove illustrative rays that would pass outside the clear aperture.
       // This includes the upper/lower diagonal paths in the previous model.
       if (Math.hypot(y * spread, z * spread) > mm(dimensions.reimaging.diameter / 2 - 0.25)) continue;
-      const rayMat = material(new THREE.LineBasicMaterial({ color: [0x6688bd, 0x80ab79, 0xd07873][band], transparent: true, opacity: 0, depthWrite: false }));
-      const rayGeo = geometry(new THREE.BufferGeometry());
-      rayGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(9), 3));
-      const line = new THREE.Line(rayGeo, rayMat); rayGroup.add(line);
-      rays.push({ line, orderY: y, orderZ: z, wavelength: band });
+      const rayMat = material(new LineMaterial({ color: [0x416fae, 0x558e4e, 0xb95855][band], linewidth: 2.25, transparent: true, opacity: 0, depthWrite: false }));
+      const rayGeo = geometry(new LineGeometry());
+      rayGeo.setPositions([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+      const line = new Line2(rayGeo, rayMat); line.frustumCulled = false; rayGroup.add(line);
+      rays.push({ line, material: rayMat, orderY: y, orderZ: z, wavelength: band });
     }
   }
-  const incomingMat = material(new THREE.LineBasicMaterial({ color: 0x99aaa0, transparent: true, opacity: 0 }));
-  const incomingGeo = geometry(new THREE.BufferGeometry());
-  incomingGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(21), 3));
-  rayGroup.add(new THREE.Line(incomingGeo, incomingMat));
+  const incomingMat = material(new LineMaterial({ color: 0x60756a, linewidth: 2.6, transparent: true, opacity: 0, depthWrite: false }));
+  const incomingGeo = geometry(new LineGeometry());
+  incomingGeo.setPositions(new Array(21).fill(0));
+  const incomingLine = new Line2(incomingGeo, incomingMat); incomingLine.frustumCulled = false; rayGroup.add(incomingLine);
 
   // A precomputed ground projection of the closed housing and protruding lens.
   // It follows the camera footprint instead of exposing the rectangular plane,
@@ -465,8 +468,8 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
     if (renderedPose !== null && renderedPose >= cameraTimeline.separationEnd && progress >= cameraTimeline.separationEnd) {
       const opacity = smooth(cameraTimeline.sensorStart, cameraTimeline.sensorEnd, progress);
       captureMat.opacity = opacity;
-      rays.forEach(({ line }) => { (line.material as THREE.LineBasicMaterial).opacity = opacity * 0.78; });
-      incomingMat.opacity = opacity * 0.6;
+      rays.forEach(({ material }) => { material.opacity = opacity * 0.92; });
+      incomingMat.opacity = opacity * 0.78;
       onFrame(position, visibleBounds);
       renderer.render(scene, camera);
       renderedPose = renderPose;
@@ -496,22 +499,27 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
     labels.forEach(({ anchor }, index) => { anchor.position.x = index===6?computer.position.x+1.65:parts[index].position.x; anchor.visible = width > 520; });
     const rayOpacity = smooth(cameraTimeline.sensorStart, cameraTimeline.sensorEnd, progress);
     captureMat.opacity = rayOpacity;
-    rays.forEach(({ line, orderY, orderZ, wavelength }) => {
+    rays.forEach(({ line, material: rayMaterial, orderY, orderZ, wavelength }) => {
       const nm = wavelengthSamples[wavelength];
       const spread = nm / 700 * mm(dimensions.reimaging.diameter / 2) * reimagingScale * 0.92;
       const displacement = nm / 700 * mm(dimensions.sensor.activeHeight / 2) * 0.9;
-      const attr = line.geometry.getAttribute("position") as THREE.BufferAttribute;
-      attr.setXYZ(0, parts[3].position.x, 0, 0);
-      attr.setXYZ(1, parts[4].position.x, orderY * spread, orderZ * spread);
-      attr.setXYZ(2, parts[5].position.x, orderY * displacement, orderZ * displacement);
-      attr.needsUpdate = true; line.geometry.computeBoundingSphere();
-      (line.material as THREE.LineBasicMaterial).opacity = rayOpacity * 0.78;
+      line.geometry.setPositions([
+        parts[3].position.x, 0, 0,
+        parts[4].position.x, orderY * spread, orderZ * spread,
+        parts[5].position.x, orderY * displacement, orderZ * displacement,
+      ]);
+      rayMaterial.opacity = rayOpacity * 0.92;
     });
-    const attr = incomingGeo.getAttribute("position") as THREE.BufferAttribute;
-    attr.setXYZ(0, parts[0].position.x - 0.9, 0, 0);
-    for (let i = 0; i < 5; i++) attr.setXYZ(i + 1, parts[i].position.x, 0, 0);
-    attr.setXYZ(6, parts[5].position.x, 0, 0);
-    attr.needsUpdate = true; incomingGeo.computeBoundingSphere(); incomingMat.opacity = rayOpacity * 0.6;
+    incomingGeo.setPositions([
+      parts[0].position.x - 0.9, 0, 0,
+      parts[0].position.x, 0, 0,
+      parts[1].position.x, 0, 0,
+      parts[2].position.x, 0, 0,
+      parts[3].position.x, 0, 0,
+      parts[4].position.x, 0, 0,
+      parts[5].position.x, 0, 0,
+    ]);
+    incomingMat.opacity = rayOpacity * 0.78;
     shadowMat.opacity = THREE.MathUtils.lerp(1, .14, smooth(0, .55, explode));
     model.rotation.y = THREE.MathUtils.lerp(-0.1, 0.02, explode);
     // Keep the assembled prism level so its front edges read as parallel.
