@@ -51,7 +51,8 @@
 /* The bar stays within this section, including after a chapter button scrolls.
    Its build-cost label belongs to the same camera viewer as the controls. */
 .camera-story__controls { position: absolute; top: calc(100svh - var(--nav-h) - 80px); left: 0; right: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 24px; width: min(560px, calc(100% - var(--gutter) * 2)); height: 64px; margin-inline: auto; padding: 8px 16px; border: 1px solid var(--border); border-radius: 4px; background: var(--white); box-shadow: 0 4px 18px rgb(26 42 31 / 5%); }
-.camera-story__disclaimer { position: absolute; top: calc(100svh - var(--nav-h) - 64px); left: var(--gutter); z-index: 4; width: min(29ch, calc(50vw - 310px)); margin: 0; color: var(--text-soft); font-size: clamp(.68rem, .12vw + .64rem, .78rem); line-height: 1.35; }
+.camera-story__disclaimer { position: absolute; top: calc(100svh - var(--nav-h) - 64px); left: var(--gutter); z-index: 4; width: min(29ch, calc(50vw - 310px)); margin: 0; color: var(--text-soft); font-size: clamp(.68rem, .12vw + .64rem, .78rem); line-height: 1.35; opacity: 0; visibility: hidden; transition: opacity 180ms ease, visibility 180ms; }
+.camera-story__disclaimer.is-visible { opacity: 1; visibility: visible; }
 .camera-story__cost { display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; margin: 0; padding-right: 24px; border-right: 1px solid var(--border); color: var(--text); font-variant-numeric: tabular-nums; line-height: 1.2; }
 .camera-story__cost span:first-child { color: var(--text-soft); font-size: 0.75rem; }
 .camera-story__cost span:last-child { font-size: 1.1rem; font-weight: 500; }
