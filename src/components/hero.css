@@ -127,19 +127,3 @@
   .camera-snapshot { flex: none; width: min(100%, 150px); margin: 0; }
   .camera-snapshot > span { font-size: .68rem; white-space: nowrap; }
 }
-.camera-story--still { height: auto; min-height: 0; }
-.camera-story--still .camera-story__controls { position: sticky; top: calc(100svh - 80px); }
-.camera-story--still .camera-story__inner { position: relative; padding-top: 40px; }
-.camera-story--still .camera-story__intro { opacity: 1; position: relative; top: 0; left: 0; width: 100%; max-width: 600px; }
-.camera-story--still .camera-story__intro h1 { max-width: none; }
-.camera-story--still .camera-story__next { display: none; }
-.camera-story--still .camera-story__figure { position: relative; top: 0; left: 0; width: 100%; height: 55svh; min-height: 310px; transform: none; }
-.camera-story--still .camera-story__details { position: relative; top: 0; left: 0; right: 0; margin-bottom: 30px; transform: none; }
-.camera-story--still .camera-story__disclaimer { position: relative; top: auto; left: auto; width: min(100% - var(--gutter) * 2, 46ch); margin: 12px var(--gutter) 24px; }
-@media (prefers-reduced-motion: reduce) {
-  .camera-story__chapter-title > span, .camera-story__explanation-copy > span { transition: none; }
-}
-
-.camera-story__motion-choice { margin-top: 12px; max-width: 36ch; }
-.camera-story__motion-choice p { margin: 0; font-size: .85rem; color: var(--text-soft); }
-.camera-story__motion-choice button { min-height: 44px; padding: 4px 0; border: 0; background: none; color: var(--accent); font: inherit; font-size: .9rem; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }

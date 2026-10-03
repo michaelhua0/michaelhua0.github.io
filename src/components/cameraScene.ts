@@ -8,6 +8,7 @@ import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.j
 import { cameraDimensions as dimensions, cameraOpticalPositions as optical, mm } from "../lib/cameraDimensions";
 import { createCameraHousingGeometry } from "../lib/cameraHousing";
 import { cameraRibbonPath } from "../lib/cameraRibbon";
+import { updateCameraLightPath } from "../lib/cameraLightPath";
 
 export interface CameraSceneBounds { top: number; bottom: number }
 
@@ -20,13 +21,12 @@ const smooth = (a: number, b: number, value: number) => THREE.MathUtils.smoothst
 const reimagingDisplayDiameter = 22;
 
 /** An illustrative optical assembly based on Michael's CTIS hardware diagram. */
-export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGElement, diffractionImage: HTMLImageElement, reducedMotion: boolean, onFailure: () => void, onFrame: (progress: number, bounds: CameraSceneBounds) => void, onReady: () => void): CameraScene {
+export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGElement, diffractionImage: HTMLImageElement, onFailure: () => void, onFrame: (progress: number, bounds: CameraSceneBounds) => void, onReady: () => void): CameraScene {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
   renderer.setClearColor(0xffffff, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.08;
-  renderer.transmissionResolutionScale = 0.5;
   // The soft contact-shadow plane below supplies the depth cue without a
   // device-dependent shadow-map pass for every animation frame.
   renderer.shadowMap.enabled = false;
@@ -59,7 +59,9 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   const black = material(new THREE.MeshStandardMaterial({ color: 0x101217, metalness: 0.26, roughness: 0.32 }));
   const metal = material(new THREE.MeshStandardMaterial({ color: 0xadb2bc, metalness: 0.85, roughness: 0.22 }));
   const green = material(new THREE.MeshStandardMaterial({ color: 0x386653, metalness: 0.2, roughness: 0.64 }));
-  const glass = material(new THREE.MeshPhysicalMaterial({ color: 0xc6e4f3, metalness: 0, roughness: 0.06, transmission: 0.82, thickness: 0.15, ior: 1.5, transparent: true, opacity: 0.75, side: THREE.DoubleSide, depthWrite: false, iridescence: 0.28, iridescenceIOR: 1.35 }));
+  // Reflective, translucent glass preserves the flat optics without Three's
+  // additional transmission render target, mipmaps and multisample resolve.
+  const glass = material(new THREE.MeshPhysicalMaterial({ color: 0xc6e4f3, metalness: 0, roughness: 0.06, ior: 1.5, transparent: true, opacity: 0.42, side: THREE.DoubleSide, forceSinglePass: true, depthWrite: false, iridescence: 0.28, iridescenceIOR: 1.35 }));
 
   function box(parent: THREE.Object3D, size: [number, number, number], position: [number, number, number], mat: THREE.Material, radius = 0.018) {
     const mesh = new THREE.Mesh(geometry(new RoundedBoxGeometry(...size, 2, radius)), mat);
@@ -192,7 +194,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   iris.rotation.y = -Math.PI / 2;
   iris.position.x = -0.37;
   parts[0].add(iris);
-  const lensCoating = material(new THREE.MeshPhysicalMaterial({ color: 0x8babca, metalness: 0.05, roughness: 0.045, transmission: 0.5, thickness: 0.11, ior: 1.52, transparent: true, opacity: 0.78, iridescence: 0.75, iridescenceThicknessRange: [220, 410], depthWrite: false }));
+  const lensCoating = material(new THREE.MeshPhysicalMaterial({ color: 0x8babca, metalness: 0.05, roughness: 0.045, ior: 1.52, transparent: true, opacity: 0.6, iridescence: 0.75, iridescenceThicknessRange: [220, 410], depthWrite: false }));
   const frontGlass = new THREE.Mesh(geometry(new THREE.SphereGeometry(0.479, 64, 40)), lensCoating);
   frontGlass.scale.x = 0.14;
   frontGlass.position.x = -0.48;
@@ -244,7 +246,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   const cardMat = material(new THREE.MeshStandardMaterial({ map: gratingCard, side: THREE.DoubleSide, transparent: true, alphaTest: 0.35, roughness: 0.48, metalness: 0.02 }));
   const card = new THREE.Mesh(geometry(new THREE.PlaneGeometry(1.5, 1.8)), cardMat);
   card.rotation.y = -Math.PI / 2; card.position.x = -0.014; parts[3].add(card);
-  const gratingMat = material(new THREE.MeshPhysicalMaterial({ color: 0xe5ede7, roughness: 0.04, transmission: 0.9, thickness: 0.006, transparent: true, opacity: 0.24, depthWrite: false, side: THREE.DoubleSide, iridescence: 0.65 }));
+  const gratingMat = material(new THREE.MeshPhysicalMaterial({ color: 0xe5ede7, roughness: 0.04, transparent: true, opacity: 0.24, depthWrite: false, side: THREE.DoubleSide, forceSinglePass: true, iridescence: 0.65 }));
   const film = new THREE.Mesh(geometry(new THREE.PlaneGeometry(1.12, 0.87)), gratingMat);
   film.rotation.y = -Math.PI / 2; film.position.y = 0.027; parts[3].add(film);
   parts[3].scale.set(1, mm(dimensions.grating.height) / 1.8, mm(dimensions.grating.width) / 1.5);
@@ -432,7 +434,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
     let top=1,bottom=0;
     model.traverseVisible(object=>{
       if(object instanceof THREE.Mesh){
-        if (object === capture) return; // The fading image must not change hardware framing.
+        if (object === capture || object instanceof Line2) return; // Fading overlays must not move the hardware framing.
         if(!Array.isArray(object.material)&&object.material.opacity<.01)return;
         objectBounds.setFromObject(object);
         for(let i=0;i<8;i++){
@@ -503,14 +505,14 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
       const nm = wavelengthSamples[wavelength];
       const spread = nm / 700 * mm(dimensions.reimaging.diameter / 2) * reimagingScale * 0.92;
       const displacement = nm / 700 * mm(dimensions.sensor.activeHeight / 2) * 0.9;
-      line.geometry.setPositions([
+      updateCameraLightPath(line.geometry, [
         parts[3].position.x, 0, 0,
         parts[4].position.x, orderY * spread, orderZ * spread,
         parts[5].position.x, orderY * displacement, orderZ * displacement,
       ]);
       rayMaterial.opacity = rayOpacity * 0.92;
     });
-    incomingGeo.setPositions([
+    updateCameraLightPath(incomingGeo, [
       parts[0].position.x - 0.9, 0, 0,
       parts[0].position.x, 0, 0,
       parts[1].position.x, 0, 0,
@@ -554,7 +556,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   }
   function requestDraw(immediate = false) {
     if (destroyed || contextLost || document.hidden || width === 0 || height === 0) return;
-    if (immediate || reducedMotion) { animate(); return; }
+    if (immediate) { animate(); return; }
     if (!running) { running = true; renderer.setAnimationLoop(animate); }
   }
   // Cap the work on high-DPI displays. Mobile toolbar/zoom events must not

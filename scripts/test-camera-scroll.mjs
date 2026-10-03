@@ -10,7 +10,7 @@ function setup(coarse = false, enabled = true) {
   let now = 0, id = 0, cleanup;
   const frames = new Map(), listeners = new Map(), calls = [], rendered = [];
   const win = {
-    scrollY: 0, innerHeight: 800,
+    scrollY: 0, innerHeight: 800, innerWidth: coarse ? 390 : 1440,
     matchMedia: () => ({ matches: coarse }),
     scrollTo: options => { win.scrollY = options.top; calls.push(options); },
     addEventListener: (name, fn) => listeners.set(name, fn),
@@ -66,8 +66,31 @@ for (let i = 2; i < samples.length; i++) {
 }
 synced.cleanup();
 const reverse = setup(); reverse.wheel(1); reverse.tick(300); reverse.wheel(-1); reverse.tick(1600); assert.equal(reverse.win.scrollY, 0); reverse.cleanup();
-const touch = setup(true); touch.navigate(660); assert.equal(touch.calls[0].behavior, 'smooth'); touch.tick(2000); assert.equal(touch.calls.length, 1, 'No arrival retries'); touch.cleanup();
+const touch = setup(true); touch.navigate(660); touch.tick(2000); assert.equal(touch.win.scrollY, 660); assert.equal(touch.calls[0].behavior, 'instant'); assert.equal(touch.calls.length, 1, 'One paced animator, no native smooth-scroll retries'); touch.cleanup();
 const interrupted = setup(); interrupted.wheel(1); interrupted.tick(100); interrupted.listeners.get('pointerdown')(); const y = interrupted.win.scrollY; interrupted.tick(2000); assert.equal(interrupted.win.scrollY, y); interrupted.cleanup();
 const ignored = setup(); assert.equal(ignored.wheel(1, { ctrlKey: true }), false); assert.equal(ignored.wheel(1, { cancelable: false }), false); ignored.cleanup();
 const disabled = setup(false, false); assert.equal(disabled.listeners.size, 0); disabled.cleanup();
 console.log('Camera scroll checks passed: stage navigation, 16/100/500ms frames, reversal, endpoints, interruption, touch buttons, disabled motion.');
+
+// A continuous input stream previously latched captured=true forever, so
+// neither the next chapter nor returning to the heading could finish.
+const stream = setup();
+for (let i = 0; i < 180; i++) { stream.wheel(.5); stream.tick(16); }
+assert.equal(stream.win.scrollY, 660, 'Continuous small downward events reach Sensor');
+for (let i = 0; i < 180; i++) { stream.wheel(-.5); stream.tick(16); }
+assert.equal(stream.win.scrollY, 0, 'Continuous upward events return to the initial heading');
+assert.equal(stream.wheel(-1), false, 'At the heading, upward scrolling is released');
+stream.cleanup();
+const queued = setup(); queued.wheel(1); queued.tick(150); queued.wheel(1);
+queued.tick(1600); queued.tick(1000);
+assert.equal(queued.win.scrollY, 660, 'Fresh wheel notch during transition queues the next chapter');
+queued.cleanup();
+for (const deltaMode of [0, 1, 2]) {
+  const mouse = setup(); mouse.wheel(1, {deltaMode}); mouse.tick(1600);
+  assert.equal(mouse.win.scrollY, 418, 'Pixel, line and page wheel events all select one chapter'); mouse.cleanup();
+}
+console.log('Continuous input, heading return, queued wheel notches and wheel delta modes passed.');
+const toolbar = setup(true); toolbar.navigate(660); toolbar.tick(300);
+toolbar.win.innerHeight += 100; toolbar.listeners.get('resize')(); toolbar.tick(2000);
+assert.equal(toolbar.win.scrollY, 660, 'Collapsing mobile toolbar must not interrupt a chapter jump');
+toolbar.cleanup();
