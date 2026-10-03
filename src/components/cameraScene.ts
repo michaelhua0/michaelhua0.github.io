@@ -1,3 +1,4 @@
+import { createCameraLensGeometry, reimagingDisplayDiameter } from "../lib/cameraLens";
 import * as THREE from "three";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { cameraPoseAt, cameraTimeline } from "../lib/cameraTimeline";
@@ -263,8 +264,11 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   for (const index of [2, 4]) {
     const spec = index === 2 ? dimensions.collimating : dimensions.reimaging;
     const radius = mm(spec.diameter / 2);
-    const lens = new THREE.Mesh(geometry(new THREE.SphereGeometry(radius, 48, 32)), glass);
-    lens.scale.set(spec.thickness / spec.diameter, 1, 1); parts[index].add(lens);
+    // Flat face toward the aperture for collimation; curved face toward the
+    // grating for focusing. Rear objective is an equivalent positive element.
+    const lens = new THREE.Mesh(geometry(createCameraLensGeometry(radius, mm(spec.thickness), index === 2 ? 1 : -1,
+      index === 2 ? mm(spec.focalLength * .5) : undefined)), glass);
+    parts[index].add(lens);
     ring(parts[index], radius, mm(index === 2 ? 0.6 : 0.25), 0, metal);
   }
   // The rear glass sits in a small threaded lens housing; its 5 mm optical
@@ -537,6 +541,8 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
       part.position.x = THREE.MathUtils.lerp(assembledX[index], openX[index], explode);
       part.visible = index === 0 || progress > cameraTimeline.openingStart;
     });
+    const reimagingScale = THREE.MathUtils.lerp(1, reimagingDisplayDiameter / dimensions.reimaging.diameter, explode);
+    parts[4].scale.set(THREE.MathUtils.lerp(1, 3, explode), reimagingScale, reimagingScale);
     computer.position.set(THREE.MathUtils.lerp(mm(dimensions.computer.centerX),2.0,explode),THREE.MathUtils.lerp(mm(dimensions.computer.centerY),-1.55,smooth(0,.15,explode)),THREE.MathUtils.lerp(0,.15,explode));
     computer.visible=progress>cameraTimeline.openingStart;
     ribbon.visible=computer.visible;
@@ -549,7 +555,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
     captureMat.opacity = rayOpacity;
     rays.forEach(({ line, orderY, orderZ, wavelength }) => {
       const nm = wavelengthSamples[wavelength];
-      const spread = nm / 700 * mm(dimensions.reimaging.diameter / 2) * 0.92;
+      const spread = nm / 700 * mm(dimensions.reimaging.diameter / 2) * reimagingScale * 0.92;
       const displacement = nm / 700 * mm(dimensions.sensor.activeHeight / 2) * 0.9;
       const attr = line.geometry.getAttribute("position") as THREE.BufferAttribute;
       attr.setXYZ(0, parts[3].position.x, 0, 0);

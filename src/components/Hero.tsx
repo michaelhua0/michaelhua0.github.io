@@ -242,7 +242,7 @@ export default function Hero() {
               <span className={chapter !== 2 ? "is-active" : ""} aria-hidden={chapter === 2}>Inside My Camera</span>
               <span className={chapter === 2 ? "is-active" : ""} aria-hidden={chapter !== 2}>The Sensor Image</span>
             </h2>
-            <p className="camera-story__scale-note">Spacing expanded for clarity</p>
+            <p className="camera-story__scale-note">Illustrative optics · spacing expanded · re-imaging lens enlarged</p>
             <p className="camera-story__explanation-copy">
               <span className={chapter !== 2 ? "is-active" : ""} aria-hidden={chapter === 2}>The lenses focus light through a square aperture. A dual-axis grating separates the light by wavelength before it reaches the camera sensor.</span>
               <span className={chapter === 2 ? "is-active" : ""} aria-hidden={chapter !== 2}>The sensor captures the 0th, ±1st, and diagonal orders in one exposure. My <span className="nowrap">Novel PASS-Transformer</span> recovers the spectra with PSF-aware spatial attention, dispersion-aware spectral attention, and iterative physical consistency. Training is self-supervised, with no ground truth.</span>
