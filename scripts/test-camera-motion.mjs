@@ -28,16 +28,10 @@ function render(prefersReducedMotion, choice, storageUnavailable = false) {
   });
   return renderToStaticMarkup(createElement(exports.default));
 }
-const reduced = render(true, null);
-assert.match(reduced, /data-motion="reduced"/);
-assert.match(reduced, /camera-story--still/);
-assert.match(reduced, /Enable camera animation/);
-const enabled = render(true, 'enabled');
-assert.match(enabled, /data-motion="animated"/);
-assert.doesNotMatch(enabled, /camera-story--still/);
-assert.match(enabled, /Use reduced motion/);
-const normal = render(false, null);
-assert.match(normal, /data-motion="animated"/);
-assert.doesNotMatch(normal, /camera-story__motion-choice/);
-assert.match(render(true, null, true), /Enable camera animation/);
-console.log('Camera motion checks passed: reduced-motion default, explicit opt-in, normal default, blocked storage.');
+for (const preference of [true, false]) for (const storageUnavailable of [true, false]) {
+  const markup = render(preference, null, storageUnavailable);
+  assert.match(markup, /data-motion="animated"/);
+  assert.doesNotMatch(markup, /camera-story--still|camera-story__motion-choice|Enable camera animation/);
+  assert.match(markup, /<h1>Michael Hua<\/h1>/);
+}
+console.log('Camera is animated by default, including reduced-motion devices and blocked storage; no opt-in UI.');

@@ -16,13 +16,13 @@ export function useCameraScrollPacing(sectionRef: RefObject<HTMLElement | null>,
     let lastGesture = -Infinity;
     let lastDirection = 0;
     let captured = false;
+    let queuedDirection = 0;
     const resetGesture = () => { lastGesture = -Infinity; captured = false; };
-    const stop = () => { cancelAnimationFrame(frame); frame = 0; };
-    const origin = () => window.scrollY + section.getBoundingClientRect().top
-      - Number.parseFloat(getComputedStyle(section).getPropertyValue("--nav-h"));
+    const stop = () => { cancelAnimationFrame(frame); frame = 0; queuedDirection = 0; };
+    const origin = () => Math.max(0, window.scrollY + section.getBoundingClientRect().top
+      - Number.parseFloat(getComputedStyle(section).getPropertyValue("--nav-h")));
     const navigate = (top: number) => {
       stop();
-      if (window.matchMedia("(pointer: coarse)").matches) { nativeScrollTo(top); return; }
       target = Math.max(0, Math.min(document.documentElement.scrollHeight - window.innerHeight, top));
       const from = window.scrollY;
       const span = distance(), start = origin();
@@ -38,6 +38,15 @@ export function useCameraScrollPacing(sectionRef: RefObject<HTMLElement | null>,
         window.scrollTo({ top: t === 1 ? target : from + (target - from) * ease(t), behavior: "instant" });
         onScrollFrame?.();
         frame = t < 1 ? requestAnimationFrame(tick) : 0;
+        // A completed chapter must release its gesture. Otherwise a continuous
+        // stream of wheel events is swallowed indefinitely, including upward
+        // scrolling back to the heading.
+        if (t === 1) {
+          resetGesture();
+          const queued = queuedDirection;
+          queuedDirection = 0;
+          if (queued) advance(queued);
+        }
       };
       frame = requestAnimationFrame(tick);
     };
@@ -45,13 +54,18 @@ export function useCameraScrollPacing(sectionRef: RefObject<HTMLElement | null>,
     const advance = (direction: number, repeat = false) => {
       if (document.querySelector("dialog[open]")) return false;
       const now = performance.now();
-      const continuing = direction === lastDirection && (repeat || now - lastGesture < 180);
+      const continuing = direction === lastDirection && (repeat || now - lastGesture < 90);
       lastGesture = now;
       lastDirection = direction;
-      if (continuing && captured) return true;
+      if (frame && continuing && captured) return true;
       // Finish one stage before accepting another in the same direction, even
       // for mice whose wheel events are farther apart than trackpad events.
-      if (frame && direction === Math.sign(target - window.scrollY)) return true;
+      if (frame && direction === Math.sign(target - window.scrollY)) {
+        // Remember one fresh gesture received while the previous stage is
+        // moving. Users need not time their next wheel notch to its last frame.
+        if (!continuing) queuedDirection = direction;
+        return true;
+      }
       captured = false;
       const start = origin(), span = distance();
       const position = (window.scrollY - start) / span;
@@ -76,12 +90,19 @@ export function useCameraScrollPacing(sectionRef: RefObject<HTMLElement | null>,
       if (direction && advance(direction, event.repeat)) event.preventDefault();
     };
     const interrupt = () => { stop(); resetGesture(); };
+    let viewportWidth = window.innerWidth;
+    const onResize = () => {
+      // Mobile toolbars resize innerHeight during a chapter jump; the scene
+      // uses stable svh units, so that event must not cancel its animation.
+      if (window.innerWidth !== viewportWidth || !window.matchMedia("(pointer: coarse)").matches) interrupt();
+      viewportWidth = window.innerWidth;
+    };
     const onVisibility = () => { if (document.hidden) interrupt(); };
     window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("keydown", onKey);
     window.addEventListener("pointerdown", interrupt);
     window.addEventListener("touchstart", interrupt, { passive: true });
-    window.addEventListener("resize", interrupt);
+    window.addEventListener("resize", onResize);
     document.addEventListener("visibilitychange", onVisibility);
     return () => {
       interrupt(); navigateRef.current = nativeScrollTo;
@@ -89,7 +110,7 @@ export function useCameraScrollPacing(sectionRef: RefObject<HTMLElement | null>,
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("pointerdown", interrupt);
       window.removeEventListener("touchstart", interrupt);
-      window.removeEventListener("resize", interrupt);
+      window.removeEventListener("resize", onResize);
       document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [sectionRef, enabled, distance, onScrollFrame]);
