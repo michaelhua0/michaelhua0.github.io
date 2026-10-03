@@ -372,17 +372,27 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   incomingGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(21), 3));
   rayGroup.add(new THREE.Line(incomingGeo, incomingMat));
 
+  // A precomputed ground projection of the closed housing and protruding lens.
+  // It follows the camera footprint instead of exposing the rectangular plane,
+  // while staying a single transparent draw call on every device.
   const shadowTexture = textureFrom((ctx, width, height) => {
-    const gradient = ctx.createRadialGradient(width * .48, height * .48, 5, width / 2, height / 2, width / 2);
-    gradient.addColorStop(0, "rgba(40,49,43,0.34)"); gradient.addColorStop(0.5, "rgba(50,62,53,0.14)"); gradient.addColorStop(1, "rgba(69,88,73,0)");
-    ctx.fillStyle = gradient; ctx.fillRect(0, 0, width, height);
-  }, 256, 256);
-  const shadowMat = material(new THREE.MeshBasicMaterial({ map: shadowTexture, transparent: true, depthWrite: false }));
-  const shadow = new THREE.Mesh(geometry(new THREE.PlaneGeometry(11.5, 5.8)), shadowMat);
-  shadow.rotation.x = -Math.PI / 2; shadow.position.set(0, -bodyHeight / 2 - mm(1.1), 0); scene.add(shadow);
-  const contactShadowMat = material(new THREE.MeshBasicMaterial({ map: shadowTexture, transparent: true, opacity: .72, depthWrite: false }));
-  const contactShadow = new THREE.Mesh(geometry(new THREE.PlaneGeometry(7.2, 3.1)), contactShadowMat);
-  contactShadow.rotation.x = -Math.PI / 2; contactShadow.position.set(.1, -bodyHeight / 2 - mm(1.2), .05); scene.add(contactShadow);
+    const body = { x: width * .176, y: height * .267, w: width * .502, h: height * .466 };
+    const lens = { x: width * .043, y: height * .385, w: width * .15, h: height * .23 };
+    const drawFootprint = (alpha: number, blur: number, dx: number, dy: number) => {
+      ctx.save();
+      ctx.filter = `blur(${blur}px)`;
+      ctx.fillStyle = `rgba(28,36,31,${alpha})`;
+      ctx.translate(dx, dy);
+      ctx.beginPath(); ctx.roundRect(body.x, body.y, body.w, body.h, 12); ctx.fill();
+      ctx.beginPath(); ctx.roundRect(lens.x, lens.y, lens.w, lens.h, lens.h / 2); ctx.fill();
+      ctx.restore();
+    };
+    drawFootprint(.16, 28, 22, 18);
+    drawFootprint(.14, 11, 10, 8);
+  }, 512, 256);
+  const shadowMat = material(new THREE.MeshBasicMaterial({ map: shadowTexture, transparent: true, depthWrite: false, toneMapped: false }));
+  const shadow = new THREE.Mesh(geometry(new THREE.PlaneGeometry(10, 5)), shadowMat);
+  shadow.rotation.x = -Math.PI / 2; shadow.position.set(0, -bodyHeight / 2 - mm(1.1), 0); shadow.renderOrder = -1; scene.add(shadow);
 
   let width = 0;
   let height = 0;
@@ -468,10 +478,13 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
     shell.visible = fade < 1;
     shellMat.opacity = 1 - fade;
     parts.forEach((part, index) => {
-      part.position.x = THREE.MathUtils.lerp(assembledX[index], openX[index], explode);
+      // The small rear lens must visibly originate inside the housing. Hold it
+      // at its assembled coordinate until separation is underway, then move it.
+      const travel = index === 4 ? smooth(.12, 1, explode) : explode;
+      part.position.x = THREE.MathUtils.lerp(assembledX[index], openX[index], travel);
       part.visible = index === 0 || progress > cameraTimeline.openingStart;
     });
-    const reimagingScale = THREE.MathUtils.lerp(1, reimagingDisplayDiameter / dimensions.reimaging.diameter, explode);
+    const reimagingScale = THREE.MathUtils.lerp(1, reimagingDisplayDiameter / dimensions.reimaging.diameter, smooth(.28, .82, explode));
     parts[4].scale.set(1, reimagingScale, reimagingScale);
     computer.position.set(THREE.MathUtils.lerp(mm(dimensions.computer.centerX),2.0,explode),THREE.MathUtils.lerp(mm(dimensions.computer.centerY),-1.55,smooth(0,.15,explode)),THREE.MathUtils.lerp(0,.15,explode));
     computer.visible=progress>cameraTimeline.openingStart;
@@ -499,8 +512,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
     for (let i = 0; i < 5; i++) attr.setXYZ(i + 1, parts[i].position.x, 0, 0);
     attr.setXYZ(6, parts[5].position.x, 0, 0);
     attr.needsUpdate = true; incomingGeo.computeBoundingSphere(); incomingMat.opacity = rayOpacity * 0.6;
-    shadowMat.opacity = THREE.MathUtils.lerp(1, .38, explode);
-    contactShadowMat.opacity = THREE.MathUtils.lerp(.72, .16, explode);
+    shadowMat.opacity = THREE.MathUtils.lerp(1, .14, smooth(0, .55, explode));
     model.rotation.y = THREE.MathUtils.lerp(-0.1, 0.02, explode);
     // Keep the assembled prism level so its front edges read as parallel.
     model.rotation.z = THREE.MathUtils.lerp(0, width < 600 ? 0.1 : 0, explode);
@@ -541,8 +553,17 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   // repeatedly allocate identical drawing buffers and invalidate cached poses.
   function syncResolution() {
     if (!width || !height || destroyed) return;
-    const desired = Math.min(window.devicePixelRatio || 1, 1.5);
-    const ratio = Math.min(desired, Math.sqrt(1_400_000 / (width * height)), renderer.capabilities.maxTextureSize / Math.max(width, height));
+    // Pick a stable quality tier before drawing. This gives capable displays
+    // sharper components without changing resolution partway through motion.
+    const memory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 4;
+    const cores = navigator.hardwareConcurrency || 4;
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
+    const highTier = !coarse && memory >= 8 && cores >= 8;
+    const standardTier = !coarse && memory >= 4 && cores >= 4;
+    const maxRatio = highTier ? 2 : standardTier ? 1.75 : 1.5;
+    const pixelBudget = highTier ? 2_800_000 : standardTier ? 2_000_000 : 1_400_000;
+    const desired = Math.min(window.devicePixelRatio || 1, maxRatio);
+    const ratio = Math.min(desired, Math.sqrt(pixelBudget / (width * height)), renderer.capabilities.maxTextureSize / Math.max(width, height));
     const nextWidth = Math.floor(width * ratio), nextHeight = Math.floor(height * ratio);
     if (nextWidth === bufferWidth && nextHeight === bufferHeight) return;
     bufferWidth = nextWidth; bufferHeight = nextHeight;
