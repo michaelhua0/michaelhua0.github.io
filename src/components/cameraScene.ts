@@ -370,7 +370,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
       rays.push({ line, material: rayMat, orderY: y, orderZ: z, wavelength: band });
     }
   }
-  const incomingMat = material(new LineMaterial({ color: 0x60756a, linewidth: 2.6, transparent: true, opacity: 0, depthWrite: false }));
+  const incomingMat = material(new LineMaterial({ color: 0x60756a, linewidth: 1.6, transparent: true, opacity: 0, depthWrite: false }));
   const incomingGeo = geometry(new LineGeometry());
   incomingGeo.setPositions(new Array(21).fill(0));
   const incomingLine = new Line2(incomingGeo, incomingMat); incomingLine.frustumCulled = false; rayGroup.add(incomingLine);
@@ -469,7 +469,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
       const opacity = smooth(cameraTimeline.sensorStart, cameraTimeline.sensorEnd, progress);
       captureMat.opacity = opacity;
       rays.forEach(({ material }) => { material.opacity = opacity * 0.92; });
-      incomingMat.opacity = opacity * 0.78;
+      incomingMat.opacity = opacity * 0.66;
       onFrame(position, visibleBounds);
       renderer.render(scene, camera);
       renderedPose = renderPose;
@@ -519,7 +519,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
       parts[4].position.x, 0, 0,
       parts[5].position.x, 0, 0,
     ]);
-    incomingMat.opacity = rayOpacity * 0.78;
+    incomingMat.opacity = rayOpacity * 0.66;
     shadowMat.opacity = THREE.MathUtils.lerp(1, .14, smooth(0, .55, explode));
     model.rotation.y = THREE.MathUtils.lerp(-0.1, 0.02, explode);
     // Keep the assembled prism level so its front edges read as parallel.
