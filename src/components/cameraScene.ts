@@ -82,6 +82,23 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
     parent.add(mesh);
     return mesh;
   }
+  function framedOptic(parent: THREE.Object3D, radius: number, depth: number) {
+    // Flat glass and a thin annular frame, like a mounted optical filter. Two
+    // planar faces and one open edge band keep the profile crisp from either
+    // viewing direction without implying a convex or concave prescription.
+    const glassDisc = new THREE.Mesh(geometry(new THREE.CircleGeometry(radius * 0.82, 64)), glass);
+    glassDisc.rotation.y = -Math.PI / 2;
+    parent.add(glassDisc);
+    const edge = new THREE.Mesh(geometry(new THREE.CylinderGeometry(radius, radius, depth, 64, 1, true)), charcoal);
+    edge.rotation.z = Math.PI / 2;
+    parent.add(edge);
+    for (const side of [-1, 1]) {
+      const face = new THREE.Mesh(geometry(new THREE.RingGeometry(radius * 0.82, radius, 64)), black);
+      face.rotation.y = side * Math.PI / 2;
+      face.position.x = side * depth / 2;
+      parent.add(face);
+    }
+  }
   function textureFrom(draw: (ctx: CanvasRenderingContext2D, width: number, height: number) => void, width = 512, height = 128) {
     const surface = document.createElement("canvas");
     surface.width = width;
@@ -196,10 +213,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   for (const index of [2, 4]) {
     const spec = index === 2 ? dimensions.collimating : dimensions.reimaging;
     const radius = mm(spec.diameter / 2);
-    const lens = new THREE.Mesh(geometry(new THREE.CylinderGeometry(radius * .91, radius * .91, mm(spec.thickness), 48)), glass);
-    lens.rotation.z = Math.PI / 2;
-    parts[index].add(lens);
-    ring(parts[index], radius, mm(.55), 0, black);
+    framedOptic(parts[index], radius, Math.max(mm(spec.thickness * .7), mm(.8)));
   }
 
   // Thin film in a printed rainbow card, following the supplied reference.
@@ -358,23 +372,17 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   incomingGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(21), 3));
   rayGroup.add(new THREE.Line(incomingGeo, incomingMat));
 
-  const ground = new THREE.Mesh(geometry(new THREE.PlaneGeometry(35, 20)), material(new THREE.ShadowMaterial({ opacity: 0.13, depthWrite: false })));
-  ground.rotation.x = -Math.PI / 2;
-  ground.position.y = -bodyHeight / 2 - mm(1);
-  ground.receiveShadow = true;
-  scene.add(ground);
-  model.traverse(object => {
-    if (object instanceof THREE.Mesh && object.material === shellMat) object.castShadow = true;
-  });
-
   const shadowTexture = textureFrom((ctx, width, height) => {
-    const gradient = ctx.createRadialGradient(width / 2, height / 2, 8, width / 2, height / 2, width / 2);
-    gradient.addColorStop(0, "rgba(69,88,73,0.15)"); gradient.addColorStop(0.5, "rgba(69,88,73,0.06)"); gradient.addColorStop(1, "rgba(69,88,73,0)");
+    const gradient = ctx.createRadialGradient(width * .48, height * .48, 5, width / 2, height / 2, width / 2);
+    gradient.addColorStop(0, "rgba(40,49,43,0.34)"); gradient.addColorStop(0.5, "rgba(50,62,53,0.14)"); gradient.addColorStop(1, "rgba(69,88,73,0)");
     ctx.fillStyle = gradient; ctx.fillRect(0, 0, width, height);
   }, 256, 256);
   const shadowMat = material(new THREE.MeshBasicMaterial({ map: shadowTexture, transparent: true, depthWrite: false }));
-  const shadow = new THREE.Mesh(geometry(new THREE.PlaneGeometry(11, 6)), shadowMat);
+  const shadow = new THREE.Mesh(geometry(new THREE.PlaneGeometry(11.5, 5.8)), shadowMat);
   shadow.rotation.x = -Math.PI / 2; shadow.position.set(0, -bodyHeight / 2 - mm(1.1), 0); scene.add(shadow);
+  const contactShadowMat = material(new THREE.MeshBasicMaterial({ map: shadowTexture, transparent: true, opacity: .72, depthWrite: false }));
+  const contactShadow = new THREE.Mesh(geometry(new THREE.PlaneGeometry(7.2, 3.1)), contactShadowMat);
+  contactShadow.rotation.x = -Math.PI / 2; contactShadow.position.set(.1, -bodyHeight / 2 - mm(1.2), .05); scene.add(contactShadow);
 
   let width = 0;
   let height = 0;
@@ -464,7 +472,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
       part.visible = index === 0 || progress > cameraTimeline.openingStart;
     });
     const reimagingScale = THREE.MathUtils.lerp(1, reimagingDisplayDiameter / dimensions.reimaging.diameter, explode);
-    parts[4].scale.set(THREE.MathUtils.lerp(1, 3, explode), reimagingScale, reimagingScale);
+    parts[4].scale.set(1, reimagingScale, reimagingScale);
     computer.position.set(THREE.MathUtils.lerp(mm(dimensions.computer.centerX),2.0,explode),THREE.MathUtils.lerp(mm(dimensions.computer.centerY),-1.55,smooth(0,.15,explode)),THREE.MathUtils.lerp(0,.15,explode));
     computer.visible=progress>cameraTimeline.openingStart;
     ribbon.visible=computer.visible;
@@ -491,7 +499,8 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
     for (let i = 0; i < 5; i++) attr.setXYZ(i + 1, parts[i].position.x, 0, 0);
     attr.setXYZ(6, parts[5].position.x, 0, 0);
     attr.needsUpdate = true; incomingGeo.computeBoundingSphere(); incomingMat.opacity = rayOpacity * 0.6;
-    shadowMat.opacity = 1 - explode * 0.66;
+    shadowMat.opacity = THREE.MathUtils.lerp(1, .38, explode);
+    contactShadowMat.opacity = THREE.MathUtils.lerp(.72, .16, explode);
     model.rotation.y = THREE.MathUtils.lerp(-0.1, 0.02, explode);
     // Keep the assembled prism level so its front edges read as parallel.
     model.rotation.z = THREE.MathUtils.lerp(0, width < 600 ? 0.1 : 0, explode);

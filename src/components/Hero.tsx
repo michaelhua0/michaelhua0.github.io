@@ -218,7 +218,7 @@ export default function Hero() {
         <p className="camera-story__cost" aria-label="Camera build cost: under 300 dollars"><span>Build cost</span><span>&lt; $300</span></p>
         <div className="camera-story__chapters" role="group" aria-label="Camera animation chapters">{cameraChapters.map((item, index) => <button key={item.label} type="button" onClick={() => goToChapter(index)} className={chapter === index ? "is-active" : ""} aria-pressed={chapter === index} aria-controls="camera-view">{item.label}</button>)}</div>
       </div>
-      <p ref={disclaimerRef} className="camera-story__disclaimer">Component spacing and relative sizes are adjusted for clarity. This is an illustration, not a scale drawing.</p>
+      <p ref={disclaimerRef} className={`camera-story__disclaimer ${detailsVisible ? "is-visible" : ""}`} aria-hidden={!detailsVisible}>Component spacing and relative sizes are adjusted for clarity. This is an illustration, not a scale drawing.</p>
       <div className="camera-story__inner">
         <header className="camera-story__intro" inert={!reducedMotion && detailsVisible} aria-hidden={!reducedMotion && detailsVisible}>
           <p className="camera-story__eyebrow">Hi, I’m</p>
