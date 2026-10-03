@@ -1,4 +1,3 @@
-import { createCameraLensGeometry, reimagingDisplayDiameter } from "../lib/cameraLens";
 import * as THREE from "three";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { cameraPoseAt, cameraTimeline } from "../lib/cameraTimeline";
@@ -15,17 +14,19 @@ export interface CameraScene {
 }
 
 const smooth = (a: number, b: number, value: number) => THREE.MathUtils.smoothstep(value, a, b);
+const reimagingDisplayDiameter = 22;
 
 /** An illustrative optical assembly based on Michael's CTIS hardware diagram. */
 export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGElement, diffractionImage: HTMLImageElement, reducedMotion: boolean, onFailure: () => void, onFrame: (progress: number, bounds: CameraSceneBounds) => void, onReady: () => void): CameraScene {
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "default" });
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
   renderer.setClearColor(0xffffff, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.08;
   renderer.transmissionResolutionScale = 0.5;
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  // The soft contact-shadow plane below supplies the depth cue without a
+  // device-dependent shadow-map pass for every animation frame.
+  renderer.shadowMap.enabled = false;
 
   const scene = new THREE.Scene();
   const studio = new RoomEnvironment();
@@ -41,12 +42,6 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   scene.add(new THREE.HemisphereLight(0xf7faff, 0x777c85, 0.65));
   const key = new THREE.DirectionalLight(0xfff4e5, 3.2);
   key.position.set(-3, 8, 6);
-  key.castShadow = true;
-  key.shadow.mapSize.set(window.innerWidth < 700 ? 1024 : 2048, window.innerWidth < 700 ? 1024 : 2048);
-  Object.assign(key.shadow.camera, { left: -9, right: 9, top: 7, bottom: -7, near: 0.1, far: 30 });
-  key.shadow.normalBias = 0.025;
-  key.shadow.bias = -0.00015;
-  key.shadow.radius = 3;
   scene.add(key);
   const fill = new THREE.DirectionalLight(0xc8ddff, 1.6);
   fill.position.set(4, 3, -5);
@@ -122,6 +117,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   const shellMat = material(charcoal.clone());
   shellMat.bumpMap = null;
   shellMat.bumpScale = 0;
+  shellMat.transparent = true;
   const bodyHeight = mm(dimensions.overall.height);
   const housing = new THREE.Mesh(geometry(createCameraHousingGeometry()), shellMat);
   housing.castShadow = true;
@@ -145,70 +141,6 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
     mesh.rotation.y = Math.PI / 2;
     parent.add(mesh);
     return mesh;
-  }
-
-  // Crossfade two complete renders rather than making individual faces
-  // transparent. This keeps the rectangular housing intact throughout its fade.
-  let fadeTargets: [THREE.WebGLRenderTarget, THREE.WebGLRenderTarget] | null = null;
-  let warmed = false;
-  let warmTimer = 0;
-  const fadeScene = new THREE.Scene();
-  const fadeCamera = new THREE.OrthographicCamera(-1,1,1,-1,0,2);
-  const fadeMaterial = material(new THREE.ShaderMaterial({
-    uniforms: { closed: {value:null}, opened: {value:null}, amount: {value:0} },
-    vertexShader: 'varying vec2 vUv; void main(){vUv=uv;gl_Position=vec4(position.xy,0.0,1.0);}',
-    fragmentShader: `
-      uniform sampler2D closed;
-      uniform sampler2D opened;
-      uniform float amount;
-      varying vec2 vUv;
-      void main(){
-        vec4 color=mix(texture2D(closed,vUv),texture2D(opened,vUv),amount);
-        gl_FragColor=vec4(color.a>0.00001 ? color.rgb/color.a : vec3(0.0),color.a);
-        #include <tonemapping_fragment>
-        #include <colorspace_fragment>
-        #include <premultiplied_alpha_fragment>
-      }`,
-    transparent:true, premultipliedAlpha:true, depthTest:false, depthWrite:false,
-  }));
-  fadeScene.add(new THREE.Mesh(geometry(new THREE.PlaneGeometry(2,2)),fadeMaterial));
-  const renderSize = new THREE.Vector2();
-  function ensureFadeTargets() {
-    renderer.getDrawingBufferSize(renderSize);
-    // Limit temporary crossfade buffers; settled views retain full resolution.
-    const fadeScale = Math.min(1, 1600 / Math.max(renderSize.x, renderSize.y));
-    renderSize.set(Math.round(renderSize.x * fadeScale), Math.round(renderSize.y * fadeScale));
-    if (!fadeTargets) {
-      fadeTargets = [
-        new THREE.WebGLRenderTarget(renderSize.x, renderSize.y, { type: THREE.HalfFloatType, samples: 2 }),
-        new THREE.WebGLRenderTarget(renderSize.x, renderSize.y, { type: THREE.HalfFloatType, samples: 2 }),
-      ];
-      fadeMaterial.uniforms.closed.value = fadeTargets[0].texture;
-      fadeMaterial.uniforms.opened.value = fadeTargets[1].texture;
-    }
-    for (const target of fadeTargets) {
-      if (target.width !== renderSize.x || target.height !== renderSize.y) target.setSize(renderSize.x, renderSize.y);
-    }
-    return fadeTargets;
-  }
-  // The opening scroll is the first thing anyone does, and it was the one that
-  // had to allocate these buffers, compile the crossfade shader, and upload the
-  // opened model's materials — several times the cost of every later stage, in
-  // both directions. Pay for it once while the canvas is still fading in.
-  function warmCrossfade() {
-    if (warmed || destroyed || contextLost || !width || !height) return;
-    warmed = true;
-    const targets = ensureFadeTargets();
-    const wasVisible = shell.visible;
-    renderer.setClearColor(0x000000, 0);
-    shell.visible = true;
-    renderer.setRenderTarget(targets[0]); renderer.render(scene, camera);
-    shell.visible = false;
-    renderer.setRenderTarget(targets[1]); renderer.render(scene, camera);
-    shell.visible = wasVisible;
-    renderer.setRenderTarget(null);
-    renderer.setClearColor(0xffffff, 0);
-    renderer.compile(fadeScene, fadeCamera);
   }
 
   const parts = Array.from({ length: 6 }, () => new THREE.Group());
@@ -264,19 +196,11 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   for (const index of [2, 4]) {
     const spec = index === 2 ? dimensions.collimating : dimensions.reimaging;
     const radius = mm(spec.diameter / 2);
-    // Flat face toward the aperture for collimation; curved face toward the
-    // grating for focusing. Rear objective is an equivalent positive element.
-    const lens = new THREE.Mesh(geometry(createCameraLensGeometry(radius, mm(spec.thickness), index === 2 ? 1 : -1,
-      index === 2 ? mm(spec.focalLength * .5) : undefined)), glass);
+    const lens = new THREE.Mesh(geometry(new THREE.CylinderGeometry(radius * .91, radius * .91, mm(spec.thickness), 48)), glass);
+    lens.rotation.z = Math.PI / 2;
     parts[index].add(lens);
-    ring(parts[index], radius, mm(index === 2 ? 0.6 : 0.25), 0, metal);
+    ring(parts[index], radius, mm(.55), 0, black);
   }
-  // The rear glass sits in a small threaded lens housing; its 5 mm optical
-  // aperture stays to scale while the housing makes the assembly legible.
-  cylinder(parts[4], mm(4.25), mm(3.8), mm(0.6), black, true);
-  ring(parts[4], mm(4.25), mm(0.3), -mm(1.3), metal);
-  ring(parts[4], mm(2.8), mm(0.35), -mm(1.4), black);
-  for (let i = 0; i < 4; i++) ring(parts[4], mm(4.25), mm(0.15), mm(-0.7 + i * 0.75), charcoal);
 
   // Thin film in a printed rainbow card, following the supplied reference.
   // Do not invent a groove density or label this dual-axis assembly "linear".
@@ -459,9 +383,6 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
   let destroyed = false;
   let contextLost = false;
   let running = false;
-  let previousTime = 0;
-  let quality = 1;
-  let slowFrames = 0;
   let bufferWidth = 0, bufferHeight = 0;
   let renderedPose: number | null = null;
   let firstFrameRendered = false;
@@ -537,6 +458,7 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
     const explode = smooth(cameraTimeline.separationStart, cameraTimeline.separationEnd, progress);
     const fade = smooth(cameraTimeline.openingStart, cameraTimeline.openingEnd, progress);
     shell.visible = fade < 1;
+    shellMat.opacity = 1 - fade;
     parts.forEach((part, index) => {
       part.position.x = THREE.MathUtils.lerp(assembledX[index], openX[index], explode);
       part.visible = index === 0 || progress > cameraTimeline.openingStart;
@@ -581,23 +503,8 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
     camera.left = -viewHeight * aspect / 2; camera.right = viewHeight * aspect / 2;
     camera.top = viewHeight / 2; camera.bottom = -viewHeight / 2; camera.updateProjectionMatrix();
     model.updateMatrixWorld(true);
-    if(fade>0 && fade<1){
-      const targets=ensureFadeTargets();
-      renderer.setClearColor(0x000000,0);
-      shell.visible=true;
-      renderer.setRenderTarget(targets[0]);renderer.render(scene,camera);
-      const closedBounds=measureVisibleBounds();
-      shell.visible=false;
-      renderer.setRenderTarget(targets[1]);renderer.render(scene,camera);
-      const openBounds=measureVisibleBounds();
-      fadeMaterial.uniforms.amount.value=fade;
-      renderer.setRenderTarget(null);renderer.render(fadeScene,fadeCamera);
-      renderer.setClearColor(0xffffff,0);
-      visibleBounds={top:THREE.MathUtils.lerp(closedBounds.top,openBounds.top,fade),bottom:THREE.MathUtils.lerp(closedBounds.bottom,openBounds.bottom,fade)};
-    }else{
-      renderer.render(scene, camera);
-      visibleBounds=measureVisibleBounds();
-    }
+    renderer.render(scene, camera);
+    visibleBounds=measureVisibleBounds();
     positionLabels();
     onFrame(position,visibleBounds);
     renderedPose = renderPose;
@@ -607,41 +514,26 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
       revealFrame = requestAnimationFrame(() => {
         if (destroyed || contextLost) return;
         onReady();
-        // After the reveal transition, so warming does not stutter it.
-        warmTimer = window.setTimeout(warmCrossfade, 300);
       });
     }
   }
   function stop() { renderer.setAnimationLoop(null); running = false; }
-  function animate(time: number) {
+  function animate() {
     stop();
-    const elapsed = previousTime && time - previousTime < 250 ? time - previousTime : 16;
-    previousTime = time;
-    const changed = current !== target;
     current = target;
-    const started = performance.now();
     draw(current);
-    // Use one pose for the canvas and DOM. Extra easing here used to trail the
-    // already-eased scroll, then catch up after the page had stopped moving.
-    if (changed && (elapsed > 34 || performance.now() - started > 24)) slowFrames++;
-    else slowFrames = Math.max(0, slowFrames - 1);
-    if (slowFrames >= 8 && quality > 0.5) {
-      quality = Math.max(0.5, quality * 0.75);
-      slowFrames = 0;
-      syncResolution();
-    }
   }
   function requestDraw(immediate = false) {
     if (destroyed || contextLost || document.hidden || width === 0 || height === 0) return;
-    if (immediate || reducedMotion) { animate(performance.now()); return; }
+    if (immediate || reducedMotion) { animate(); return; }
     if (!running) { running = true; renderer.setAnimationLoop(animate); }
   }
   // Cap the work on high-DPI displays. Mobile toolbar/zoom events must not
   // repeatedly allocate identical drawing buffers and invalidate cached poses.
   function syncResolution() {
     if (!width || !height || destroyed) return;
-    const desired = Math.min(window.devicePixelRatio || 1, 1.75) * quality;
-    const ratio = Math.min(desired, Math.sqrt(2_000_000 / (width * height)), renderer.capabilities.maxTextureSize / Math.max(width, height));
+    const desired = Math.min(window.devicePixelRatio || 1, 1.5);
+    const ratio = Math.min(desired, Math.sqrt(1_400_000 / (width * height)), renderer.capabilities.maxTextureSize / Math.max(width, height));
     const nextWidth = Math.floor(width * ratio), nextHeight = Math.floor(height * ratio);
     if (nextWidth === bufferWidth && nextHeight === bufferHeight) return;
     bufferWidth = nextWidth; bufferHeight = nextHeight;
@@ -683,11 +575,10 @@ export function createCameraScene(canvas: HTMLCanvasElement, labelLayer: SVGSVGE
       resolutionQuery.removeEventListener("change", onResolutionChange);
       window.removeEventListener("resize", syncResolution);
       labels.forEach(({ element }) => element.remove());
-      cancelAnimationFrame(revealFrame); clearTimeout(warmTimer);
+      cancelAnimationFrame(revealFrame);
       document.removeEventListener("visibilitychange", onVisibility); canvas.removeEventListener("webglcontextlost", onLost);
       model.traverse(object => { if (object instanceof THREE.InstancedMesh) object.dispose(); });
       geometries.forEach(item => item.dispose()); materials.forEach(item => item.dispose()); textures.forEach(item => item.dispose());
-      fadeTargets?.forEach(target=>target.dispose());fadeScene.clear();
       scene.clear(); key.shadow.dispose(); environment.dispose(); renderer.dispose(); renderer.forceContextLoss();
     },
   };

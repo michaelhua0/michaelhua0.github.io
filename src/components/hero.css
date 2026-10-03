@@ -41,7 +41,6 @@
 .camera-story__explanation { flex: 0 1 auto; max-width: clamp(420px, 44vw, 740px); }
 .camera-story__explanation h2 { font-size: clamp(1.9rem, min(3.9vw, 7svh), 3.8rem); line-height: 1.08; font-weight: 550; letter-spacing: -0.03em; margin-bottom: 18px; }
 .camera-story__explanation p { font-size: clamp(0.95rem, min(0.58vw + 0.8rem, 2.5svh), 1.42rem); max-width: none; color: var(--text-soft); line-height: 1.5; margin-bottom: 8px; text-wrap: pretty; }
-.camera-story__explanation .camera-story__scale-note { font-size: clamp(0.78rem, 0.18vw + 0.7rem, 0.95rem); margin: -4px 0 16px; }
 .camera-story__chapter-title, .camera-story__explanation-copy { display: grid; }
 .camera-story__chapter-title > span, .camera-story__explanation-copy > span { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity 180ms ease; }
 .camera-story__chapter-title > .is-active, .camera-story__explanation-copy > .is-active { opacity: 1; visibility: visible; }
@@ -52,6 +51,7 @@
 /* The bar stays within this section, including after a chapter button scrolls.
    Its build-cost label belongs to the same camera viewer as the controls. */
 .camera-story__controls { position: absolute; top: calc(100svh - var(--nav-h) - 80px); left: 0; right: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 24px; width: min(560px, calc(100% - var(--gutter) * 2)); height: 64px; margin-inline: auto; padding: 8px 16px; border: 1px solid var(--border); border-radius: 4px; background: var(--white); box-shadow: 0 4px 18px rgb(26 42 31 / 5%); }
+.camera-story__disclaimer { position: absolute; top: calc(100svh - var(--nav-h) - 64px); left: var(--gutter); z-index: 4; width: min(29ch, calc(50vw - 310px)); margin: 0; color: var(--text-soft); font-size: clamp(.68rem, .12vw + .64rem, .78rem); line-height: 1.35; }
 .camera-story__cost { display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; margin: 0; padding-right: 24px; border-right: 1px solid var(--border); color: var(--text); font-variant-numeric: tabular-nums; line-height: 1.2; }
 .camera-story__cost span:first-child { color: var(--text-soft); font-size: 0.75rem; }
 .camera-story__cost span:last-child { font-size: 1.1rem; font-weight: 500; }
@@ -74,7 +74,7 @@
   .camera-story__explanation { max-width: calc(100% - var(--snapshot-w) - 30px); flex-basis: 580px; }
   .camera-story__explanation p { max-width: none; }
   .camera-story__explanation h2 { margin-bottom: 12px; }
-  .camera-story__explanation .camera-story__scale-note { margin-bottom: 8px; }
+  .camera-story__disclaimer { top: calc(100svh - var(--nav-h) - 126px); width: 31ch; }
 }
 @media (max-width: 700px) {
   .camera-story__intro { top: 24px; width: auto; right: var(--gutter); max-width: none; }
@@ -96,6 +96,7 @@
   .camera-story__cost span:last-child { font-size: 0.97rem; }
   .camera-story__chapters { flex: 1; justify-content: space-between; gap: 4px; }
   .camera-story__chapters button { padding: 8px 6px; font-size: 0.8rem; }
+  .camera-story__disclaimer { top: calc(100svh - var(--nav-h) - 132px); width: min(36ch, calc(100% - var(--gutter) * 2)); font-size: .65rem; }
 }
 @media (max-height: 700px) and (max-width: 700px) {
   .camera-story { height: calc(265svh - var(--nav-h) + 32px); min-height: calc(1090px + 65svh); }
@@ -108,9 +109,9 @@
 @media (max-width: 520px) {
   .camera-story__details { display: grid; grid-template-columns: minmax(0, 1fr) 94px; gap: 8px 12px; }
   .camera-story__explanation { display: contents; }
-  .camera-story__explanation h2, .camera-story__explanation .camera-story__scale-note, .camera-story__explanation .camera-story__link { grid-column: 1 / -1; margin: 0; }
+  .camera-story__explanation h2, .camera-story__explanation .camera-story__link { grid-column: 1 / -1; margin: 0; }
   .camera-story__explanation-copy { grid-column: 1; margin: 0; }
-  .camera-snapshot { grid-column: 2; grid-row: 3; margin: 0; align-self: start; }
+  .camera-snapshot { grid-column: 2; grid-row: 2; margin: 0; align-self: start; }
 }
 /* In short landscape windows, copy and hardware occupy separate columns. */
 @media (min-width: 521px) and (max-height: 600px), (min-width: 1001px) and (max-height: 620px) {
@@ -122,7 +123,6 @@
   .camera-story__explanation { max-width: none; flex: none; }
   .camera-story__explanation h2 { font-size: 1.7rem; margin-bottom: 10px; }
   .camera-story__explanation p { font-size: .9rem; line-height: 1.42; }
-  .camera-story__explanation .camera-story__scale-note { font-size: .72rem; margin-bottom: 8px; }
   .camera-snapshot { flex: none; width: min(100%, 150px); margin: 0; }
   .camera-snapshot > span { font-size: .68rem; white-space: nowrap; }
 }
@@ -134,6 +134,7 @@
 .camera-story--still .camera-story__next { display: none; }
 .camera-story--still .camera-story__figure { position: relative; top: 0; left: 0; width: 100%; height: 55svh; min-height: 310px; transform: none; }
 .camera-story--still .camera-story__details { position: relative; top: 0; left: 0; right: 0; margin-bottom: 30px; transform: none; }
+.camera-story--still .camera-story__disclaimer { position: relative; top: auto; left: auto; width: min(100% - var(--gutter) * 2, 46ch); margin: 12px var(--gutter) 24px; }
 @media (prefers-reduced-motion: reduce) {
   .camera-story__chapter-title > span, .camera-story__explanation-copy > span { transition: none; }
 }

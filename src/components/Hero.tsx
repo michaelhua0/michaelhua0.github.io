@@ -27,6 +27,7 @@ export default function Hero() {
   const figureRef = useRef<HTMLElement>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
   const controlsRef = useRef<HTMLDivElement>(null);
+  const disclaimerRef = useRef<HTMLParagraphElement>(null);
   const sceneRef = useRef<CameraScene | null>(null);
   const progressRef = useRef(0);
   const visualRef = useRef<{progress: number; bounds?: CameraSceneBounds}>({progress:0});
@@ -69,8 +70,8 @@ export default function Hero() {
 
   const layoutViewer = useCallback((progress: number, bounds?: CameraSceneBounds) => {
     const pose = cameraPoseAt(progress);
-    const section=sectionRef.current, figure=figureRef.current, details=detailsRef.current, controls=controlsRef.current;
-    if (section && figure && details && controls) {
+    const section=sectionRef.current, figure=figureRef.current, details=detailsRef.current, controls=controlsRef.current, disclaimer=disclaimerRef.current;
+    if (section && figure && details && controls && disclaimer) {
       const height = viewportHeight();
       const motion = cameraMotionAt(pose, window.innerWidth, height);
       // Matches the short-window rules in hero.css. A 1440x900 laptop leaves a
@@ -113,6 +114,7 @@ export default function Hero() {
       figure.style.transform = reducedMotion ? "none" : `translate3d(${landscape ? 0 : motion.x}%, ${y}px, 0) scale(${scale})`;
       details.style.transform = reducedMotion ? "none" : `translate3d(0, ${notesY}px, 0)`;
       controls.style.transform=reducedMotion?'none':`translateY(${controlsTravel}px)`;
+      disclaimer.style.transform=reducedMotion?'none':`translateY(${controlsTravel}px)`;
       // Occupied bounds are also useful for checking responsive clearances.
       if(bounds && !reducedMotion){
         figure.dataset.contentBottom=(figureTop+y+figureHeight/2+(bounds.bottom-.5)*figureHeight*scale).toFixed(2);
@@ -216,6 +218,7 @@ export default function Hero() {
         <p className="camera-story__cost" aria-label="Camera build cost: under 300 dollars"><span>Build cost</span><span>&lt; $300</span></p>
         <div className="camera-story__chapters" role="group" aria-label="Camera animation chapters">{cameraChapters.map((item, index) => <button key={item.label} type="button" onClick={() => goToChapter(index)} className={chapter === index ? "is-active" : ""} aria-pressed={chapter === index} aria-controls="camera-view">{item.label}</button>)}</div>
       </div>
+      <p ref={disclaimerRef} className="camera-story__disclaimer">Component spacing and relative sizes are adjusted for clarity. This is an illustration, not a scale drawing.</p>
       <div className="camera-story__inner">
         <header className="camera-story__intro" inert={!reducedMotion && detailsVisible} aria-hidden={!reducedMotion && detailsVisible}>
           <p className="camera-story__eyebrow">Hi, I’m</p>
@@ -242,7 +245,6 @@ export default function Hero() {
               <span className={chapter !== 2 ? "is-active" : ""} aria-hidden={chapter === 2}>Inside My Camera</span>
               <span className={chapter === 2 ? "is-active" : ""} aria-hidden={chapter !== 2}>The Sensor Image</span>
             </h2>
-            <p className="camera-story__scale-note">Illustrative optics · spacing expanded · re-imaging lens enlarged</p>
             <p className="camera-story__explanation-copy">
               <span className={chapter !== 2 ? "is-active" : ""} aria-hidden={chapter === 2}>The lenses focus light through a square aperture. A dual-axis grating separates the light by wavelength before it reaches the camera sensor.</span>
               <span className={chapter === 2 ? "is-active" : ""} aria-hidden={chapter !== 2}>The sensor captures the 0th, ±1st, and diagonal orders in one exposure. My <span className="nowrap">Novel PASS-Transformer</span> recovers the spectra with PSF-aware spatial attention, dispersion-aware spectral attention, and iterative physical consistency. Training is self-supervised, with no ground truth.</span>
