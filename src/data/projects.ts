@@ -374,6 +374,17 @@ export const projects: Project[] = [
         id: "uXrWLcgq5fA",
         title: "The Assassination of Shinzo Abe: A Moment that Moved a Nation",
       },
+      {
+        kind: "video",
+        id: "eg7hRpiYzf8",
+        title:
+          "The Assassination of Park Chung-Hee: The Dinner That Ended 18 Years of Rule",
+      },
+      {
+        kind: "video",
+        id: "p4PbQB2f95M",
+        title: "The Assassination of Yitzhak Rabin: The Moment Peace Died",
+      },
     ],
   },
 ];
