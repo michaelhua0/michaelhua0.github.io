@@ -68,6 +68,8 @@
 
 .rb-sub + .yt .yt__frame,
 .rb-sub + .yt + .yt .yt__frame,
-.rb-sub + .yt + .yt + .yt .yt__frame {
+.rb-sub + .yt + .yt + .yt .yt__frame,
+.rb-sub + .yt + .yt + .yt + .yt .yt__frame,
+.rb-sub + .yt + .yt + .yt + .yt + .yt .yt__frame {
   border-radius: var(--radius-md);
 }
