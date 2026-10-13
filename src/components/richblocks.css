@@ -148,14 +148,18 @@
 /* Consecutive videos after a section heading form a compact episode shelf. */
 .rb-sub + .yt,
 .rb-sub + .yt + .yt,
-.rb-sub + .yt + .yt + .yt {
+.rb-sub + .yt + .yt + .yt,
+.rb-sub + .yt + .yt + .yt + .yt,
+.rb-sub + .yt + .yt + .yt + .yt + .yt {
   grid-column: span 4;
   align-self: start;
 }
 
 .rb-sub + .yt .yt__caption,
 .rb-sub + .yt + .yt .yt__caption,
-.rb-sub + .yt + .yt + .yt .yt__caption {
+.rb-sub + .yt + .yt + .yt .yt__caption,
+.rb-sub + .yt + .yt + .yt + .yt .yt__caption,
+.rb-sub + .yt + .yt + .yt + .yt + .yt .yt__caption {
   min-height: 3.2em;
 }
 
@@ -165,7 +169,9 @@
   .rb-aside__arrow { right: calc(100% - 30px); width: 120px; height: 96px; }
   .rb-sub + .yt,
   .rb-sub + .yt + .yt,
-  .rb-sub + .yt + .yt + .yt { grid-column: span 6; }
+  .rb-sub + .yt + .yt + .yt,
+  .rb-sub + .yt + .yt + .yt + .yt,
+  .rb-sub + .yt + .yt + .yt + .yt + .yt { grid-column: span 6; }
 }
 
 @media (max-width: 620px) {
@@ -185,9 +191,13 @@
   .rb-p,
   .rb-sub + .yt,
   .rb-sub + .yt + .yt,
-  .rb-sub + .yt + .yt + .yt { grid-column: 1 / -1; }
+  .rb-sub + .yt + .yt + .yt,
+  .rb-sub + .yt + .yt + .yt + .yt,
+  .rb-sub + .yt + .yt + .yt + .yt + .yt { grid-column: 1 / -1; }
   .rb-p { font-size: 1.03rem; line-height: 1.68; }
   .rb-sub + .yt .yt__caption,
   .rb-sub + .yt + .yt .yt__caption,
-  .rb-sub + .yt + .yt + .yt .yt__caption { min-height: 0; }
+  .rb-sub + .yt + .yt + .yt .yt__caption,
+  .rb-sub + .yt + .yt + .yt + .yt .yt__caption,
+  .rb-sub + .yt + .yt + .yt + .yt + .yt .yt__caption { min-height: 0; }
 }
