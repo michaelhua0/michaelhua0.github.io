@@ -569,7 +569,7 @@ own underline (`home.css:351-353`) leaving a 4px arrow nudge as the sole feedbac
    code. Zero webp/avif, zero `srcset`, no `fetchpriority` on the LCP image. Resize the two
    1800×1200 gallery photos (648KB, 476KB) to ~720px for a column that is at most 240px, and
    convert the three photographic PNGs out of PNG: `publication-vessel-transformer.png` (748KB),
-   `msst.png` (544KB), `retired-project.png` (236KB).
+   `msst.png` (544KB).
 2. **Stop the near-white flash.** `SmartImage.tsx:36-37` applies `#f4f3ef` to the wrapper for the
    5 of 6 projects using `imageFit: "contain"`, so large near-white rectangles hold on the
    near-black page until each lazy image decodes — and the 900ms scan wipe ceremoniously reveals
