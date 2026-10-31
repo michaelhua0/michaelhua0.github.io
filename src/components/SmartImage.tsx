@@ -6,7 +6,7 @@ import {
 } from "../lib/images";
 
 interface Props {
-  /** File name inside /public/images, e.g. "retired-project.webp" */
+  /** File name inside /public/images, e.g. "msst.webp" */
   src: string;
   alt: string;
   className?: string;

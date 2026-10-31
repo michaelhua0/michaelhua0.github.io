@@ -46,9 +46,9 @@ optimized copy of the logo supplied in the official
 2. Right-click each image → **Open image in new tab** (or **Save image as…**).
 3. Save it here with the matching filename above.
 
-`.jpg`, `.png`, and `.webp` all work — just keep the base name (e.g. `retired-project.png`
-is fine if you update the extension in `src/data/projects.ts`, otherwise rename
-to `retired-project.jpg`). `.webp` is recommended for smaller files.
+`.jpg`, `.png`, and `.webp` all work — just keep the base name consistent with
+the corresponding entry in `src/data/projects.ts`. `.webp` is recommended for
+smaller files.
 
 ## Social sharing
 
