@@ -8,6 +8,8 @@ const links = [
   { to: "/about", label: "About" },
   { to: "/portfolio", label: "Portfolio" },
   { to: "/publications", label: "Publications" },
+  { to: "/activities", label: "Activities" },
+  { to: "/across-the-globe", label: "Across the Globe" },
 ];
 
 export default function Nav() {

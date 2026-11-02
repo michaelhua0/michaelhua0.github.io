@@ -61,7 +61,7 @@
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 940px) {
   .nav__links {
     display: none;
   }
@@ -77,6 +77,9 @@
   .nav--transparent.nav {
     background: transparent;
   }
+}
+
+@media (max-width: 760px) {
 
   .portfolio__grid {
     grid-template-columns: 1fr;

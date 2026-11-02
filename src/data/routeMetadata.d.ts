@@ -23,6 +23,8 @@ export const pageMetadata: {
   about: RouteMetadata;
   portfolio: RouteMetadata;
   publications: RouteMetadata;
+  activities: RouteMetadata;
+  travel: RouteMetadata;
 };
 
 export const projectMetadata: {

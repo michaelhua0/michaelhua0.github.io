@@ -30,6 +30,18 @@ export const pageMetadata = {
     description:
       "Explore my peer-reviewed research and competition papers in computer vision, hyperspectral imaging, and history.",
   },
+  activities: {
+    title: "Activities",
+    path: "/activities",
+    description:
+      "Read about my work with the ACA Teen Volunteer Council, oral history filmmaking, and competitive fencing.",
+  },
+  travel: {
+    title: "Across the Globe",
+    path: "/across-the-globe",
+    description:
+      "A travel notebook beginning with my BU RISE summer in Boston, with a flat map of places visited.",
+  },
 };
 
 export const projectMetadata = {
