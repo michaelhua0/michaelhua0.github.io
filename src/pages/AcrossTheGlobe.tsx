@@ -77,7 +77,7 @@ export default function AcrossTheGlobe() {
             <div className="travel-photo-stop__heading">
               <h3>{selectedStop.label}</h3>
             </div>
-            <PhotoNotebook ariaLabel={`${selectedStop.label} photos`} photos={selectedStop.photos} />
+            <PhotoNotebook ariaLabel={`${selectedStop.label} photos`} photos={selectedStop.photos} stablePair={selectedStop.photos.length === 2} eager />
           </div>}
 
           <div className="travel-places" aria-label="Places visited">

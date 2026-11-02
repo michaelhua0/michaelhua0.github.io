@@ -43,6 +43,7 @@
 .travel-photo-stop__heading { display: flex; align-items: start; }
 .travel-photo-stop__heading h3 { margin: 0; font-size: clamp(1.45rem, 2.8vw, 1.85rem); }
 .travel-photo-stop .photo-notebook { margin-top: 20px; }
+.travel-photo-stop .photo-notebook--single .photo-notebook__grid { max-width: 520px; }
 .travel-places { display: grid; grid-template-columns: 1fr 1fr; gap: 38px; margin-top: 44px; }
 .travel-places section { min-width: 0; }
 .travel-places__heading { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border-strong); }

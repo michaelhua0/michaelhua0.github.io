@@ -51,7 +51,7 @@ export const travelStops: TravelStop[] = [
   },
   {
     id: "south-korea", label: "South Korea", detail: "South Korea", longitude: 127.8, latitude: 36.5,
-    photos: [{ src: "notebook/korea.webp", label: "South Korea", alt: "Michael visiting a striking modern building in South Korea" }],
+    photos: [{ src: "notebook/korea.webp", label: "South Korea", alt: "Michael visiting a striking modern building in South Korea", rotateClockwise: true }],
   },
   {
     id: "macao", label: "Macao", detail: "Special administrative region of China", longitude: 113.5833, latitude: 22.2333,

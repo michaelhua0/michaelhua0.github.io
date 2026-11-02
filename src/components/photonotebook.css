@@ -1,13 +1,15 @@
 .photo-notebook { margin-top: 26px; }
 .photo-notebook__grid { columns: 3; column-gap: 12px; }
 .photo-notebook--pair .photo-notebook__grid { columns: 2; }
-.photo-notebook--stable-pair .photo-notebook__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.photo-notebook--stable-pair .photo-notebook__grid { display: grid; grid-template-columns: minmax(0, var(--photo-pair-first, 1fr)) minmax(0, var(--photo-pair-second, 1fr)); gap: 12px; }
 .photo-notebook--stable-pair .photo-notebook__item { display: block; min-width: 0; margin: 0; }
 .photo-notebook--single .photo-notebook__grid { columns: 1; max-width: 680px; }
 .photo-notebook--featured .photo-notebook__grid { display: grid; grid-template-columns: minmax(0, 0.39fr) minmax(0, 0.61fr); gap: 12px; }
 .photo-notebook__support { columns: 2; column-gap: 12px; }
 .photo-notebook__item { display: inline-block; width: 100%; margin: 0 0 12px; break-inside: avoid; vertical-align: top; }
 .photo-notebook__item img { display: block; width: 100%; height: auto; }
+.photo-notebook__item--rotated { position: relative; overflow: hidden; }
+.photo-notebook__item--rotated img { position: absolute; left: 50%; top: 50%; width: var(--photo-rotate-width); max-width: none; transform: translate(-50%, -50%) rotate(90deg); }
 
 @media (max-width: 620px) {
   .photo-notebook--collage .photo-notebook__grid { columns: 2; }
