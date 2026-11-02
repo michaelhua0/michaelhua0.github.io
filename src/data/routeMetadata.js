@@ -37,8 +37,8 @@ export const pageMetadata = {
       "Read about my work with the ACA Teen Volunteer Council, oral history filmmaking, and competitive fencing.",
   },
   travel: {
-    title: "Across the Globe",
-    path: "/across-the-globe",
+    title: "Around the World",
+    path: "/around-the-world",
     description:
       "A travel notebook beginning with my BU RISE summer in Boston, with a flat map of places visited.",
   },

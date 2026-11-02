@@ -29,19 +29,3 @@ export function projectCountryPath(path: string): string {
     return `${command}${projectedX.toFixed(1)} ${projectedY.toFixed(1)}`;
   });
 }
-
-export function graticulePath(fixed: "latitude" | "longitude", value: number): string {
-  const points: string[] = [];
-  if (fixed === "latitude") {
-    for (let longitude = -180; longitude <= 180; longitude += 5) {
-      const [x, y] = projectLocation(longitude, value);
-      points.push(`${points.length ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`);
-    }
-  } else {
-    for (let latitude = -60; latitude <= 85; latitude += 5) {
-      const [x, y] = projectLocation(value, latitude);
-      points.push(`${points.length ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`);
-    }
-  }
-  return points.join("");
-}

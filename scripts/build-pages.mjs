@@ -64,3 +64,8 @@ await Promise.all(
 );
 
 await writeFile(new URL("404.html", dist), renderMetadata(pageMetadata.home));
+
+// Preserve links to the page's former address on static hosts.
+const oldTravelPage = new URL("across-the-globe/index.html", dist);
+await mkdir(new URL("./", oldTravelPage), { recursive: true });
+await writeFile(oldTravelPage, `<!doctype html><html lang="en"><head><meta charset="UTF-8" /><meta http-equiv="refresh" content="0;url=/around-the-world/" /><link rel="canonical" href="${siteIdentity.url}/around-the-world" /><title>Around the World | ${siteIdentity.name}</title></head><body><a href="/around-the-world/">Around the World</a></body></html>`);

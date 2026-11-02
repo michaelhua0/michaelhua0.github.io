@@ -9,7 +9,7 @@ const links = [
   { to: "/portfolio", label: "Portfolio" },
   { to: "/publications", label: "Publications" },
   { to: "/activities", label: "Activities" },
-  { to: "/across-the-globe", label: "Across the Globe" },
+  { to: "/around-the-world", label: "Around the World" },
 ];
 
 export default function Nav() {

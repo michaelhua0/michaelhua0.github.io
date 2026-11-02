@@ -40,6 +40,10 @@ export const notebookImageSizes: Record<string, { width: number; height: number 
     "width": 4032,
     "height": 3024
   },
+  "notebook/img_0890.webp": {
+    "width": 4032,
+    "height": 3024
+  },
   "notebook/japan.webp": {
     "width": 3024,
     "height": 4032

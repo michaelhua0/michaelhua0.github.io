@@ -8,6 +8,10 @@ const communityPhotos: NotebookPhoto[] = [
   { src: "notebook/acawork2.webp", label: "A busy day with ACA", alt: "Families and volunteers at an ACA community event" },
 ];
 
+const threadsPhotos: NotebookPhoto[] = [
+  { src: "notebook/img_0890.webp", label: "At the community garden", alt: "Michael with the gardening team outside the Chueh Hom Memorial Garden greenhouse" },
+];
+
 const fencingPhotos: NotebookPhoto[] = [
   { src: "notebook/trs01741.webp", label: "Saber portrait", alt: "Michael in fencing gear holding a saber" },
   { src: "notebook/fencingcomp.webp", label: "At a tournament", alt: "Michael and other fencers at a competition" },
@@ -63,11 +67,12 @@ export default function Activities() {
                   workshops for 11 students on researching, interviewing, filming,
                   and editing those stories.
                 </p>
+                <PhotoNotebook ariaLabel="Threads of Belonging community photo" photos={threadsPhotos} eager />
               </article>
             </div>
 
             <a className="activities-entry__link" href="https://www.acatvc.org/about-us" target="_blank" rel="noopener noreferrer">ACA TVC website</a>
-            <PhotoNotebook ariaLabel="ACA TVC photos" photos={communityPhotos} />
+            <PhotoNotebook ariaLabel="ACA TVC photos" photos={communityPhotos} stablePair eager />
           </div>
         </section>
 
@@ -80,6 +85,12 @@ export default function Activities() {
               I fence saber and hold a national C rating. A bout can turn on a step
               taken too soon or a decision made a beat too late. I like going back to
               practice with one of those moments in mind and seeing what changes next time.
+            </p>
+            <p>
+              I&apos;ve trained at fencing camps in Massachusetts, Italy, and Japan.
+              Fencing people I haven&apos;t met before makes me pay attention to their
+              distance and timing from the first exchange. I also placed 11th at an
+              international circuit event in Wuxi, China.
             </p>
             <PhotoNotebook ariaLabel="Fencing photos" photos={fencingPhotos} featureFirst />
           </div>

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -22,7 +22,8 @@ export default function App() {
             <Route path="/portfolio/:slug" element={<ProjectDetail />} />
             <Route path="/publications" element={<Publications />} />
             <Route path="/activities" element={<Activities />} />
-            <Route path="/across-the-globe" element={<AcrossTheGlobe />} />
+            <Route path="/around-the-world" element={<AcrossTheGlobe />} />
+            <Route path="/across-the-globe" element={<Navigate to="/around-the-world" replace />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

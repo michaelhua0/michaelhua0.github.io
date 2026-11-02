@@ -17,7 +17,7 @@ export default function Footer() {
           <Link className="mono-copy" to="/portfolio">Portfolio</Link>
           <Link className="mono-copy" to="/publications">Publications</Link>
           <Link className="mono-copy" to="/activities">Activities</Link>
-          <Link className="mono-copy" to="/across-the-globe">Across the Globe</Link>
+          <Link className="mono-copy" to="/around-the-world">Around the World</Link>
           <a
             className="mono-copy"
             href="https://www.youtube.com/@HistorysTrigger"

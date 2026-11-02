@@ -1,17 +1,16 @@
 import type { MouseEvent } from "react";
 import { travelStops, visitedCountryCodes } from "../data/travel";
 import { worldMap } from "../data/worldMap";
-import { MAP_HEIGHT, MAP_WIDTH, graticulePath, projectCountryPath, projectLocation } from "../lib/mapProjection";
+import { MAP_HEIGHT, MAP_WIDTH, projectCountryPath, projectLocation } from "../lib/mapProjection";
 
 const visited = new Set(visitedCountryCodes);
 const projectedCountries = worldMap.map((country) => ({ ...country, path: projectCountryPath(country.path) }));
-const latitudeLines = [-60, -30, 0, 30, 60].map((latitude) => graticulePath("latitude", latitude));
-const longitudeLines = [-150, -120, -90, -60, -30, 0, 30, 60, 90, 120, 150].map((longitude) => graticulePath("longitude", longitude));
-// These visited places are smaller than the country outlines at 1:110m scale.
+// These countries are too small to appear in the 1:110m country outlines.
+// Anchor the markers at Singapore's center and Malé rather than at map pixels.
 const smallVisitedPlaces = [
-  { name: "Maldives", longitude: 73.2, latitude: 3.2 },
-  { name: "Singapore", longitude: 103.85, latitude: 1.3 },
-  { name: "Hong Kong", longitude: 114.16, latitude: 22.31 },
+  { name: "Maldives", longitude: 73.50972, latitude: 4.17417 },
+  { name: "Singapore", longitude: 103.8198, latitude: 1.3521 },
+  { name: "Hong Kong", longitude: 114.1694, latitude: 22.3193 },
 ];
 
 export default function WorldMap({ selectedId, onSelect }: { selectedId: string; onSelect: (id: string) => void }) {
@@ -37,10 +36,6 @@ export default function WorldMap({ selectedId, onSelect }: { selectedId: string;
     <div className="travel-map__canvas">
       <svg className="travel-map__svg" viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`} role="img" aria-label="World map with visited countries and regions highlighted">
         <rect className="travel-map__ocean" width={MAP_WIDTH} height={MAP_HEIGHT} />
-        <g className="travel-map__graticule" aria-hidden="true">
-          {latitudeLines.map((path, index) => <path key={`latitude-${index}`} d={path} />)}
-          {longitudeLines.map((path, index) => <path key={`longitude-${index}`} d={path} />)}
-        </g>
         <g className="travel-map__land">
           {projectedCountries.map((country) => (
             <path
@@ -56,7 +51,7 @@ export default function WorldMap({ selectedId, onSelect }: { selectedId: string;
         <g className="travel-map__small-places" aria-hidden="true">
           {smallVisitedPlaces.map((place) => {
             const [x, y] = projectLocation(place.longitude, place.latitude);
-            return <circle key={place.name} cx={x} cy={y} r="2.8"><title>{place.name} · visited</title></circle>;
+            return <circle key={place.name} cx={x} cy={y} r="3.2"><title>{place.name} · visited</title></circle>;
           })}
         </g>
       </svg>
