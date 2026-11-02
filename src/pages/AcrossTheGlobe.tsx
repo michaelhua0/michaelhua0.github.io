@@ -30,7 +30,7 @@ export default function AcrossTheGlobe() {
               {visitedCount > 0 ? visitedCount : "—"} / {countryGoal} countries
             </p>
           </div>
-          <p className="travel-atlas__intro">I&apos;d like to visit every country someday.</p>
+          <p className="travel-atlas__intro">I want to visit every country someday. I like keeping a record of the places I&apos;ve been along the way.</p>
           <div className="travel-map"><WorldMap /></div>
         </section>
 
@@ -40,9 +40,9 @@ export default function AcrossTheGlobe() {
           </div>
           <div className="travel-entry__body">
             <p>
-              My latest trip was to Boston for BU RISE. I spent the summer working on a
-              computer vision project at Boston University and got to see the city
-              between research days.
+              BU RISE took me to Boston for summer 2026. I spent weekdays on a computer
+              vision project at Boston University and my free time getting to know the
+              city. Staying for a summer let me explore at my own pace.
             </p>
             <Link to="/portfolio/chemosensory-grounding">My BU RISE research ↗</Link>
             <PhotoNotebook ariaLabel="Boston photos" photos={bostonPhotos} />

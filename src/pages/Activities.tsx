@@ -30,34 +30,37 @@ export default function Activities() {
           </div>
           <div className="activities-entry__body">
             <p>
-              I joined ACA&apos;s Teen Volunteer Council in 2023 and now serve as its
-              co-president and technology director. I help coordinate more than 100 teen
-              volunteers across our service events. One is ACA&apos;s Lunar New Year
-              celebration, which brings in more than 3,000 people.
+              ACA TVC has been part of my week since 2023. I&apos;m now its co-president
+              and technology director, working with more than 100 teen volunteers on
+              service and cultural events. Some are small; our Lunar New Year
+              celebration brings in more than 3,000 people.
             </p>
             <p>
-              I&apos;ve volunteered more than 300 hours with TVC. I also helped move our
-              website to its own domain and keep the event calendar and volunteer
-              information current.
+              I&apos;ve put in more than 300 hours, including work people don&apos;t see at
+              an event. I helped move our website to its own domain, and I keep the
+              calendar and volunteer information current so someone new can find a way in.
             </p>
 
             <div className="activities-entry__stories">
               <article>
                 <h3>Curtis Chin book talk</h3>
                 <p>
-                  I helped plan ACA TVC&apos;s October 2026 book talk with Curtis Chin and
-                  was an MC that evening. He spoke about his memoir, <cite>Everything I
-                  Learned, I Learned in a Chinese Restaurant</cite>, and growing up
-                  Chinese American in Detroit.
+                  Our October 2026 book talk with Curtis Chin was one of my favorite TVC
+                  events. I helped plan it and emceed the evening. I especially liked
+                  hearing him speak about growing up Chinese American in Detroit and the
+                  stories behind his memoir, <cite>Everything I Learned, I Learned in a
+                  Chinese Restaurant</cite>.
                 </p>
                 <a href="https://www.michiganhumanities.org/event/great-michigan-read-partner-event-madison-heights/" target="_blank" rel="noopener noreferrer">About the event ↗</a>
               </article>
               <article>
                 <h3>Threads of Belonging</h3>
                 <p>
-                  I direct this oral history series about Chinese American elders. I
-                  taught 11 students how to research subjects, interview elders, film,
-                  and edit the videos.
+                  Directing this series lets me bring filmmaking into community work.
+                  Our student crew records Chinese American elders sharing their
+                  experiences with immigration, identity, and community. I led
+                  workshops for 11 students on researching, interviewing, filming,
+                  and editing those stories.
                 </p>
               </article>
             </div>
@@ -73,9 +76,9 @@ export default function Activities() {
           </div>
           <div className="activities-entry__body">
             <p>
-              I fence saber and hold a national C rating. I like making decisions under
-              pressure in a bout, then going back to practice to work on the moments I
-              got wrong.
+              I fence saber and hold a national C rating. A bout can turn on a step
+              taken too soon or a decision made a beat too late. I like going back to
+              practice with one of those moments in mind and seeing what changes next time.
             </p>
             <PhotoNotebook ariaLabel="Fencing photos" photos={fencingPhotos} />
           </div>
