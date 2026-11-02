@@ -1,149 +1,95 @@
 import SEO from "../components/SEO";
+import PageHeader from "../components/PageHeader";
 import PhotoNotebook, { type NotebookPhoto } from "../components/PhotoNotebook";
 import { pageMetadata } from "../data/routeMetadata.js";
 import "./activities.css";
 
 const communityPhotos: NotebookPhoto[] = [
-  { label: "Curtis Chin book talk", note: "The people and the evening behind the program" },
-  { label: "Threads of Belonging", note: "A story in the making" },
-  { label: "TVC in action", note: "A year of showing up together" },
+  { label: "Curtis Chin book talk", note: "October 2026" },
+  { label: "Threads of Belonging", note: "Oral history project" },
+  { label: "ACA TVC volunteers", note: "Community events" },
 ];
 
 const fencingPhotos: NotebookPhoto[] = [
-  { label: "On the strip", note: "Competition day" },
-  { label: "Between bouts", note: "The quieter side of a tournament" },
-  { label: "The team", note: "People who make the long days fun" },
+  { label: "At a tournament", note: "Competition" },
+  { label: "At practice", note: "Training" },
+  { label: "With my team", note: "Fencing" },
 ];
 
 export default function Activities() {
   return (
     <div className="activities-page">
       <SEO {...pageMetadata.activities} />
+      <PageHeader eyebrow="Outside the lab" title="Activities">
+        <p>I volunteer with ACA&apos;s Teen Volunteer Council and fence competitively.</p>
+      </PageHeader>
 
-      <header className="activities-hero">
-        <div className="container activities-hero__inner">
-          <span className="readout activities-hero__eyebrow">Activities / beyond the lab</span>
-          <h1>
-            The hours <em>outside</em> the lab.
-          </h1>
-          <div className="activities-hero__bottom">
+      <div className="container activities-content">
+        <section id="community" className="activities-section" aria-labelledby="community-title">
+          <div className="activities-section__heading">
+            <h2 id="community-title">ACA Teen Volunteer Council</h2>
+            <p>Co-President and Technology Director · 2023–present</p>
+          </div>
+
+          <div className="activities-prose">
             <p>
-              I spend some of them building a place for other students to serve. I spend
-              others learning to think faster on a fencing strip.
+              I joined the Association of Chinese Americans&apos; Teen Volunteer Council in
+              2023. I now help lead more than 100 teen volunteers through service and
+              cultural events throughout the year. Our Lunar New Year celebration brings
+              in more than 3,000 guests. I&apos;ve contributed over 300 volunteer hours so far.
             </p>
-            <div className="activities-hero__index readout" aria-label="Page sections">
-              <a href="#community">01 / Community</a>
-              <a href="#fencing">02 / Fencing</a>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <section id="community" className="activities-community" aria-labelledby="community-title">
-        <div className="container">
-          <div className="activities-section-head">
-            <span className="readout">01 / Association of Chinese Americans</span>
-            <span className="activities-section-head__line" aria-hidden="true" />
-            <span className="readout">Teen Volunteer Council</span>
+            <p>
+              I also helped move the TVC website to its own domain. I keep the event
+              calendar and information for volunteers and directors up to date, so people
+              can find what they need before they show up.
+            </p>
           </div>
 
-          <div className="activities-community__intro">
-            <div>
-              <h2 id="community-title">A place to show up for each other.</h2>
-              <p className="activities-community__role readout">Co-President · Technology Director</p>
-            </div>
-            <div className="activities-community__copy">
+          <div className="activities-details">
+            <article>
+              <h3>Curtis Chin book talk</h3>
               <p>
-                At ACA&apos;s Teen Volunteer Council, I help students turn a good intention
-                into an event people can walk into. That means planning the year with
-                fellow volunteers, keeping our website useful, and making room for the
-                next person who wants to take part.
-              </p>
-              <p>
-                I joined in 2023. Since then, I&apos;ve helped lead a council of more than
-                100 teen volunteers across a calendar of service and cultural programs.
-                The work has given me a much wider idea of what it means to build
-                something for a community.
-              </p>
-              <p>
-                Some days that community fills a room; at our Lunar New Year celebration,
-                it fills a venue with more than 3,000 guests. I also helped move TVC&apos;s
-                website to its own domain, then kept the information people need to
-                volunteer, join a program, or find an event easy to reach.
-              </p>
-              <a className="activities-text-link" href="https://www.acatvc.org/about-us" target="_blank" rel="noopener noreferrer">
-                Visit ACA TVC <span aria-hidden="true">↗</span>
-              </a>
-            </div>
-          </div>
-
-          <div className="activities-community__notes" aria-label="ACA TVC at a glance">
-            <div><strong>100+</strong><span>teen volunteers</span></div>
-            <div><strong>300+</strong><span>hours I&apos;ve contributed</span></div>
-            <div><strong>11</strong><span>students in video workshops</span></div>
-          </div>
-
-          <div className="activities-stories">
-            <article className="activities-story activities-story--feature">
-              <span className="readout">A recent evening / October 2026</span>
-              <h3>At the microphone with Curtis Chin</h3>
-              <p>
-                I helped plan ACA TVC&apos;s book talk with Curtis Chin, then served as an
-                MC for the event. His memoir, <em>Everything I Learned, I Learned in a
-                Chinese Restaurant</em>, opened a conversation about growing up Chinese
-                American in Detroit. I loved helping bring that conversation into a
-                room where students and older generations could hear it together.
+                In October 2026, I helped plan a book talk with Curtis Chin and was an MC
+                at the event. The conversation centered on his memoir, <cite>Everything
+                I Learned, I Learned in a Chinese Restaurant</cite>, and his experience
+                growing up Chinese American in Detroit.
               </p>
               <a href="https://www.michiganhumanities.org/event/great-michigan-read-partner-event-madison-heights/" target="_blank" rel="noopener noreferrer">
-                About the book talk <span aria-hidden="true">↗</span>
+                Event details ↗
               </a>
             </article>
-            <article className="activities-story">
-              <span className="readout">An ongoing project / oral history</span>
+            <article>
               <h3>Threads of Belonging</h3>
               <p>
-                I direct a student-led series recording Chinese American elders&apos;
-                stories of immigration, identity, and community. To prepare our crew,
-                I led workshops for 11 students on the research and production skills
-                behind an interview: finding the right questions, listening closely,
-                filming, and editing with care.
+                I direct this oral history series about Chinese American elders&apos;
+                experiences with immigration, identity, and community. I taught 11 student
+                volunteers how to research a subject, prepare interview questions, film,
+                and edit the conversations.
               </p>
             </article>
           </div>
 
-          <PhotoNotebook title="From the community" tone="community" photos={communityPhotos} />
-        </div>
-      </section>
+          <a className="activities-external-link" href="https://www.acatvc.org/about-us" target="_blank" rel="noopener noreferrer">
+            Visit ACA TVC ↗
+          </a>
+          <PhotoNotebook title="ACA TVC photos" photos={communityPhotos} />
+        </section>
 
-      <section id="fencing" className="activities-fencing" aria-labelledby="fencing-title">
-        <div className="container">
-          <div className="activities-section-head activities-section-head--light">
-            <span className="readout">02 / Fencing</span>
-            <span className="activities-section-head__line" aria-hidden="true" />
-            <span className="readout">Practice / distance / decision</span>
+        <section id="fencing" className="activities-section" aria-labelledby="fencing-title">
+          <div className="activities-section__heading">
+            <h2 id="fencing-title">Fencing</h2>
+            <p>National C rating</p>
           </div>
-          <div className="activities-fencing__intro">
-            <div className="activities-fencing__mark" aria-label="C rating">
-              <span className="readout">National rating</span>
-              <strong>C</strong>
-            </div>
-            <div>
-              <h2 id="fencing-title">One touch at a time.</h2>
-              <p>
-                I&apos;m a C-rated fencer who competes at the national level. Fencing
-                asks me to read distance, commit to a decision, and adjust in a
-                fraction of a second. Then I go back to practice and work on the
-                same movement again.
-              </p>
-              <p>
-                I like the clarity of it. A bout gives immediate feedback, and the
-                people beside the strip make the long tournament days worth keeping.
-              </p>
-            </div>
+          <div className="activities-prose">
+            <p>
+              I fence saber and hold a national C rating. I like the quick decisions in a
+              bout, but most of my time in the sport is spent practicing footwork and
+              timing. Tournaments give me a chance to see what I need to work on next.
+            </p>
           </div>
-          <PhotoNotebook title="From the strip" tone="fencing" photos={fencingPhotos} />
-        </div>
-      </section>
+          <PhotoNotebook title="Fencing photos" photos={fencingPhotos} />
+        </section>
+      </div>
     </div>
   );
 }

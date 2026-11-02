@@ -1,65 +1,37 @@
-.travel-page { color: #244154; }
-.travel-hero { overflow: hidden; background: #dfeef1; border-bottom: 1px solid #bad2d8; }
-.travel-hero__inner { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(220px, 0.7fr); gap: clamp(30px, 5vw, 80px); align-items: center; padding-block: clamp(76px, 10vw, 142px); }
-.travel-hero__copy .readout { color: #386a78; }
-.travel-hero h1 { max-width: 9ch; margin: 26px 0 34px; font-size: clamp(3.4rem, 7.7vw, 7.5rem); line-height: 0.91; letter-spacing: -0.067em; color: #193c4d; }
-.travel-hero h1 em { font-family: var(--font-accent); font-weight: 420; }
-.travel-hero__copy p { max-width: 48ch; margin: 0; font-size: 1.22rem; line-height: 1.56; color: #426170; }
-.travel-hero__stamp { display: flex; flex-direction: column; align-items: center; justify-content: space-between; aspect-ratio: 0.93; padding: 27px 18px; border: 3px double #6c96a1; border-radius: 50%; color: #2c6475; transform: rotate(11deg); text-align: center; background: #e8f4f5; box-shadow: 14px 18px 0 #d0e6e9; }
-.travel-hero__stamp span { font-family: var(--font-body); font-size: 0.68rem; letter-spacing: 0.2em; }
-.travel-hero__stamp strong { font-family: var(--font-accent); font-size: clamp(2rem, 3.5vw, 4rem); font-weight: 430; line-height: 0.96; letter-spacing: -0.04em; }
+.travel-page .container { max-width: 1000px; }
+.travel-page .pageheader { padding-top: 64px; }
+.travel-page .pageheader__title { font-size: clamp(2.5rem, 5vw, 3.4rem); line-height: 1.1; }
+.travel-page .pageheader__lead { font-size: 1.08rem; }
+.travel-content { padding-bottom: 96px; }
+.travel-section { padding-top: 56px; }
+.travel-section + .travel-section { margin-top: 70px; border-top: 1px solid var(--border); }
+.travel-section__heading { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
+.travel-section h2 { margin: 0; font-size: clamp(1.8rem, 3.2vw, 2.2rem); }
+.travel-count { margin: 0; color: var(--text-soft); font-size: 1rem; white-space: nowrap; }
+.travel-map { padding: 18px; border: 1px solid var(--border); background: var(--surface-1); }
+.travel-map__svg { display: block; width: 100%; height: auto; }
+.travel-map__grid { display: none; }
+.travel-map__country { fill: #cfdbd2; stroke: var(--surface-1); stroke-width: 0.8; vector-effect: non-scaling-stroke; }
+.travel-map__country.is-visited { fill: #518064; }
+.travel-map__boston circle:first-child { fill: var(--surface-1); stroke: #366b50; stroke-width: 2; }
+.travel-map__boston circle:nth-child(2) { fill: #366b50; }
+.travel-map__boston path { fill: none; stroke: #366b50; stroke-width: 1.2; }
+.travel-map__boston text { fill: #315c46; font-family: var(--font-body); font-size: 12px; font-weight: 600; }
+.travel-map__note { margin: 12px 0 0; color: var(--text-soft); font-size: 0.94rem; }
+.travel-map__source { margin: 5px 0 0; color: var(--text-faint); font-size: 0.82rem; }
+.travel-map__source a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.travel-boston__label { margin: 0 0 10px; color: var(--text-faint); font-size: 0.9rem; }
+.travel-boston__copy { max-width: 67ch; margin-top: 20px; }
+.travel-boston__copy p { color: var(--text-soft); line-height: 1.72; }
+.travel-boston__copy a { font-size: 0.94rem; font-weight: 600; }
 
-.travel-atlas { padding-block: clamp(74px, 9vw, 120px); background: #f6faf8; }
-.travel-atlas__top { display: flex; justify-content: space-between; align-items: end; gap: 32px; margin-bottom: 36px; }
-.travel-atlas__top .readout { color: #507480; }
-.travel-atlas h2 { margin: 11px 0 0; font-size: clamp(2.4rem, 5vw, 4.5rem); letter-spacing: -0.05em; color: #203e4d; }
-.travel-atlas__counter { display: flex; flex-direction: column; align-items: end; min-width: 195px; }
-.travel-atlas__counter strong { color: #d26846; font-family: var(--font-accent); font-size: clamp(3.8rem, 7vw, 6rem); font-weight: 440; line-height: 0.95; letter-spacing: -0.06em; white-space: nowrap; }
-.travel-atlas__counter strong span { color: #92a9a9; font-family: var(--font-body); font-size: 0.32em; letter-spacing: -0.03em; }
-.travel-atlas__counter > .readout { margin-top: 9px; text-transform: uppercase; }
-.travel-map { position: relative; padding: 42px 24px 18px; background: #e5f0ed; border: 1px solid #bed4cd; overflow: hidden; }
-.travel-map__corner { position: absolute; top: 18px; left: 23px; color: #6f918f; }
-.travel-map__svg { display: block; width: 100%; height: auto; background: transparent; }
-.travel-map__grid path { fill: none; stroke: #c6dcd7; stroke-width: 0.9; stroke-dasharray: 2 5; }
-.travel-map__country { fill: #b7cdc5; stroke: #e5f0ed; stroke-width: 0.9; vector-effect: non-scaling-stroke; transition: fill 180ms ease; }
-.travel-map__country:hover { fill: #8dafaa; }
-.travel-map__country.is-visited { fill: #d97753; }
-.travel-map__country.is-visited:hover { fill: #bf5f3f; }
-.travel-map__boston circle:first-child { fill: none; stroke: #b44730; stroke-width: 2; }
-.travel-map__boston circle:nth-child(2) { fill: #b44730; }
-.travel-map__boston path { fill: none; stroke: #b44730; stroke-width: 1.4; }
-.travel-map__boston text { fill: #92412e; font-family: var(--font-body); font-weight: 700; font-size: 12px; letter-spacing: 0.07em; }
-.travel-map__bottom { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid #b9d2ca; padding-top: 14px; color: #5d7d7a; }
-.travel-map__legend { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
-.travel-map__legend i { display: block; width: 12px; height: 12px; background: #d97753; border-radius: 50%; }
-.travel-atlas__footnote { margin: 17px 0 0; color: #66827e; font-size: 0.82rem; }
-.travel-atlas__footnote a { color: #346c78; text-decoration: underline; text-underline-offset: 2px; }
-
-.travel-boston { padding-block: clamp(74px, 10vw, 132px); background: #fff7ec; color: #684c34; }
-.travel-boston__feature { display: grid; grid-template-columns: minmax(240px, 0.75fr) minmax(0, 1.25fr); gap: clamp(42px, 8vw, 112px); align-items: center; }
-.travel-boston__ticket { display: flex; flex-direction: column; justify-content: space-between; min-height: 360px; padding: 28px; position: relative; background: #f6d8b3; border: 1px solid #d4a779; box-shadow: 16px 16px 0 #f0e4d1; overflow: hidden; transform: rotate(-3deg); }
-.travel-boston__ticket::before { content: ""; position: absolute; left: 0; right: 0; bottom: 72px; border-top: 2px dashed #cc9d6b; }
-.travel-boston__ticket::after { content: ""; position: absolute; width: 120px; height: 120px; right: -38px; top: -38px; border: 1px solid #cf9e69; border-radius: 50%; }
-.travel-boston__ticket .readout { color: #865a39; text-transform: uppercase; }
-.travel-boston__ticket strong { color: #a45a37; font-family: var(--font-accent); font-weight: 480; font-size: clamp(6rem, 13vw, 12rem); line-height: 0.8; letter-spacing: -0.08em; }
-.travel-boston__copy > .readout { color: #a66b42; }
-.travel-boston h2 { margin: 16px 0 27px; max-width: 11ch; color: #4e3829; font-size: clamp(2.8rem, 5vw, 5rem); line-height: 1.02; letter-spacing: -0.05em; }
-.travel-boston__copy p { max-width: 51ch; color: #6c5949; font-size: 1.15rem; line-height: 1.67; }
-.travel-boston__link { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; color: #9d5a34; font-weight: 600; border-bottom: 1px solid currentColor; text-decoration: none; }
-.travel-boston__link:hover { color: #694329; text-decoration: none; }
-
-@media (max-width: 760px) {
-  .travel-hero__inner,
-  .travel-boston__feature { grid-template-columns: 1fr; }
-  .travel-hero__stamp { width: min(54vw, 220px); justify-self: end; margin-top: -20px; }
-  .travel-boston__ticket { width: min(100%, 370px); min-height: 290px; }
-}
-@media (max-width: 580px) {
-  .travel-hero h1 { font-size: clamp(3.2rem, 13vw, 5rem); }
-  .travel-hero__stamp { display: none; }
-  .travel-atlas__top { align-items: start; flex-direction: column; gap: 20px; }
-  .travel-atlas__counter { align-items: start; }
-  .travel-map { padding-inline: 8px; }
-  .travel-map__bottom { flex-direction: column; gap: 4px; }
-  .travel-map__boston text { font-size: 18px; }
+@media (max-width: 680px) {
+  .travel-page .pageheader { padding-top: 48px; }
+  .travel-content { padding-bottom: 64px; }
+  .travel-section { padding-top: 42px; }
+  .travel-section + .travel-section { margin-top: 54px; }
+  .travel-section__heading { align-items: start; flex-direction: column; gap: 5px; }
+  .travel-map { padding: 8px; }
+  .travel-map__boston path,
+  .travel-map__boston text { display: none; }
 }
