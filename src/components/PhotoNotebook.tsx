@@ -3,24 +3,19 @@ import "./photonotebook.css";
 
 export interface NotebookPhoto {
   label: string;
-  note: string;
   src?: string;
   alt?: string;
 }
 
 export default function PhotoNotebook({
-  title,
+  ariaLabel,
   photos,
 }: {
-  title: string;
+  ariaLabel: string;
   photos: NotebookPhoto[];
 }) {
   return (
-    <div className="photo-notebook">
-      <div className="photo-notebook__heading">
-        <h3>{title}</h3>
-        <span className="readout">More photographs to come</span>
-      </div>
+    <div className="photo-notebook" role="group" aria-label={ariaLabel}>
       <div className="photo-notebook__grid">
         {photos.map((photo) => (
           <figure className="photo-notebook__item" key={photo.label}>
@@ -33,10 +28,7 @@ export default function PhotoNotebook({
                 </div>
               )}
             </div>
-            <figcaption>
-              <strong>{photo.label}</strong>
-              <span>{photo.note}</span>
-            </figcaption>
+            <figcaption>{photo.label}</figcaption>
           </figure>
         ))}
       </div>

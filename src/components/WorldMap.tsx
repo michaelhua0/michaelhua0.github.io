@@ -11,8 +11,8 @@ export default function WorldMap() {
       role="img"
       aria-label={
         visited.size > 0
-          ? `Flat world map with ${visited.size} visited countries highlighted`
-          : "Flat world map; visited countries will be highlighted as the travel log is filled in"
+          ? `Flat world map with ${visited.size} visited countries highlighted and Boston pinned`
+          : "Flat world map with Boston pinned; visited countries will be highlighted once the travel list is added"
       }
     >
       <g className="travel-map__grid" aria-hidden="true">
@@ -34,8 +34,6 @@ export default function WorldMap() {
       <g className="travel-map__boston" aria-hidden="true">
         <circle cx="303" cy="132" r="9" />
         <circle cx="303" cy="132" r="3.5" />
-        <path d="M311 128 L339 103 H431" />
-        <text x="343" y="97">BOSTON / 2026</text>
       </g>
     </svg>
   );
