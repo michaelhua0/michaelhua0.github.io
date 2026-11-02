@@ -1,3 +1,4 @@
+import { notebookImageSizes } from "../data/notebookImageSizes";
 import { imageUrl } from "../lib/images";
 import "./photonotebook.css";
 
@@ -10,25 +11,29 @@ export interface NotebookPhoto {
 export default function PhotoNotebook({
   ariaLabel,
   photos,
+  featureFirst = false,
 }: {
   ariaLabel: string;
   photos: NotebookPhoto[];
+  featureFirst?: boolean;
 }) {
+  const featured = featureFirst && photos.length > 1;
+  function renderPhoto(photo: NotebookPhoto) {
+    const dimensions = photo.src ? notebookImageSizes[photo.src] : undefined;
+    return (
+      <figure className="photo-notebook__item" key={photo.src ?? photo.label}>
+        {photo.src && <img src={imageUrl(photo.src)} alt={photo.alt ?? photo.label} width={dimensions?.width} height={dimensions?.height} loading="lazy" decoding="async" />}
+      </figure>
+    );
+  }
+
   return (
-    <div className="photo-notebook" role="group" aria-label={ariaLabel}>
+    <div className={`photo-notebook photo-notebook--${featured ? "featured" : photos.length === 1 ? "single" : photos.length === 2 || photos.length === 4 ? "pair" : "collage"}`} role="group" aria-label={ariaLabel}>
       <div className="photo-notebook__grid">
-        {photos.map((photo) => (
-          <figure className="photo-notebook__item" key={photo.label}>
-            <div className="photo-notebook__frame">
-              {photo.src ? (
-                <img src={imageUrl(photo.src)} alt={photo.alt ?? photo.label} loading="lazy" decoding="async" />
-              ) : (
-                <div className="photo-notebook__empty" role="img" aria-label={`Photo placeholder: ${photo.label}`} />
-              )}
-            </div>
-            <figcaption>{photo.label}</figcaption>
-          </figure>
-        ))}
+        {featured ? <>
+          {renderPhoto(photos[0])}
+          <div className="photo-notebook__support">{photos.slice(1).map(renderPhoto)}</div>
+        </> : photos.map(renderPhoto)}
       </div>
     </div>
   );

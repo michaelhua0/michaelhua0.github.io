@@ -11,7 +11,7 @@ export interface TravelStop {
 
 export const travelStops: TravelStop[] = [
   {
-    id: "boston", label: "Boston", detail: "Massachusetts, United States", longitude: -71.06, latitude: 42.36,
+    id: "boston", label: "Boston", detail: "Massachusetts, United States", longitude: -71.0589, latitude: 42.3601,
     photos: [
       { src: "notebook/burise.webp", label: "BU RISE", alt: "Michael with other students at Boston University" },
       { src: "notebook/buriseboston.webp", label: "Summer in Boston", alt: "Michael and friends together in Boston" },
@@ -20,29 +20,25 @@ export const travelStops: TravelStop[] = [
     ],
   },
   {
-    id: "new-york", label: "New York City", detail: "New York, United States", longitude: -74.01, latitude: 40.71,
+    id: "new-york", label: "New York City", detail: "New York, United States", longitude: -74.0060, latitude: 40.7128,
     photos: [
       { src: "notebook/newyork.webp", label: "New York", alt: "Michael outside a building in New York City" },
       { src: "notebook/newyork2.webp", label: "Another day in New York", alt: "Michael on a New York City street" },
     ],
   },
   {
-    id: "arizona", label: "Arizona", detail: "United States", longitude: -111.8, latitude: 34.2,
+    id: "arizona", label: "Arizona", detail: "United States", longitude: -111.8561, latitude: 34.5667,
     photos: [
       { src: "notebook/arizonaisef.webp", label: "ISEF in Arizona", alt: "Michael and friends together at ISEF in Arizona" },
       { src: "notebook/canyonamericansouthwest.webp", label: "Arizona canyon", alt: "Michael and others inside a sandstone canyon in Arizona" },
     ],
   },
   {
-    id: "shanghai", label: "Shanghai", detail: "China", longitude: 121.47, latitude: 31.23,
+    id: "shanghai", label: "Shanghai", detail: "China", longitude: 121.4833, latitude: 31.2333,
     photos: [
       { src: "notebook/shanghai-heic.webp", label: "Shanghai skyline", alt: "Shanghai skyline illuminated at night" },
       { src: "notebook/shanghai-jpg.webp", label: "By the waterfront", alt: "Michael by the waterfront in Shanghai at night" },
     ],
-  },
-  {
-    id: "wuxi", label: "Wuxi", detail: "China", longitude: 120.3, latitude: 31.57,
-    photos: [{ src: "notebook/wuxichinafencing.webp", label: "Fencing in Wuxi", alt: "Michael at a fencing event in Wuxi, China" }],
   },
   {
     id: "japan", label: "Japan", detail: "Around Japan", longitude: 138, latitude: 36,
@@ -51,7 +47,6 @@ export const travelStops: TravelStop[] = [
       { src: "notebook/japanstreetfood.webp", label: "Street food", alt: "Michael on a busy street with food stalls in Japan" },
       { src: "notebook/japanuniversal.webp", label: "Universal Studios Japan", alt: "Michael at Universal Studios Japan at night" },
       { src: "notebook/japansister.webp", label: "With my sister", alt: "Michael with his sister in Japan" },
-      { src: "notebook/japanfencing.webp", label: "Fencing in Japan", alt: "A fencing competition in Japan" },
     ],
   },
   {
@@ -59,7 +54,7 @@ export const travelStops: TravelStop[] = [
     photos: [{ src: "notebook/korea.webp", label: "South Korea", alt: "Michael visiting a striking modern building in South Korea" }],
   },
   {
-    id: "macao", label: "Macao", detail: "Special administrative region of China", longitude: 113.54, latitude: 22.2,
+    id: "macao", label: "Macao", detail: "Special administrative region of China", longitude: 113.5833, latitude: 22.2333,
     photos: [{ src: "notebook/macao.webp", label: "Macao", alt: "Michael standing in front of a Macao sign" }],
   },
 ];

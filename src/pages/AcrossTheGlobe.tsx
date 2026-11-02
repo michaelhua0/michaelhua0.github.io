@@ -10,12 +10,16 @@ import "./acrosstheglobe.css";
 export default function AcrossTheGlobe() {
   const [selectedId, setSelectedId] = useState("japan");
   const photoPanel = useRef<HTMLDivElement>(null);
+  const bostonSection = useRef<HTMLElement>(null);
   const selectedStop = travelStops.find((stop) => stop.id === selectedId) ?? travelStops[0];
   const boston = travelStops[0];
 
   function selectStop(id: string) {
     setSelectedId(id);
-    window.requestAnimationFrame(() => photoPanel.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }));
+    window.requestAnimationFrame(() => {
+      const target = id === "boston" ? bostonSection.current : photoPanel.current;
+      target?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
   }
 
   function placeList(places: string[]) {
@@ -25,7 +29,7 @@ export default function AcrossTheGlobe() {
           const stopId = placeToStop[place];
           return stopId ? (
             <button key={place} type="button" className={`travel-places__item has-photos${selectedId === stopId ? " is-selected" : ""}`} onClick={() => selectStop(stopId)} aria-pressed={selectedId === stopId}>
-              {place}<span aria-hidden="true">↗</span>
+              {place}
             </button>
           ) : <span key={place} className="travel-places__item" aria-label={`${place}, visited; photos coming later`}>{place}</span>;
         })}
@@ -50,17 +54,12 @@ export default function AcrossTheGlobe() {
           <div className="travel-map"><WorldMap selectedId={selectedId} onSelect={selectStop} /></div>
           <p className="travel-map__legend"><span className="travel-map__legend-visited" /> Visited <span className="travel-map__legend-photo" /> Photos available</p>
 
-          <div className="travel-photo-stop" ref={photoPanel} aria-live="polite">
+          {selectedId !== "boston" && <div className="travel-photo-stop" ref={photoPanel} aria-live="polite">
             <div className="travel-photo-stop__heading">
-              <div>
-                <p className="travel-photo-stop__eyebrow">Photo stop</p>
-                <h3>{selectedStop.label}</h3>
-                <p>{selectedStop.detail}</p>
-              </div>
-              <span>{selectedStop.photos.length} {selectedStop.photos.length === 1 ? "photo" : "photos"}</span>
+              <h3>{selectedStop.label}</h3>
             </div>
             <PhotoNotebook ariaLabel={`${selectedStop.label} photos`} photos={selectedStop.photos} />
-          </div>
+          </div>}
 
           <div className="travel-places" aria-label="Places visited">
             <section aria-labelledby="travel-us-title">
@@ -70,12 +69,11 @@ export default function AcrossTheGlobe() {
             <section aria-labelledby="travel-world-title">
               <div className="travel-places__heading"><h3 id="travel-world-title">Countries &amp; territories</h3><span>Beyond the states</span></div>
               {placeList(outsidePlaces)}
-              <button type="button" className={`travel-places__extra${selectedId === "wuxi" ? " is-selected" : ""}`} onClick={() => selectStop("wuxi")} aria-pressed={selectedId === "wuxi"}>Wuxi fencing photos ↗</button>
             </section>
           </div>
         </section>
 
-        <section className="travel-entry" aria-labelledby="boston-title">
+        <section className="travel-entry" ref={bostonSection} aria-labelledby="boston-title">
           <div className="travel-entry__name">
             <h2 id="boston-title">Boston, 2026</h2>
           </div>
@@ -85,7 +83,7 @@ export default function AcrossTheGlobe() {
               vision project at Boston University and my free time getting to know the
               city. Staying for a summer let me explore at my own pace.
             </p>
-            <Link to="/portfolio/chemosensory-grounding">My BU RISE research ↗</Link>
+            <Link to="/portfolio/chemosensory-grounding">My BU RISE research</Link>
             <PhotoNotebook ariaLabel="Boston photos" photos={boston.photos} />
           </div>
         </section>

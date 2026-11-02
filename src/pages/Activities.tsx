@@ -10,7 +10,6 @@ const communityPhotos: NotebookPhoto[] = [
 
 const fencingPhotos: NotebookPhoto[] = [
   { src: "notebook/trs01741.webp", label: "Saber portrait", alt: "Michael in fencing gear holding a saber" },
-  { src: "notebook/trs01754-3.webp", label: "Fencing portrait", alt: "Michael in fencing gear with his mask" },
   { src: "notebook/fencingcomp.webp", label: "At a tournament", alt: "Michael and other fencers at a competition" },
   { src: "notebook/fencingteam.webp", label: "With my team", alt: "Michael with his fencing teammates" },
   { src: "notebook/japanfencing.webp", label: "Fencing in Japan", alt: "Fencers competing in Japan" },
@@ -53,7 +52,7 @@ export default function Activities() {
                   stories behind his memoir, <cite>Everything I Learned, I Learned in a
                   Chinese Restaurant</cite>.
                 </p>
-                <a href="https://www.michiganhumanities.org/event/great-michigan-read-partner-event-madison-heights/" target="_blank" rel="noopener noreferrer">About the event ↗</a>
+                <a href="https://www.michiganhumanities.org/event/great-michigan-read-partner-event-madison-heights/" target="_blank" rel="noopener noreferrer">About the event</a>
               </article>
               <article>
                 <h3>Threads of Belonging</h3>
@@ -67,7 +66,7 @@ export default function Activities() {
               </article>
             </div>
 
-            <a className="activities-entry__link" href="https://www.acatvc.org/about-us" target="_blank" rel="noopener noreferrer">ACA TVC website ↗</a>
+            <a className="activities-entry__link" href="https://www.acatvc.org/about-us" target="_blank" rel="noopener noreferrer">ACA TVC website</a>
             <PhotoNotebook ariaLabel="ACA TVC photos" photos={communityPhotos} />
           </div>
         </section>
@@ -82,7 +81,7 @@ export default function Activities() {
               taken too soon or a decision made a beat too late. I like going back to
               practice with one of those moments in mind and seeing what changes next time.
             </p>
-            <PhotoNotebook ariaLabel="Fencing photos" photos={fencingPhotos} />
+            <PhotoNotebook ariaLabel="Fencing photos" photos={fencingPhotos} featureFirst />
           </div>
         </section>
       </div>
