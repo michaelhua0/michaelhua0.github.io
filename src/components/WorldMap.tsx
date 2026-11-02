@@ -12,7 +12,7 @@ export default function WorldMap() {
       aria-label={
         visited.size > 0
           ? `Flat world map with ${visited.size} visited countries highlighted and Boston pinned`
-          : "Flat world map with Boston pinned; visited countries will be highlighted once the travel list is added"
+          : "Flat world map with Boston pinned and no countries highlighted"
       }
     >
       <g className="travel-map__grid" aria-hidden="true">

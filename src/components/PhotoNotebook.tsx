@@ -23,9 +23,7 @@ export default function PhotoNotebook({
               {photo.src ? (
                 <img src={imageUrl(photo.src)} alt={photo.alt ?? photo.label} loading="lazy" decoding="async" />
               ) : (
-                <div className="photo-notebook__empty" role="img" aria-label={`Photo placeholder: ${photo.label}`}>
-                  Photo to be added
-                </div>
+                <div className="photo-notebook__empty" role="img" aria-label={`Photo placeholder: ${photo.label}`} />
               )}
             </div>
             <figcaption>{photo.label}</figcaption>
