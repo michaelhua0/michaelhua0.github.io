@@ -66,7 +66,6 @@ export default function AcrossTheGlobe() {
             <section aria-labelledby="travel-us-title">
               <div className="travel-places__heading"><h3 id="travel-us-title">United States</h3><span>Michigan is home</span></div>
               {placeList(usPlaces)}
-              <button type="button" className={`travel-places__extra${selectedId === "southwest" ? " is-selected" : ""}`} onClick={() => selectStop("southwest")} aria-pressed={selectedId === "southwest"}>American Southwest canyon photos ↗</button>
             </section>
             <section aria-labelledby="travel-world-title">
               <div className="travel-places__heading"><h3 id="travel-world-title">Countries &amp; territories</h3><span>Beyond the states</span></div>

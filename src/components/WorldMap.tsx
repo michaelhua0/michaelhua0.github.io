@@ -3,7 +3,7 @@ import { worldMap } from "../data/worldMap";
 
 const visited = new Set(visitedCountryCodes);
 const pinOffsets: Record<string, [number, number]> = {
-  boston: [11, -10], "new-york": [-11, 10], arizona: [-11, 10], southwest: [11, -10],
+  boston: [11, -10], "new-york": [-11, 10], arizona: [0, 0],
   shanghai: [13, -10], wuxi: [-13, 10], macao: [-8, 10],
 };
 

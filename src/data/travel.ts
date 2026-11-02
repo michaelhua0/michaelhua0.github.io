@@ -28,11 +28,10 @@ export const travelStops: TravelStop[] = [
   },
   {
     id: "arizona", label: "Arizona", detail: "United States", longitude: -111.8, latitude: 34.2,
-    photos: [{ src: "notebook/arizonaisef.webp", label: "ISEF in Arizona", alt: "Michael and friends together at ISEF in Arizona" }],
-  },
-  {
-    id: "southwest", label: "American Southwest", detail: "United States", longitude: -110, latitude: 37,
-    photos: [{ src: "notebook/canyonamericansouthwest.webp", label: "Canyon country", alt: "Michael and others inside a sandstone canyon in the American Southwest" }],
+    photos: [
+      { src: "notebook/arizonaisef.webp", label: "ISEF in Arizona", alt: "Michael and friends together at ISEF in Arizona" },
+      { src: "notebook/canyonamericansouthwest.webp", label: "Arizona canyon", alt: "Michael and others inside a sandstone canyon in Arizona" },
+    ],
   },
   {
     id: "shanghai", label: "Shanghai", detail: "China", longitude: 121.47, latitude: 31.23,
