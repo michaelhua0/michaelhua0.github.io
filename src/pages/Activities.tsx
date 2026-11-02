@@ -4,15 +4,17 @@ import { pageMetadata } from "../data/routeMetadata.js";
 import "./activities.css";
 
 const communityPhotos: NotebookPhoto[] = [
-  { label: "Curtis Chin book talk" },
-  { label: "Threads of Belonging" },
-  { label: "ACA TVC volunteers" },
+  { src: "notebook/acawork.webp", label: "Paper cutting at an ACA event", alt: "ACA volunteers leading a paper cutting activity" },
+  { src: "notebook/acawork2.webp", label: "A busy day with ACA", alt: "Families and volunteers at an ACA community event" },
 ];
 
 const fencingPhotos: NotebookPhoto[] = [
-  { label: "At a tournament" },
-  { label: "At practice" },
-  { label: "With my team" },
+  { src: "notebook/trs01741.webp", label: "Saber portrait", alt: "Michael in fencing gear holding a saber" },
+  { src: "notebook/trs01754-3.webp", label: "Fencing portrait", alt: "Michael in fencing gear with his mask" },
+  { src: "notebook/fencingcomp.webp", label: "At a tournament", alt: "Michael and other fencers at a competition" },
+  { src: "notebook/fencingteam.webp", label: "With my team", alt: "Michael with his fencing teammates" },
+  { src: "notebook/japanfencing.webp", label: "Fencing in Japan", alt: "Fencers competing in Japan" },
+  { src: "notebook/wuxichinafencing.webp", label: "Fencing in Wuxi", alt: "Michael at a fencing event in Wuxi, China" },
 ];
 
 export default function Activities() {
