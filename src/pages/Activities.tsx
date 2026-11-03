@@ -1,11 +1,24 @@
 import SEO from "../components/SEO";
 import PhotoNotebook, { type NotebookPhoto } from "../components/PhotoNotebook";
+import JustifiedGallery, { type GalleryPhoto } from "../components/JustifiedGallery";
 import { pageMetadata } from "../data/routeMetadata.js";
 import "./activities.css";
 
-const communityPhotos: NotebookPhoto[] = [
-  { src: "notebook/acawork.webp", label: "Paper cutting at an ACA event", alt: "ACA volunteers leading a paper cutting activity" },
-  { src: "notebook/acawork2.webp", label: "A busy day with ACA", alt: "Families and volunteers at an ACA community event" },
+const communityPhotoRows: GalleryPhoto[][] = [
+  [
+    { src: "notebook/acawork.webp", alt: "ACA volunteers leading a paper cutting activity" },
+    { src: "notebook/img_1107.webp", alt: "ACA volunteers and community members holding a garden harvest" },
+    { src: "notebook/4i0a4921.webp", alt: "Attendees gathered around tables at an ACA community event" },
+  ],
+  [
+    { src: "notebook/curtisbookeventfinal.webp", alt: "Poster for An Evening with Curtis Chin" },
+    { src: "notebook/img_9840.webp", alt: "ACA teen volunteers together in a community room" },
+    { src: "notebook/acawork2.webp", alt: "Families and volunteers at an ACA community event" },
+  ],
+  [
+    { src: "notebook/4i0a4944.webp", alt: "ACA teen volunteers and Curtis Chin together after the book talk" },
+    { src: "notebook/4i0a4930.webp", alt: "A speaker addressing an audience at an ACA event" },
+  ],
 ];
 
 const threadsPhotos: NotebookPhoto[] = [
@@ -72,7 +85,7 @@ export default function Activities() {
             </div>
 
             <a className="activities-entry__link" href="https://www.acatvc.org/about-us" target="_blank" rel="noopener noreferrer">ACA TVC website</a>
-            <PhotoNotebook ariaLabel="ACA TVC photos" photos={communityPhotos} stablePair eager />
+            <JustifiedGallery ariaLabel="ACA TVC photos" rows={communityPhotoRows} />
           </div>
         </section>
 
