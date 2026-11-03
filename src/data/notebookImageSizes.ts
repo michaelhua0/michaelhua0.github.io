@@ -104,6 +104,10 @@ export const notebookImageSizes: Record<string, { width: number; height: number 
     "width": 4280,
     "height": 5374
   },
+  "notebook/screenshot-2026-11-03-at-12-13-16-am.webp": {
+    "width": 1048,
+    "height": 1722
+  },
   "notebook/shanghai-heic.webp": {
     "width": 4032,
     "height": 3024

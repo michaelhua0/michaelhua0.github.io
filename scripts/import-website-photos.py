@@ -63,7 +63,7 @@ def main() -> None:
             image = image.transpose(Image.Transpose.ROTATE_270)
         if path.stem.lower() in ROTATE_HALF_TURN:
             image = image.transpose(Image.Transpose.ROTATE_180)
-        stem = path.stem.lower().replace(" ", "-")
+        stem = re.sub(r"[^a-z0-9]+", "-", path.stem.lower()).strip("-")
         if stem == "shanghai":
             stem += f"-{path.suffix.lower().lstrip('.')}"
         output = DESTINATION / f"{stem}.webp"

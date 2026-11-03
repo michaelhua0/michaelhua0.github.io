@@ -30,12 +30,17 @@ const threadsPhotos: NotebookPhoto[] = [
   { src: "notebook/img_0890.webp", label: "At the community garden", alt: "Michael with the gardening team outside the Chueh Hom Memorial Garden greenhouse" },
 ];
 
-const fencingPhotos: NotebookPhoto[] = [
-  { src: "notebook/trs01741.webp", label: "Saber portrait", alt: "Michael in fencing gear holding a saber" },
-  { src: "notebook/fencingcomp.webp", label: "At a tournament", alt: "Michael and other fencers at a competition" },
-  { src: "notebook/fencingteam.webp", label: "With my team", alt: "Michael with his fencing teammates" },
-  { src: "notebook/japanfencing.webp", label: "Fencing in Japan", alt: "Fencers competing in Japan" },
-  { src: "notebook/wuxichinafencing.webp", label: "Fencing in Wuxi", alt: "Michael at a fencing event in Wuxi, China" },
+const fencingPhotoRows: GalleryPhoto[][] = [
+  [
+    { src: "notebook/trs01741.webp", alt: "Michael in fencing gear pointing his saber toward the camera" },
+    { src: "notebook/screenshot-2026-11-03-at-12-13-16-am.webp", alt: "Michael refereeing a fencing bout at an event" },
+    { src: "notebook/japanfencing.webp", alt: "Fencers competing in Japan" },
+  ],
+  [
+    { src: "notebook/fencingcomp.webp", alt: "Michael and other fencers at a competition" },
+    { src: "notebook/fencingteam.webp", alt: "Michael with his fencing teammates" },
+    { src: "notebook/wuxichinafencing.webp", alt: "Michael at a fencing event in Wuxi, China" },
+  ],
 ];
 
 export default function Activities() {
@@ -123,7 +128,7 @@ export default function Activities() {
                 to help other fencers recognize mistakes and make adjustments between bouts.
               </p>
             </div>
-            <PhotoNotebook ariaLabel="Fencing photos" photos={fencingPhotos} featureFirst eager />
+            <JustifiedGallery ariaLabel="Fencing photos" rows={fencingPhotoRows} />
           </div>
         </section>
       </div>

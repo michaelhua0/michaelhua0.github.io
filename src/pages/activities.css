@@ -22,7 +22,7 @@
 .activities-entry__stories .photo-notebook { margin-top: 24px; }
 .activities-entry__link { display: inline-block; }
 .activities-entry--fencing .activities-entry__body { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 36px; align-items: start; }
-.activities-entry--fencing .photo-notebook { margin-top: 0; }
+.activities-entry--fencing .justified-gallery { margin-top: 0; }
 
 @media (max-width: 800px) {
   .activities-entry__overview,
