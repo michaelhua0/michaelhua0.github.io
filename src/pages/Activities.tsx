@@ -53,18 +53,22 @@ export default function Activities() {
             <a className="activities-entry__link" href="https://www.acatvc.org/about-us" target="_blank" rel="noopener noreferrer">ACA TVC website</a>
           </div>
           <div className="activities-entry__body">
-            <p>
-              ACA TVC has been part of my week since 2023. I&apos;m now its co-president
-              and technology director, working with more than 100 teen volunteers on
-              service and cultural events. Some are small; our Lunar New Year
-              celebration brings in more than 3,000 people.
-            </p>
-            <p>
-              I&apos;ve put in more than 300 hours, including work people don&apos;t see at
-              an event. I helped move our website to its own domain, and I keep the
-              calendar and volunteer information current so someone new can find a way in.
-            </p>
-            <JustifiedGallery ariaLabel="ACA TVC community photos" rows={communityPhotoRows} />
+            <div className="activities-entry__overview">
+              <div className="activities-entry__copy">
+                <p>
+                  ACA TVC has been part of my week since 2023. I&apos;m now its co-president
+                  and technology director, working with more than 100 teen volunteers on
+                  service and cultural events. Some are small; our Lunar New Year
+                  celebration brings in more than 3,000 people.
+                </p>
+                <p>
+                  I&apos;ve put in more than 300 hours, including work people don&apos;t see at
+                  an event. I helped move our website to its own domain, and I keep the
+                  calendar and volunteer information current so someone new can find a way in.
+                </p>
+              </div>
+              <JustifiedGallery ariaLabel="ACA TVC community photos" rows={communityPhotoRows} />
+            </div>
 
             <div className="activities-entry__stories">
               <article>
@@ -91,27 +95,28 @@ export default function Activities() {
                 <PhotoNotebook ariaLabel="Threads of Belonging community photo" photos={threadsPhotos} eager />
               </article>
             </div>
-
           </div>
         </section>
 
-        <section id="fencing" className="activities-entry" aria-labelledby="fencing-title">
+        <section id="fencing" className="activities-entry activities-entry--fencing" aria-labelledby="fencing-title">
           <div className="activities-entry__name">
             <h2 id="fencing-title">Fencing</h2>
           </div>
           <div className="activities-entry__body">
-            <p>
-              I fence saber and hold a national C rating. A bout can turn on a step
-              taken too soon or a decision made a beat too late. I like going back to
-              practice with one of those moments in mind and seeing what changes next time.
-            </p>
-            <p>
-              I&apos;ve trained at fencing camps in Massachusetts, Italy, and Japan.
-              Fencing people I haven&apos;t met before makes me pay attention to their
-              distance and timing from the first exchange. I also placed 11th at an
-              international circuit event in Wuxi, China.
-            </p>
-            <PhotoNotebook ariaLabel="Fencing photos" photos={fencingPhotos} featureFirst />
+            <div className="activities-entry__copy">
+              <p>
+                I fence saber and hold a national C rating. A bout can turn on a step
+                taken too soon or a decision made a beat too late. I like going back to
+                practice with one of those moments in mind and seeing what changes next time.
+              </p>
+              <p>
+                I&apos;ve trained at fencing camps in Massachusetts, Italy, and Japan.
+                Fencing people I haven&apos;t met before makes me pay attention to their
+                distance and timing from the first exchange. I also placed 11th at an
+                international circuit event in Wuxi, China.
+              </p>
+            </div>
+            <PhotoNotebook ariaLabel="Fencing photos" photos={fencingPhotos} featureFirst eager />
           </div>
         </section>
       </div>

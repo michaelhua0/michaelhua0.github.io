@@ -52,13 +52,15 @@ export default function AcrossTheGlobe() {
             <span>Boston, Massachusetts</span>
           </div>
           <div className="travel-entry__body">
-            <p>
-              In the summer of 2026, I traveled to Boston for a summer research opportunity, BU RISE. I spent weekdays working on a computer
-              vision project at Boston University. In my free time, I had the opportunity to get to know the
-              city. Staying for a summer let me explore at my own pace, which was something I really enjoyed.
-              My favorite part was trying all the new restaurants with my friends!
-            </p>
-            <Link to="/portfolio/chemosensory-grounding">My BU RISE research</Link>
+            <div className="travel-entry__copy">
+              <p>
+                In the summer of 2026, I traveled to Boston for a summer research opportunity, BU RISE. I spent weekdays working on a computer
+                vision project at Boston University. In my free time, I had the opportunity to get to know the
+                city. Staying for a summer let me explore at my own pace, which was something I really enjoyed.
+                My favorite part was trying all the new restaurants with my friends!
+              </p>
+              <Link to="/portfolio/chemosensory-grounding">My BU RISE research</Link>
+            </div>
             <PhotoNotebook ariaLabel="Boston photos" photos={boston.photos} eager />
           </div>
         </section>
@@ -71,14 +73,16 @@ export default function AcrossTheGlobe() {
           <p className="travel-atlas__intro">I hope I can visit every country someday!</p>
           <div className="travel-map"><WorldMap selectedId={selectedId} onSelect={selectStop} /></div>
           <p className="travel-map__legend"><span className="travel-map__legend-visited" /> Visited <span className="travel-map__legend-photo" /> Photos available</p>
-          <UsStatesMap selectedId={selectedId} onSelect={selectStop} />
+          <div className={`travel-atlas__details${selectedId === "boston" ? " travel-atlas__details--map-only" : ""}`}>
+            <UsStatesMap selectedId={selectedId} onSelect={selectStop} />
 
-          {selectedId !== "boston" && <div className="travel-photo-stop" ref={photoPanel} aria-live="polite">
-            <div className="travel-photo-stop__heading">
-              <h3>{selectedStop.label}</h3>
-            </div>
-            <PhotoNotebook ariaLabel={`${selectedStop.label} photos`} photos={selectedStop.photos} stablePair={selectedStop.photos.length === 2} eager />
-          </div>}
+            {selectedId !== "boston" && <div className="travel-photo-stop" ref={photoPanel} aria-live="polite">
+              <div className="travel-photo-stop__heading">
+                <h3>{selectedStop.label}</h3>
+              </div>
+              <PhotoNotebook ariaLabel={`${selectedStop.label} photos`} photos={selectedStop.photos} stablePair={selectedStop.photos.length === 2} eager />
+            </div>}
+          </div>
 
           <div className="travel-places" aria-label="Places visited">
             <section aria-labelledby="travel-us-title">

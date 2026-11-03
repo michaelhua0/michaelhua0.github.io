@@ -1,37 +1,38 @@
-.activities-page .container { max-width: 1080px; }
+.activities-page .container { max-width: 1200px; }
 .activities-header { padding-top: 58px; padding-bottom: 32px; }
 .activities-header h1 { margin: 0; font-size: clamp(2.5rem, 5vw, 3.3rem); letter-spacing: -0.035em; }
 .activities-content { padding-bottom: 88px; }
-.activities-entry { position: relative; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 42px; padding-top: 27px; border-top: 1px solid var(--border-strong); }
+.activities-entry { position: relative; display: grid; gap: 22px; padding-top: 27px; border-top: 1px solid var(--border-strong); }
 .activities-entry::before { content: ""; position: absolute; left: 0; top: -1px; width: 42px; height: 2px; background: var(--research-bright); }
 .activities-entry + .activities-entry { margin-top: 64px; }
-.activities-entry__name h2 { max-width: 12ch; margin: 0; font-size: clamp(1.55rem, 2.6vw, 1.85rem); line-height: 1.2; }
-.activities-entry--community { row-gap: 18px; }
-.activities-entry--community .activities-entry__name { grid-column: 1 / -1; display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px 24px; }
-.activities-entry--community .activities-entry__name h2 { max-width: none; }
-.activities-entry--community .activities-entry__body { grid-column: 2; }
-.activities-entry--community .activities-entry__link { margin-top: 0; }
-.activities-entry--community .justified-gallery { max-width: 760px; }
-.activities-entry--community .activities-entry__stories { grid-template-columns: 1fr; gap: 28px; }
-.activities-entry__body { min-width: 0; }
-.activities-entry__body > p { max-width: 66ch; margin-bottom: 16px; color: var(--text-soft); line-height: 1.7; }
-.activities-entry__stories { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 30px; }
-.activities-entry__stories article { padding-top: 13px; border-top: 1px solid var(--border); }
+.activities-entry__name { display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px 24px; }
+.activities-entry__name h2 { margin: 0; font-size: clamp(1.55rem, 2.6vw, 1.85rem); line-height: 1.2; }
+.activities-entry__body, .activities-entry__copy { min-width: 0; }
+.activities-entry__copy p { max-width: 66ch; margin-bottom: 16px; color: var(--text-soft); line-height: 1.7; }
+.activities-entry__overview { display: grid; grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr); gap: 36px; align-items: start; }
+.activities-entry__overview .justified-gallery { margin-top: 0; }
+.activities-entry__stories { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px; margin-top: 38px; }
+.activities-entry__stories article { min-width: 0; padding-top: 13px; border-top: 1px solid var(--border); }
 .activities-entry__stories h3 { margin: 0 0 9px; font-size: 1.15rem; }
 .activities-entry__stories p { margin-bottom: 10px; color: var(--text-soft); font-size: 0.96rem; line-height: 1.62; }
 .activities-entry__stories cite { font-style: normal; }
 .activities-entry__stories a,
 .activities-entry__link { font-size: 0.93rem; font-weight: 600; }
-.activities-entry__link { display: inline-block; margin-top: 18px; }
+.activities-entry__stories .justified-gallery { margin-top: 20px; }
+.activities-entry__stories .photo-notebook { margin-top: 24px; }
+.activities-entry__link { display: inline-block; }
+.activities-entry--fencing .activities-entry__body { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 36px; align-items: start; }
+.activities-entry--fencing .photo-notebook { margin-top: 0; }
 
+@media (max-width: 800px) {
+  .activities-entry__overview,
+  .activities-entry--fencing .activities-entry__body { grid-template-columns: 1fr; gap: 20px; }
+  .activities-entry__stories { grid-template-columns: 1fr; gap: 26px; }
+  .activities-entry__overview .justified-gallery { max-width: 680px; }
+}
 @media (max-width: 720px) {
   .activities-header { padding-top: 44px; padding-bottom: 26px; }
   .activities-content { padding-bottom: 64px; }
-  .activities-entry { grid-template-columns: 1fr; gap: 13px; }
+  .activities-entry { gap: 15px; }
   .activities-entry + .activities-entry { margin-top: 52px; }
-  .activities-entry__name h2 { max-width: none; }
-  .activities-entry--community .activities-entry__body { grid-column: 1; }
-}
-@media (max-width: 520px) {
-  .activities-entry__stories { grid-template-columns: 1fr; gap: 18px; }
 }
