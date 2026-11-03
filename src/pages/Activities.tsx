@@ -8,16 +8,21 @@ const communityPhotoRows: GalleryPhoto[][] = [
   [
     { src: "notebook/acawork.webp", alt: "ACA volunteers leading a paper cutting activity" },
     { src: "notebook/img_1107.webp", alt: "ACA volunteers and community members holding a garden harvest" },
-    { src: "notebook/4i0a4921.webp", alt: "Attendees gathered around tables at an ACA community event" },
   ],
   [
-    { src: "notebook/curtisbookeventfinal.webp", alt: "Poster for An Evening with Curtis Chin" },
     { src: "notebook/img_9840.webp", alt: "ACA teen volunteers together in a community room" },
     { src: "notebook/acawork2.webp", alt: "Families and volunteers at an ACA community event" },
   ],
+];
+
+const curtisPhotoRows: GalleryPhoto[][] = [
   [
+    { src: "notebook/curtisbookeventfinal.webp", alt: "Poster for An Evening with Curtis Chin" },
+    { src: "notebook/4i0a4921.webp", alt: "Attendees at the Curtis Chin book talk" },
+  ],
+  [
+    { src: "notebook/4i0a4930.webp", alt: "Curtis Chin speaking to attendees at the book talk" },
     { src: "notebook/4i0a4944.webp", alt: "ACA teen volunteers and Curtis Chin together after the book talk" },
-    { src: "notebook/4i0a4930.webp", alt: "A speaker addressing an audience at an ACA event" },
   ],
 ];
 
@@ -42,9 +47,10 @@ export default function Activities() {
       </header>
 
       <div className="activities-content container">
-        <section id="community" className="activities-entry" aria-labelledby="community-title">
+        <section id="community" className="activities-entry activities-entry--community" aria-labelledby="community-title">
           <div className="activities-entry__name">
             <h2 id="community-title">ACA Teen Volunteer Council</h2>
+            <a className="activities-entry__link" href="https://www.acatvc.org/about-us" target="_blank" rel="noopener noreferrer">ACA TVC website</a>
           </div>
           <div className="activities-entry__body">
             <p>
@@ -58,6 +64,7 @@ export default function Activities() {
               an event. I helped move our website to its own domain, and I keep the
               calendar and volunteer information current so someone new can find a way in.
             </p>
+            <JustifiedGallery ariaLabel="ACA TVC community photos" rows={communityPhotoRows} />
 
             <div className="activities-entry__stories">
               <article>
@@ -70,6 +77,7 @@ export default function Activities() {
                   Chinese Restaurant</cite>.
                 </p>
                 <a href="https://www.michiganhumanities.org/event/great-michigan-read-partner-event-madison-heights/" target="_blank" rel="noopener noreferrer">About the event</a>
+                <JustifiedGallery ariaLabel="Curtis Chin book talk photos" rows={curtisPhotoRows} />
               </article>
               <article>
                 <h3>Threads of Belonging</h3>
@@ -84,8 +92,6 @@ export default function Activities() {
               </article>
             </div>
 
-            <a className="activities-entry__link" href="https://www.acatvc.org/about-us" target="_blank" rel="noopener noreferrer">ACA TVC website</a>
-            <JustifiedGallery ariaLabel="ACA TVC photos" rows={communityPhotoRows} />
           </div>
         </section>
 
