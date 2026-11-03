@@ -45,8 +45,26 @@ export const publications: Publication[] = [
     ],
   },
   {
-    id: "msst-paper",
+    id: "pass-transformer-sts-2027",
     index: 2,
+    category: "research",
+    title:
+      "Decoding Light: Physics-Aware Spatial-Spectral Transformer for Low-Cost High-Fidelity Hyperspectral Imaging",
+    image: "publication-pass-transformer.jpg",
+    imageAlt: "Title page of the 2027 Science Talent Search PASS Transformer manuscript",
+    links: [
+      {
+        label: "Manuscript",
+        href: `${import.meta.env.BASE_URL}documents/pass-transformer-sts-2027.pdf`,
+      },
+    ],
+    copy: [
+      "My 2027 Science Talent Search paper builds on the hyperspectral imaging system I presented at Regeneron ISEF 2026. It explains how a low-cost camera captures diffraction patterns in one exposure, then uses the camera's physics to guide the PASS Transformer as it reconstructs detailed spectral images. I test the system on plant stress, environmental contamination, and food allergy detection.",
+    ],
+  },
+  {
+    id: "msst-paper",
+    index: 3,
     category: "research",
     title:
       "MSST Transformer: A Novel Multimodal Spatial-Spectral-Temporal Transformer for Time-series Hyperspectral Imaging in Plant Growth Modeling",
@@ -65,7 +83,7 @@ export const publications: Publication[] = [
   },
   {
     id: "chemosensory-grounding",
-    index: 3,
+    index: 4,
     category: "research",
     title:
       "Enabling and Scaling Chemosensory Grounding in Egocentric Infant Video via a Dual-Memory Human-in-the-Loop Deep Learning Framework",
@@ -86,11 +104,11 @@ export const publications: Publication[] = [
       "I completed this research at Boston University under Dr. Boqing Gong and Dr. Kate Saenko during the BU RISE Summer Program, and submitted the manuscript to the 2026 Junior Science and Humanities Symposium recognition program, where it received a $550 award and a Meta Quest 3S.",
     ],
     note:
-      "This paper covers the work I contributed during the program. It is a competition manuscript, not one I plan to publish: the 2026 BU RISE interns and the rest of the Gong Lab are continuing the research, and we plan to submit to CVPR 2027.",
+      "This paper covers the work I contributed during the program. It is a competition manuscript, not one I plan to publish: the 2026 BU RISE interns and the rest of the Gong Lab are continuing the research, and we plan to submit to ICCV 2027.",
   },
   {
     id: "nhd-paper",
-    index: 4,
+    index: 5,
     category: "history",
     title:
       "Protecting the Public: The Uphill Battles for Consumer Rights through the Expansion of Responsibilities",
@@ -109,7 +127,7 @@ export const publications: Publication[] = [
   },
   {
     id: "nhd-2026-paper",
-    index: 5,
+    index: 6,
     category: "history",
     title: "From Munitions to Speech: The Crypto Wars and the Fight for Digital Freedom",
     image: "nhd-2026-paper-928.webp",

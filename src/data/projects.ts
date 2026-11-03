@@ -211,7 +211,7 @@ export const projects: Project[] = [
         "I then developed a dual-memory human-in-the-loop framework to scale that schema, pairing a rule bank distilled from expert corrections with a searchable memory of past prediction errors. It grew a few hundred expert-reviewed clips into a verified corpus of 20,000.",
       ),
       p(
-        "The project is still running. The 2026 BU RISE interns and the rest of the Gong Lab are continuing the research, and we plan to submit to CVPR 2027.",
+        "The project is still running. The 2026 BU RISE interns and the rest of the Gong Lab are continuing the research, and we plan to submit to ICCV 2027.",
       ),
       {
         kind: "note",
