@@ -56,15 +56,19 @@ export default function Activities() {
             <div className="activities-entry__overview">
               <div className="activities-entry__copy">
                 <p>
-                  ACA TVC has been part of my week since 2023. I&apos;m now its co-president
-                  and technology director, working with more than 100 teen volunteers on
-                  service and cultural events. Some are small; our Lunar New Year
-                  celebration brings in more than 3,000 people.
+                  Since 2023, I’ve volunteered with the Association of Chinese Americans’ Teen
+                  Volunteer Council (ACA TVC), where I now serve as co-president and technology
+                  director. I help lead more than 100 teen volunteers in community service and
+                  cultural events, including ACA’s Lunar New Year celebration, which draws over
+                  3,000 attendees.
                 </p>
                 <p>
-                  I&apos;ve put in more than 300 hours, including work people don&apos;t see at
-                  an event. I helped move our website to its own domain, and I keep the
-                  calendar and volunteer information current so someone new can find a way in.
+                  Beyond my 300+ volunteer hours, I’ve helped reorganize TVC’s website, moving
+                  it to its own domain and making upcoming events and volunteer opportunities
+                  easier to find. I also initiated <em>Threads of Belonging</em>, an oral-history
+                  documentary series preserving the experiences of Chinese American elders. For
+                  its first episode, I interviewed members of ACA’s gardening team and produced
+                  short films exploring their lives and connections to the local community.
                 </p>
               </div>
               <JustifiedGallery ariaLabel="ACA TVC community photos" rows={communityPhotoRows} />
@@ -72,7 +76,7 @@ export default function Activities() {
 
             <div className="activities-entry__stories">
               <article>
-                <h3>Curtis Chin book talk</h3>
+                <h3>Curtis Chin Book Talk</h3>
                 <p>
                   Our October 2026 book talk with Curtis Chin was one of my favorite TVC
                   events. I helped plan it and emceed the evening. I especially liked
@@ -105,15 +109,18 @@ export default function Activities() {
           <div className="activities-entry__body">
             <div className="activities-entry__copy">
               <p>
-                I fence saber and hold a national C rating. A bout can turn on a step
-                taken too soon or a decision made a beat too late. I like going back to
-                practice with one of those moments in mind and seeing what changes next time.
+                I compete nationally in saber fencing and hold a C rating. I&apos;ve qualified
+                for the Junior Olympics three times, earned two regional bronze medals, and
+                placed 11th at the 2025 Wuxi International Circuit in China. I&apos;ve also
+                attended fencing camps in Massachusetts, Italy, and Japan, where I&apos;ve had
+                the opportunity to train with fencers whose styles differ from those I
+                regularly encounter.
               </p>
               <p>
-                I&apos;ve trained at fencing camps in Massachusetts, Italy, and Japan.
-                Fencing people I haven&apos;t met before makes me pay attention to their
-                distance and timing from the first exchange. I also placed 11th at an
-                international circuit event in Wuxi, China.
+                Outside my own competitions, I serve as a regional referee and strip-coach
+                younger fencers at national tournaments. Refereeing requires me to evaluate
+                exchanges from a different perspective, while coaching gives me the chance
+                to help other fencers recognize mistakes and make adjustments between bouts.
               </p>
             </div>
             <PhotoNotebook ariaLabel="Fencing photos" photos={fencingPhotos} featureFirst eager />
