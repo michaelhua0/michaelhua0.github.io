@@ -30,7 +30,7 @@ About page photos:
 
 | File | Used for |
 | --- | --- |
-| `about-portrait.webp` | About — red-background portrait in the light blue suit (vertical, ~3:4) |
+| `about-portrait.webp` | Home and About — blue-background headshot in a black polo (932×1200 portrait crop) |
 
 Gallery photos are stored in `public/images/gallery/`. The homepage includes two
 intentional placeholders, so future candid images can be added without changing

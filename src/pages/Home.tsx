@@ -69,7 +69,7 @@ export default function Home() {
                         { src: "about-portrait.webp", width: 932 },
                       ])}
                       sizes="(max-width: 620px) 100vw, (max-width: 900px) 82vw, 38vw"
-                      alt="Michael Hua wearing a light blue suit against a red background"
+                      alt="Michael Hua in a black polo against a blue studio background"
                       width="932"
                       height="1200"
                       loading="lazy"
